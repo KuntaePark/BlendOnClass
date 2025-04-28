@@ -19,7 +19,6 @@ public class SystemAnnounce {
     private String title;//제목
     @Column(columnDefinition = "TEXT")
     private String context;//내용
-    @ColumnDefault("now()")
     private LocalDateTime writeTime;//작성시간
 
 

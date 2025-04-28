@@ -15,7 +15,7 @@ public class Lesson {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("NORMAL")
+    @ColumnDefault("'NORMAL'")
     private LTYPE lessonType;
 
     @Column(nullable = false)

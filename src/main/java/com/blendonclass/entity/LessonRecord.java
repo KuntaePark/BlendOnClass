@@ -18,6 +18,7 @@ public class LessonRecord {
     @JoinColumn(name="account_id")
     private Account account;
 
+    @ManyToOne
     @JoinColumn(name="lesson_id")
     private Lesson lesson;
 
