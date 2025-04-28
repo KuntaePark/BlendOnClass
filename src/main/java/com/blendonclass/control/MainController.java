@@ -1,6 +1,7 @@
 package com.blendonclass.control;
 
 import com.blendonclass.service.CustomUserDetails;
+import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,9 +16,10 @@ import java.security.Principal;
 @Getter@Setter
 public class MainController {
     @GetMapping("/")
-    public String index(Principal principal, Model model) {
-        Long id = Long.parseLong(principal.getName());
-        model.addAttribute("id", id);
+    public String index(HttpSession session, Model model) {
+        model.addAttribute("id",session.getAttribute("id"));
+        model.addAttribute("name",session.getAttribute("name"));
+        model.addAttribute("email",session.getAttribute("email"));
         return "index";
     }
 

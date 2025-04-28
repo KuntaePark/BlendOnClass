@@ -18,10 +18,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         Account account = accountRepository.findByLoginId(loginId).orElseThrow(() -> new UsernameNotFoundException(loginId));
 
-        return User.builder()
-                    .username(account.getId().toString())
-                    .password(account.getPassword())
-                    .roles(account.getRole().toString())
-                    .build();
+        CustomUserDetails customUserDetails = new CustomUserDetails();
+        customUserDetails.setId(account.getId().toString());
+        customUserDetails.setLoginId(account.getLoginId());
+        customUserDetails.setPassword(account.getPassword());
+        customUserDetails.setEmail(account.getEmail());
+        customUserDetails.setName(account.getName());
+        return customUserDetails;
     }
 }
