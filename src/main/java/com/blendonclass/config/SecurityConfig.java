@@ -17,7 +17,6 @@ public class SecurityConfig {
                         .usernameParameter("loginId")
                         .passwordParameter("password")
         );
-
         return http.build();
     }
 }
