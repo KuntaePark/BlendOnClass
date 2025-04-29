@@ -1,5 +1,6 @@
 package com.blendonclass.security;
 
+import com.blendonclass.constant.ROLE;
 import com.blendonclass.service.CustomUserDetails;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,20 @@ public class CustomAuthenticationHandler implements AuthenticationSuccessHandler
         session.setAttribute("email", customUserDetails.getEmail());
 
         //role 체크해서 해당하는 주소로 redirect - todo
-        response.sendRedirect("/");
+        ROLE role = customUserDetails.getRole();
+        String redirectUrl = null;
+        switch (role) {
+            case ADMIN:
+                redirectUrl = "/admin";
+                break;
+            case STUDENT:
+                redirectUrl = "/student";
+                break;
+            case TEACHER:
+                redirectUrl = "/teacher";
+                break;
+        }
+
+        response.sendRedirect(redirectUrl);
     }
 }

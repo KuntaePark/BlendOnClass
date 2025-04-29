@@ -24,6 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         customUserDetails.setPassword(account.getPassword());
         customUserDetails.setEmail(account.getEmail());
         customUserDetails.setName(account.getName());
+        customUserDetails.setRole(account.getRole());
         return customUserDetails;
     }
 }

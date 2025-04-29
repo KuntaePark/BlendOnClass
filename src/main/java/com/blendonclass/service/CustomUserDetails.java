@@ -1,5 +1,6 @@
 package com.blendonclass.service;
 
+import com.blendonclass.constant.ROLE;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,7 @@ public class CustomUserDetails implements UserDetails {
     private String password;
     private String email;
     private String name;
+    private ROLE role;
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override

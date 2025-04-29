@@ -18,14 +18,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(
                 authorizeRequests -> authorizeRequests
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(
                 form -> form
-//                        .loginPage("/login")
+                        .loginPage("/login")
                         .usernameParameter("loginId")
                         .passwordParameter("password")
                         .successHandler(new CustomAuthenticationHandler())
+                        .permitAll()
                 );
         return http.build();
     }

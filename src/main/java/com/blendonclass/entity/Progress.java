@@ -5,17 +5,22 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter@Setter
+@EntityListeners(AuditingEntityListener.class)
 public class Progress {
     @Id
     @Column(name="progress_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @CreatedDate
+    @Column(updatable = false)
     private LocalDate startDate;//진도 시작 날짜
     private LocalDate endDate;//진도 종료 날짜
 
