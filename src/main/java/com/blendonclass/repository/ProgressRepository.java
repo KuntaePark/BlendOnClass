@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface ProgressRepository extends JpaRepository<Progress, Long> {
     List<Progress> findByClassroomId(Long classroomId);
-    Progress findByClassroomIdAndSubject(Long classroomId, SUBJECT subject);
+
+
 }

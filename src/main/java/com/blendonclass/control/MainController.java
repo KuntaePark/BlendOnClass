@@ -1,5 +1,6 @@
 package com.blendonclass.control;
 
+import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.entity.Account;
 import com.blendonclass.entity.Authority;
 import com.blendonclass.entity.Classroom;
@@ -8,6 +9,7 @@ import com.blendonclass.repository.AccountRepository;
 import com.blendonclass.repository.AuthorityRepository;
 import com.blendonclass.repository.ClassroomRepository;
 import com.blendonclass.repository.QuizRepository;
+import com.blendonclass.service.ScoreService;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ import java.util.List;
 @Getter@Setter
 @RequiredArgsConstructor
 public class MainController {
+    private final ScoreService scoreService;
+
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -32,8 +36,13 @@ public class MainController {
     public String student(Model model) {return "studentMain";}
 
     @GetMapping("/teacher")
-    public String teacher(Model model) {return "teacherMain";}
+    public String teacher(Model model) {
+        scoreService.getClassroomCompleteRate(1L, SUBJECT.MATH);
+        return "teacherMain";
+    }
 
     @GetMapping("/admin")
     public String admin(Model model) {return "redirect:/admin/accounts";}
+
+
 }

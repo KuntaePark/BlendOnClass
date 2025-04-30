@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
-
+ Classroom findByGrade(int grade);
+ Classroom findByGradeAndClassroomNum(int grade, int classroomNum);
 }

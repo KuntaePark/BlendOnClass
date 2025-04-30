@@ -2,6 +2,7 @@ package com.blendonclass.dto;
 
 
 import com.blendonclass.constant.SUBJECT;
+import com.blendonclass.entity.Progress;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +17,19 @@ public class ProgressListDto {
     private LocalDate endDate;
     private float completeRate;
     private SUBJECT subject;
+
+    public ProgressListDto from(Progress progress, float completeRate) {
+        ProgressListDto progressListDto = new ProgressListDto();
+
+        progressListDto.setProgressId(progress.getId());
+        progressListDto.setStartTitle(progress.getStartLesson().getLessonTitle());
+        progressListDto.setEndTitle(progress.getEndLesson().getLessonTitle());
+        progressListDto.setStartDate(progress.getStartDate());
+        progressListDto.setEndDate(progress.getEndDate());
+        progressListDto.setSubject(progress.getStartLesson().getChapter().getSubject());
+        progressListDto.setCompleteRate(completeRate);
+
+        return progressListDto;
+
+    }
 }

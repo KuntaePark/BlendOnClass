@@ -11,7 +11,5 @@ import java.util.Optional;
 @Repository
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
     Authority findByAccountId(Long accountId);
-    List<Authority> findByMemberId(Long memberId);
-    List<Authority> findByClassroomIdAndRole(Long classroomId, ROLE role);
 
 }
