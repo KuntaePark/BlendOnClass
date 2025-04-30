@@ -19,10 +19,8 @@ public class ChapterDto {
         ChapterDto chapterDto = new ChapterDto();
         chapterDto.setChapId(chapter.getId());
         chapterDto.setTitle(chapter.getTitle());
+        chapterDto.setLessonDtoList(lessonDtoList);
 
-        chapterDto.setLessonDtoList(
-                chapter.getLesssonList
-        );
         return chapterDto;
     }
 }
