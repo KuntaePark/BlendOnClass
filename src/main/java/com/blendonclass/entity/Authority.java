@@ -14,7 +14,7 @@ public class Authority {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    SUBJECT subject;
+    SUBJECT authType;
 
     @ManyToOne
     @JoinColumn(name = "classroom_id")
