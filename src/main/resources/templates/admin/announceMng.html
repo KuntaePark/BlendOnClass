@@ -9,6 +9,11 @@
 
 
 <div layout:fragment="main" id="main">
-    <h1>교사</h1>
+    <h1>공지 관리 페이지</h1>
+    <ul th:each="sysAnn : ${sysAnnListDtos.getContent()}">
+            <li th:text="${sysAnn.id}"></li>
+            <li th:text="${sysAnn.title}"></li>
+            <li th:text="${sysAnn.writeTime}"></li>
+    </ul>
 </div>
 </html>

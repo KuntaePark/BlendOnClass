@@ -4,6 +4,7 @@ package com.blendonclass.service;
  */
 
 import com.blendonclass.constant.SUBJECT;
+import com.blendonclass.dto.admin.AccountListDto;
 import com.blendonclass.dto.admin.AuthReqListDto;
 import com.blendonclass.entity.Account;
 import com.blendonclass.entity.AuthRequest;
@@ -23,6 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @RequiredArgsConstructor
@@ -57,11 +61,20 @@ public class AuthorityService {
     //권한 요청 목록 표시
     public Page<AuthReqListDto> getAuthReqList(Pageable pageable){
         List<AuthRequest> authReqList = authRequestRepository.findAllByOrderByReqTimeDesc(pageable);
-        List<AuthReqListDto> authReqListDtos = new ArrayList<>();
-        for(AuthRequest authReq : authReqList) {
-            authReqListDtos.add(AuthReqListDto.from(authReq));
-        }
+        List<AuthReqListDto> authReqListDtos = authReqList.stream()
+                .map(AuthReqListDto::from).collect(Collectors.toList());
+
         return new PageImpl<>(authReqListDtos, pageable, authReqListDtos.size());
     }
-    
+
+    //특정 반의 권한 보유자 모두 조회
+    public Page<AccountListDto> getAllAccountsOfClassroom(int grade, int classroomNum,Pageable pageable){
+        Classroom classroom = classroomRepository.findByGradeAndClassroomNum(grade, classroomNum);
+        List<Authority> authorities = authorityRepository.findByClassroom(classroom);
+        List<AccountListDto> accountListDtos = authorities.stream()
+                .map(authority -> AccountListDto.from(authority.getAccount()))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(accountListDtos, pageable, accountListDtos.size());
+    }
 }

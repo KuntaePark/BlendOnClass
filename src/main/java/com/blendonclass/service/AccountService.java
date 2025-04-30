@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,10 +43,10 @@ public class AccountService {
             accounts = accountRepository.findByNameContaining(keyword, pageable);
         }
 
-        List<AccountListDto> accountListDtos = new ArrayList<>();
-        for(Account account : accounts) {
-            accountListDtos.add(AccountListDto.from(account));
-        }
+        List<AccountListDto> accountListDtos = accounts.stream()
+                .map(AccountListDto::from)
+                .collect(Collectors.toList());
+
         return new PageImpl<>(accountListDtos, pageable, accounts.size());
     }
 

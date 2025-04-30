@@ -9,6 +9,12 @@
 
 
 <div layout:fragment="main" id="main">
-    <h1>교사</h1>
+    <h1>반 관리 페이지</h1>
+    <h2>1학년 1반 목록</h2>
+    <div th:each="account : ${accountListDtos}">
+        <li th:text="${account.name}"></li>
+        <li th:text="${account.email}"></li>
+        <li th:text="${account.role}"></li>
+    </div>
 </div>
 </html>

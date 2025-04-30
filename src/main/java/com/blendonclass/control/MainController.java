@@ -1,13 +1,6 @@
 package com.blendonclass.control;
 
-import com.blendonclass.entity.Account;
-import com.blendonclass.entity.Authority;
-import com.blendonclass.entity.Classroom;
-import com.blendonclass.entity.Quiz;
-import com.blendonclass.repository.AccountRepository;
-import com.blendonclass.repository.AuthorityRepository;
-import com.blendonclass.repository.ClassroomRepository;
-import com.blendonclass.repository.QuizRepository;
+import com.blendonclass.constant.ROLE;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +9,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.security.Principal;
-import java.util.List;
-
 @Controller
 @Getter@Setter
 @RequiredArgsConstructor
 public class MainController {
+    @GetMapping("/")
+    public String home(HttpSession session, Model model) {
+        ROLE role = (ROLE)session.getAttribute("role");
+        String redirectUrl = switch (role) {
+            case ADMIN -> "/admin";
+            case TEACHER -> "/teacher";
+            case STUDENT -> "/student";
+        };
+        return "redirect:" + redirectUrl;
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login";
