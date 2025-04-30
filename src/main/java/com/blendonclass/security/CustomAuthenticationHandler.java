@@ -24,18 +24,11 @@ public class CustomAuthenticationHandler implements AuthenticationSuccessHandler
 
         //role 체크해서 해당하는 주소로 redirect - todo
         ROLE role = customUserDetails.getRole();
-        String redirectUrl = null;
-        switch (role) {
-            case ADMIN:
-                redirectUrl = "/admin";
-                break;
-            case STUDENT:
-                redirectUrl = "/student";
-                break;
-            case TEACHER:
-                redirectUrl = "/teacher";
-                break;
-        }
+        String redirectUrl = switch (role) {
+            case ADMIN -> "/admin";
+            case STUDENT -> "/student";
+            case TEACHER -> "/teacher";
+        };
 
         response.sendRedirect(redirectUrl);
     }
