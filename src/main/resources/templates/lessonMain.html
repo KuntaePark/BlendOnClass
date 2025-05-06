@@ -22,50 +22,74 @@
 <!--</div>-->
 
 
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-50 text-gray-900">
 <div layout:fragment="main" id="main" class="container mx-auto px-4 py-6">
 
-    <h1 class="text-2xl font-semibold mb-4">Lesson Home</h1>
-
-    <div class="bg-white p-4 rounded-lg shadow-md">
-        <h2 class="text-xl font-medium mb-3">최근 강의</h2>
-
-        <ul class="space-y-4">
-            <li th:each="lesson : ${recentLessons}">
-
-                <div class="flex justify-between items-center">
-                    <div class="w-full">
-                        <!-- 강의 제목 -->
-                        <p th:text="${lesson.lessonTitle}" class="text-lg font-semibold text-gray-800"></p>
-
-                        <!-- 진도율 바 -->
-                        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-                            <div th:style="|width: ${lesson.completeRate}%|"
-                                 class="bg-blue-500 h-2.5 rounded-full"></div>
-                        </div>
-                        <p class="text-sm text-gray-600 mt-1"
-                           th:text="|진도율: ${lesson.completeRate}%|"></p>
-                    </div>
-
-                    <!-- 이어하기 / 다시하기 버튼 -->
-                    <div class="flex flex-col items-end ml-4">
-                        <button th:if="${lesson.completeRate == 100}"
-                                th:onclick="|location.href='/student/restart/${lesson.lessonId}'|"
-                                class="bg-red-500 text-white px-2 py-1 rounded text-sm mb-1 hover:bg-red-600">
-                            다시하기
-                        </button>
-
-                        <button th:onclick="|location.href='/student/continue/${lesson.lessonId}'|"
-                                class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
-                            이어하기
-                        </button>
-                    </div>
-                </div>
-            </li>
-        </ul>
+<div class="container mx-auto p-6">
+    <!-- 학년 선택 -->
+    <div class="mb-4 space-x-2">
+        <a th:href="@{/lesson/main(grade=1, subject=${selectedSubject != null ? selectedSubject : 'MATH'})}"
+           class="px-4 py-2 border rounded hover:bg-blue-100">1학년</a>
+        <a th:href="@{/lesson/main(grade=2, subject=${selectedSubject != null ? selectedSubject : 'MATH'})}"
+           class="px-4 py-2 border rounded hover:bg-blue-100">2학년</a>
+        <a th:href="@{/lesson/main(grade=3, subject=${selectedSubject != null ? selectedSubject : 'MATH'})}"
+           class="px-4 py-2 border rounded hover:bg-blue-100">3학년</a>
     </div>
 
+    <!-- 과목 선택 -->
+    <div class="mb-6 space-x-2">
+        <a th:href="@{/lesson/main(grade=${selectedGrade}, subject='KOR')}"
+           class="px-4 py-2 border rounded hover:bg-green-100">국어</a>
+        <a th:href="@{/lesson/main(grade=${selectedGrade}, subject='ENG')}"
+           class="px-4 py-2 border rounded hover:bg-green-100">영어</a>
+        <a th:href="@{/lesson/main(grade=${selectedGrade}, subject='MATH')}"
+           class="px-4 py-2 border rounded hover:bg-green-100">수학</a>
+    </div>
 
+    <!-- 최근 강의 (기본 챕터 기준) -->
+    <div th:if="${recentLessons != null}">
+        <h2 class="text-xl font-semibold mb-4">강의 목록</h2>
+        <div class="grid grid-cols-3 md:grid-cols-5 gap-4">
+            <div th:each="lesson : ${recentLessons}"
+                 class="bg-white border rounded-lg p-4 text-center shadow hover:shadow-md">
+                <a th:href="@{/lesson/continue/{id}(id=${lesson.lessonId})}"
+                   class="block font-medium text-blue-700 hover:underline"
+                   th:text="${lesson.lessonTitle}">
+                    소단원 제목
+                </a>
+                <p class="text-sm text-gray-600 mt-2"
+                   th:text="|진도율: ${lesson.completeRate}%|"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 대단원 + 소단원 목록 -->
+    <div th:if="${chapters != null}">
+        <div th:each="chapter : ${chapters}" class="mb-8">
+            <h2 class="text-xl font-bold mb-2" th:text="${chapter.title}">대단원 제목</h2>
+            <div class="grid grid-cols-3 md:grid-cols-5 gap-4">
+                <div th:each="lesson : ${chapter.lessonDtoList}"
+                     class="relative group bg-white border rounded-lg p-4 text-center shadow hover:shadow-md">
+                    <a th:href="@{/lesson/continue/{id}(id=${lesson.lessonId})}"
+                       class="block font-medium text-blue-700 hover:underline" th:text="${lesson.lessonTitle}">
+                        소단원 제목
+                    </a>
+                    <!-- Hover 설명 -->
+                    <div class="absolute hidden group-hover:block top-full left-0 mt-1 bg-gray-700 text-white text-sm p-2 rounded z-10 w-40">
+                        <!-- 소단원 설명 -->
+                        <p class="text-sm text-gray-700 mb-2" th:text="${lesson.lessonBrief}"></p>
+
+                        <!-- 학습하기 버튼 -->
+                        <a th:href="@{/lesson/continue/{id}(id=${lesson.lessonId})}"
+                           class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition">
+                            학습하기
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </body>
 

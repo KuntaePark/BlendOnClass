@@ -1,5 +1,6 @@
 package com.blendonclass.control;
 
+import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.LessonDetailDto;
 import com.blendonclass.dto.LessonDto;
 import com.blendonclass.service.CustomUserDetails;
@@ -45,10 +46,12 @@ public class LessonController {
 
         // ✅ 학년 + 과목이 선택되었을 때만 챕터 목록 조회
         if (grade != null && subject != null) {
-            model.addAttribute("chapters", lessonService.getAllChapters(grade, subject));
+            SUBJECT subjectEnum = SUBJECT.valueOf(subject.toUpperCase()); // String → SUBJECT 변환
+            model.addAttribute("chapters", lessonService.getAllChapters(grade, subjectEnum));
+        }
+
             model.addAttribute("selectedGrade", grade);
             model.addAttribute("selectedSubject", subject);
-        }
 
         return "lessonMain";
     }
