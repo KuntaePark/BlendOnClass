@@ -19,4 +19,14 @@ public class LessonDto {
     public static LessonDto from(Lesson lesson) {
         return modelMapper.map(lesson, LessonDto.class);
     }
+
+    public static LessonDto from(Lesson lesson, int completeRate) {
+        LessonDto dto = new LessonDto();
+        dto.setLessonId(lesson.getId());
+        dto.setLessonTitle(lesson.getLessonTitle()); // 정확히 일치
+        dto.setLessonBrief(lesson.getLessonBrief());
+        dto.setLessonType(lesson.getLessonType().toString()); // Enum -> String 처리
+        dto.setCompleteRate(completeRate);
+        return dto;
+    }
 }

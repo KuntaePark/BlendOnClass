@@ -10,6 +10,6 @@ import java.util.List;
 public interface ScoreRepository extends JpaRepository<Score, Long> {
     List<Score> findByAccountIdOrderByLessonIdAsc(Long accountId);
     Score findByAccountIdAndLessonId(Long accountId, Long lessonId);
-    List<Score> findByAccountIdLessonIdBetweenOrderByLessonIdAsc(Long accountId, Long lessonId1, Long lessonId2);
+    List<Score> findByAccountIdAndLessonIdBetweenOrderByLessonIdAsc(Long accountId, Long lessonId1, Long lessonId2);
     float findAvgCompleteRateByLessonIdBetween(Long lessonId1, Long lessonId2);
 }

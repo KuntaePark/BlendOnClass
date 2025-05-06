@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface LessonDetailRepository extends JpaRepository<LessonDetail, Long> {
-    List<LessonDetailDto> findByLessonId(Long lessonId);
+    LessonDetail findByLessonId(Long lessonId);
 }

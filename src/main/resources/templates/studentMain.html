@@ -4,11 +4,66 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragment/default}">
 
-<th:block layout:fragment="css"></th:block>
-<th:block layout:fragment="script"></th:block>
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">BlendOnClass</title>
+<!--    script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>   <-->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <th:block layout:fragment="css"></th:block>
+</head>
+
+<!--<th:block layout:fragment="css"></th:block>-->
+<!--<th:block layout:fragment="script"></th:block>-->
 
 
-<div layout:fragment="main" id="main">
-    <h1>student</h1>
+<!--<div layout:fragment="main" id="main">-->
+<!--    <h1>student</h1>-->
+<!--</div>-->
+
+
+<body class="bg-gray-100 text-gray-800">
+<div layout:fragment="main" id="main" class="container mx-auto px-4 py-6">
+
+    <h1 class="text-2xl font-semibold mb-4">Student Home</h1>
+
+
+    <div class="bg-white p-4 rounded-lg shadow-md">
+        <h2 class="text-xl font-medium mb-3">최근 강의</h2>
+
+        <div th:if="${lastLesson != null}" class="flex justify-between items-center">
+            <div class="w-full">
+                <!-- 강의 제목 -->
+                <p th:text="${lastLesson.lessonTitle}" class="text-lg font-semibold text-gray-800"></p>
+
+                <!-- 진도율 바 -->
+                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                    <div th:style="|width: ${lastLesson.completeRate}%|"
+                         class="bg-blue-500 h-2.5 rounded-full"></div>
+                </div>
+                <p class="text-sm text-gray-600 mt-1"
+                   th:text="|진도율: ${lastLesson.completeRate}%|"></p>
+            </div>
+
+            <!-- 이어하기 / 다시하기 버튼 -->
+            <div class="flex flex-col items-end ml-4">
+                <a th:if="${lastLesson.completeRate == 100}"
+                   th:href="@{/lesson/restart/{id}(id=${lastLesson.lessonId})}"
+                   class="bg-red-500 text-white px-2 py-1 rounded text-sm mb-1 hover:bg-red-600">
+                    다시하기
+                </a>
+
+                <a th:href="@{/lesson/continue/{id}(id=${lastLesson.lessonId})}"
+                   class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
+                    이어하기
+                </a>
+            </div>
+        </div>
+    </div>
+
+
 </div>
+</body>
+
+
 </html>

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface LessonRecordRepository extends JpaRepository<LessonRecord, Long> {
     List<LessonRecord> findByAccountId(Long accountId);
+
+    LessonRecord findTopByAccountIdOrderByIdDesc(Long accountId);
 }
