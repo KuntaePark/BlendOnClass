@@ -32,7 +32,7 @@ public class QuizController {
         model.addAttribute("quizList", quizList);
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("currentIndex", 0);
-        return "quiz/quiz";
+        return"quiz";
     }
 
     // 대단원 시험 시작
@@ -46,7 +46,7 @@ public class QuizController {
         model.addAttribute("quizList", quizList);
         model.addAttribute("chapterId", chapterId);
         model.addAttribute("currentIndex", 0);
-        return "quiz/quiz";
+        return "quiz";
     }
 
     // 문제 채점

@@ -13,6 +13,7 @@ public class LessonDto {
     private String lessonBrief;
     private String lessonType;
     private int completeRate;
+    private Long chapterId;
 
     private static ModelMapper modelMapper = new ModelMapper();
 
@@ -26,6 +27,7 @@ public class LessonDto {
         dto.setLessonTitle(lesson.getLessonTitle()); // 정확히 일치
         dto.setLessonBrief(lesson.getLessonBrief());
         dto.setLessonType(lesson.getLessonType().toString()); // Enum -> String 처리
+        dto.setChapterId(lesson.getChapter().getId());
         dto.setCompleteRate(completeRate);
         return dto;
     }

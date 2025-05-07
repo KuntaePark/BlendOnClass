@@ -4,16 +4,16 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragment/default}">
 
-<head>
-    <meta charset="UTF-8">
+
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">BlendOnClass</title>
     <!--    script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>   <-->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <th:block layout:fragment="css"></th:block>
-</head>
-<body class="p-6">
-<div class="max-w-3xl mx-auto">
+
+
+<div class="max-w-3xl mx-auto" layout:fragment="main">
+    <div  class="container mx-auto px-4 py-6">
     <div class="flex gap-2 mb-4">
         <div th:each="i : ${#numbers.sequence(1, quizList.size())}"
              th:classappend="${i-1 == currentIndex} ? 'bg-gray-300' : 'bg-blue-300'"
@@ -24,14 +24,14 @@
 
     <form id="quizForm" method="post" th:action="@{/quiz/grade}">
         <div>
-            <div th:text="${quizList[currentIndex].contextJson}">문제 내용</div>
+            <div th:text="${quizList.get(currentIndex).contextJson}">문제 내용</div>
         </div>
 
         <div id="optionsBox">
             <!-- 객관식/주관식에 따라 동적으로 변경됨 -->
         </div>
 
-        <input type="hidden" name="quizId" th:value="${quizList[currentIndex].quizId}" />
+        <input type="hidden" name="quizId" th:value="${quizList.get(currentIndex).quizId}" />
         <input type="hidden" name="lessonId" th:value="${lessonId}" />
 
         <button type="submit" class="mt-4 bg-blue-500 px-4 py-2 text-white rounded">다음</button>
@@ -119,6 +119,6 @@
         solutionBox.style.display = 'block';
     }
 </script>
+</div>
 
-</body>
 </html>

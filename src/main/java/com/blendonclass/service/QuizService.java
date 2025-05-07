@@ -30,6 +30,8 @@ public class QuizService {
     public List<QuizDetailDto> getQuiz(Long lessonId, Long accountId, HttpSession session) {
         // 퀴즈 조회
         List<Quiz> quizzes = quizRepository.findByLessonId(lessonId);
+
+        System.out.println(quizzes.size() );
         Collections.shuffle(quizzes);
         List<Quiz> selected = quizzes.stream().limit(5).toList();
         // 진행 중인 세션이 없다면 새로 생성
