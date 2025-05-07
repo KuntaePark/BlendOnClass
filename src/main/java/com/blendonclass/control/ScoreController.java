@@ -15,7 +15,7 @@ public class ScoreController {
     @GetMapping("/student/myscore")
     public String getStudentScorePage(Principal principal, Model model) {
         Long id = Long.parseLong(principal.getName());
-
+        //todo - 해당 학생의 전체 성적 불러오기
         return "score";
     }
 
