@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
+
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">BlendOnClass</title>
+    <!--    script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>   <-->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <th:block layout:fragment="css"></th:block>
+</head>
+
+<!--<th:block layout:fragment="css"></th:block>-->
+<!--<th:block layout:fragment="script"></th:block>-->
+
+
+<!--<div layout:fragment="main" id="main">-->
+<!--    <h1>student</h1>-->
+<!--</div>-->
+
+
+<body class="bg-gray-50 text-gray-900">
+<div layout:fragment="main" id="main" class="container mx-auto px-4 py-6">
+
+<div class="container mx-auto p-6">
+    <!-- 학년 선택 -->
+    <div class="mb-4 space-x-2">
+        <a th:href="@{/lesson/main(grade=1, subject=${selectedSubject != null ? selectedSubject : 'MATH'})}"
+           class="px-4 py-2 border rounded hover:bg-blue-100">1학년</a>
+        <a th:href="@{/lesson/main(grade=2, subject=${selectedSubject != null ? selectedSubject : 'MATH'})}"
+           class="px-4 py-2 border rounded hover:bg-blue-100">2학년</a>
+        <a th:href="@{/lesson/main(grade=3, subject=${selectedSubject != null ? selectedSubject : 'MATH'})}"
+           class="px-4 py-2 border rounded hover:bg-blue-100">3학년</a>
+    </div>
+
+    <!-- 과목 선택 -->
+    <div class="mb-6 space-x-2">
+        <a th:href="@{/lesson/main(grade=${selectedGrade}, subject='KOR')}"
+           class="px-4 py-2 border rounded hover:bg-green-100">국어</a>
+        <a th:href="@{/lesson/main(grade=${selectedGrade}, subject='ENG')}"
+           class="px-4 py-2 border rounded hover:bg-green-100">영어</a>
+        <a th:href="@{/lesson/main(grade=${selectedGrade}, subject='MATH')}"
+           class="px-4 py-2 border rounded hover:bg-green-100">수학</a>
+    </div>
+
+    <!-- 최근 강의 (기본 챕터 기준) -->
+<!--    <div th:if="${recentLessons != null}">-->
+<!--        <h2 class="text-xl font-semibold mb-4">강의 목록</h2>-->
+<!--        <div class="grid grid-cols-3 md:grid-cols-5 gap-4">-->
+<!--            <div th:each="lesson : ${recentLessons}"-->
+<!--                 class="bg-white border rounded-lg p-4 text-center shadow hover:shadow-md">-->
+<!--                <a th:href="@{/lesson/continue/{id}(id=${lesson.lessonId})}"-->
+<!--                   class="block font-medium text-blue-700 hover:underline"-->
+<!--                   th:text="${lesson.lessonTitle}">-->
+<!--                    소단원 제목-->
+<!--                </a>-->
+<!--                <p class="text-sm text-gray-600 mt-2"-->
+<!--                   th:text="|진도율: ${lesson.completeRate}%|"></p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <!-- 대단원 + 소단원 목록 -->
+    <div th:if="${chapters != null}">
+        <div th:each="chapter : ${chapters}" class="mb-8">
+            <h2 class="text-xl font-bold mb-2" th:text="${chapter.title}">대단원 제목</h2>
+            <div class="grid grid-cols-3 md:grid-cols-5 gap-4">
+                <div th:each="lesson : ${chapter.lessonDtoList}" class="relative group">
+                    <div class="bg-white border rounded-lg p-4 text-center shadow group-hover:shadow-lg transition">
+                        <a th:href="@{/lesson/continue/{id}(id=${lesson.lessonId})}"
+                           class="block font-medium text-blue-700 hover:underline" th:text="${lesson.lessonTitle}">
+                            소단원 제목
+                        </a>
+                        <p class="text-sm text-gray-600 mt-2"
+                           th:text="|진도율: ${lesson.completeRate}%|"></p>
+                    </div>
+
+                    <!-- Hover 정보 박스 (마우스가 설명 박스 위에 있어도 유지되도록 수정됨) -->
+                    <div class="absolute left-0 top-full mt-2 w-48 bg-gray-800 text-white text-sm p-3 rounded z-50
+                opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-200">
+                        <p class="text-sm mb-3" th:text="${lesson.lessonBrief}">간단한 설명</p>
+
+                        <!-- 학습하기 버튼 -->
+                        <a th:href="@{/lesson/continue/{id}(id=${lesson.lessonId})}"
+                           class="block mb-2 px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition">
+                            학습하기
+                        </a>
+
+                        <!-- 퀴즈풀기 버튼 -->
+                        <a th:href="@{/quiz/start(lessonId=${lesson.lessonId})}"
+                           class="block px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition">
+                            퀴즈풀기
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+
+
+</html>

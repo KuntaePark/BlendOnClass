@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
+
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">BlendOnClass</title>
+    <!--    script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>   <-->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <th:block layout:fragment="css"></th:block>
+</head>
+<body class="p-6">
+<div class="max-w-3xl mx-auto">
+    <div class="flex gap-2 mb-4">
+        <div th:each="i : ${#numbers.sequence(1, quizList.size())}"
+             th:classappend="${i-1 == currentIndex} ? 'bg-gray-300' : 'bg-blue-300'"
+             class="w-8 h-8 text-center leading-8 rounded-full text-white">
+            <span th:text="${i}">1</span>
+        </div>
+    </div>
+
+    <form id="quizForm" method="post" th:action="@{/quiz/grade}">
+        <div>
+            <div th:text="${quizList[currentIndex].contextJson}">문제 내용</div>
+        </div>
+
+        <div id="optionsBox">
+            <!-- 객관식/주관식에 따라 동적으로 변경됨 -->
+        </div>
+
+        <input type="hidden" name="quizId" th:value="${quizList[currentIndex].quizId}" />
+        <input type="hidden" name="lessonId" th:value="${lessonId}" />
+
+        <button type="submit" class="mt-4 bg-blue-500 px-4 py-2 text-white rounded">다음</button>
+    </form>
+
+    <div id="feedbackBox" class="mt-4 hidden">
+        <p id="resultText" class="font-bold"></p>
+        <p id="solutionText" class="text-sm text-gray-600 mt-2"></p>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    // contextJson 파싱
+    const quiz = /*[[${quiz}]]*/ {};
+    const gradeResult = /*[[${gradeResult}]]*/ null;
+
+    const optionsBox = document.getElementById('optionsBox');
+    const solutionBox = document.getElementById('solutionBox');
+    const resultPopup = document.getElementById('resultPopup');
+
+    const studentAnswerInput = document.getElementById('studentAnswer');
+    const isChoice = quiz.quizType === 'CHOICE';
+
+    // 👉 선택지 표시
+    if (isChoice) {
+        const context = JSON.parse(quiz.contextJson);
+        optionsBox.innerHTML = ''; // 초기화
+
+        context.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = opt.optionNum + '. ' + opt.optionContext;
+            btn.classList.add('option-btn', 'border', 'p-2', 'rounded', 'mb-2');
+            btn.setAttribute('data-answer', opt.optionNum);
+
+            btn.addEventListener('click', () => {
+                // 선택된 값 hidden input에 저장
+                studentAnswerInput.value = opt.optionNum;
+
+                // 시각적 효과
+                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('bg-blue-100'));
+                btn.classList.add('bg-blue-100');
+            });
+
+            optionsBox.appendChild(btn);
+        });
+    } else {
+        // 주관식이면 input 필드 보여주기
+        optionsBox.innerHTML = `
+            <input type="text" name="studentAnswer" id="studentAnswer" placeholder="답을 입력하세요" class="border p-2 w-full" />
+        `;
+    }
+
+    // 👉 채점 결과 표시
+    if (gradeResult) {
+        const correct = gradeResult.correct;
+        const correctAnswer = gradeResult.answer;
+        const solution = gradeResult.solution;
+
+        // 정답 여부 팝업 표시
+        resultPopup.style.display = 'block';
+        resultPopup.textContent = correct ? '정답입니다!' : '오답입니다. 다시 생각해보세요!';
+
+        // 정답 표시 (객관식일 경우 정답 번호에 표시)
+        if (isChoice) {
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                const answerNum = btn.getAttribute('data-answer');
+
+                if (answerNum === correctAnswer) {
+                    btn.classList.add(correct ? 'text-green-500' : 'text-red-500');
+                    const label = correct ? '(정답)' : '(정답)';
+                    btn.innerHTML += ` <span>${label}</span>`;
+                }
+
+                // 사용자가 선택한 답 표시
+                if (answerNum === studentAnswerInput.value && !correct) {
+                    btn.classList.add('text-red-400');
+                    btn.innerHTML += ` <span>(오답)</span>`;
+                }
+            });
+        }
+
+        // 풀이 보기 영역
+        solutionBox.textContent = solution;
+        solutionBox.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
