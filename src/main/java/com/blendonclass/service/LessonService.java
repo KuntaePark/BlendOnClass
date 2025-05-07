@@ -4,17 +4,15 @@ import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.ChapterDto;
 import com.blendonclass.dto.LessonDetailDto;
 import com.blendonclass.dto.LessonDto;
-import com.blendonclass.dto.ProgressListDto;
 import com.blendonclass.entity.*;
 import com.blendonclass.repository.*;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,13 +24,11 @@ public class LessonService {
     private final LessonRecordRepository lessonRecordRepository;
     private final ChapterRepository chapterRepository;
 
-    public List<ChapterDto> getAllChapters(int grade, SUBJECT subject) {
+    public List<ChapterDto> getAllChapters(int grade, SUBJECT subject, Long loggedId) {
         return chapterRepository.findByGradeAndSubject(grade, subject)
                 .stream()
                 .map(chapter -> {
-                    List<LessonDto> lessonDtos = lessonRepository.findByChapter(chapter)
-                            .stream()
-                            .map(LessonDto::from).collect(Collectors.toList());
+                    List<LessonDto> lessonDtos = getAllLessonsOfChapter(chapter.getId(), loggedId);
                     return ChapterDto.from(chapter, lessonDtos);
                 })
                 .collect(Collectors.toList());
@@ -49,8 +45,9 @@ public class LessonService {
                 : lessonRepository.findFirstByOrderByIdAsc();
 
         // 사용자의 강의에 대한 진도율 조회
-        Score score = scoreRepository.findByAccountIdAndLessonId(accountId, lastLesson.getId());
-        int completeRate = (score != null) ? score.getCompleteRate() : 0;
+        Optional<Score> optionalScore = scoreRepository.findByAccountIdAndLessonId(accountId, lastLesson.getId());
+        int completeRate = optionalScore.map(Score::getCompleteRate).orElse(0);
+
 
         return LessonDto.from(lastLesson, completeRate);
     }
@@ -68,10 +65,10 @@ public class LessonService {
         List<LessonDto> lessonDtos = new ArrayList<>();
         for(Lesson lesson : lessons){
             // 각 강의에 대해 ScoreRepository에서 진도율 조회
-            Score score = scoreRepository.findByAccountIdAndLessonId(accountId, lesson.getId());
-            // 진도율이 없다면 0%로 설정
+            Optional<Score> optionalScore = scoreRepository.findByAccountIdAndLessonId(accountId, lesson.getId());
+            Score score = optionalScore.orElse(null);
             int completeRate = (score != null) ? score.getCompleteRate() : 0;
-
+            System.out.println(completeRate);
             // LessonDto로 변환하여 리스트에 추가
             LessonDto dto = LessonDto.from(lesson, completeRate);
             lessonDtos.add(dto);

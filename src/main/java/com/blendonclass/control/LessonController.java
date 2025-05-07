@@ -47,7 +47,7 @@ public class LessonController {
         // ✅ 학년 + 과목이 선택되었을 때만 챕터 목록 조회
         if (grade != null && subject != null) {
             SUBJECT subjectEnum = SUBJECT.valueOf(subject.toUpperCase()); // String → SUBJECT 변환
-            model.addAttribute("chapters", lessonService.getAllChapters(grade, subjectEnum));
+            model.addAttribute("chapters", lessonService.getAllChapters(grade, subjectEnum, loggedId));
         }
 
             model.addAttribute("selectedGrade", grade);
