@@ -28,7 +28,6 @@ public class ScoreService {
     private final ClassroomScoreRepository classroomScoreRepository;
     private final ProgressRepository progressRepository;
     private final AuthorityRepository authorityRepository;
-    private final LessonRepository lessonRepository;
 
     public Float getStudentCompleteRate(Long accountId, SUBJECT subject){
         // 학생이 속한 모든 반 조회

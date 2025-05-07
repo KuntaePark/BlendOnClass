@@ -10,5 +10,8 @@
 
 <div layout:fragment="main" id="main">
     <h1>진도 설정 페이지</h1>
+    <div th:each="lesson : ${lessons}">
+        <a th:text="${lesson.lessonTitle}"></a>
+    </div>
 </div>
 </html>

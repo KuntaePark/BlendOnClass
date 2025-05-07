@@ -1,9 +1,7 @@
 package com.blendonclass.service;
 
 import com.blendonclass.constant.SUBJECT;
-import com.blendonclass.dto.ChapterDto;
-import com.blendonclass.dto.LessonDetailDto;
-import com.blendonclass.dto.LessonDto;
+import com.blendonclass.dto.*;
 import com.blendonclass.entity.*;
 import com.blendonclass.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -52,11 +50,6 @@ public class LessonService {
         return LessonDto.from(lastLesson, completeRate);
     }
 
-
-
-
-
-
     public List<LessonDto> getAllLessonsOfChapter(Long chapId, Long accountId){
         // 해당 대단원의 모든 소단원 조회
         List<Lesson> lessons = lessonRepository.findByChapter_Id(chapId);
@@ -76,9 +69,6 @@ public class LessonService {
         }
         return lessonDtos;
     }
-
-
-
 
     public LessonDetailDto getLessonDetail(Long lessonId){
         //현재 강의 정보 가져오기
@@ -103,6 +93,14 @@ public class LessonService {
         return lessonRepository.findTopByIdGreaterThanOrderByIdAsc(currentId)
                 .map(Lesson::getId)
                 .orElse(null);
+    }
+
+    public List<ChapterLessonDto> getAllLessons(int grade, SUBJECT subject) {
+        return lessonRepository.findLessonsByGradeAndSubject(grade, subject);
+    }
+
+    public List<LessonScoreDto> getAllLessonScores(int grade, SUBJECT subject) {
+        return scoreRepository.findScoresByGradeAndSubject(grade, subject);
     }
 }
 
