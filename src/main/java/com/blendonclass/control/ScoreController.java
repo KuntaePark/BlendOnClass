@@ -44,6 +44,7 @@ public class ScoreController {
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
         System.out.println("실행 시간:"+duration/1e+9 +"s");
+
         List<String> subjectList = Arrays.stream(SUBJECT.values()).map(Enum::name).collect(Collectors.toList());
         subjectList.remove("HR");
         model.addAttribute("scoreDataDtos", scoreDataDtos);
