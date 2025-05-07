@@ -9,6 +9,8 @@
 
 
 <div layout:fragment="main" id="main">
-    <h1>hello</h1>
+    <div th:each="item, stat : ${quizList}">
+        <h1 th:text="${item.solution}"></h1>
+    </div>
 </div>
 </html>

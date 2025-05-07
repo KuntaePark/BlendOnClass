@@ -1,27 +1,26 @@
 package com.blendonclass.entity;
 
-import com.blendonclass.constant.SUBJECT;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-@Getter@Setter
-public class Authority {
+@Getter @Setter
+public class QuizOngoing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "auth_id")
+    @Column(name = "qo_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    SUBJECT authType;
+    @ColumnDefault("0")
+    private int correctNum;
 
-    @ManyToOne
-    @JoinColumn(name = "classroom_id")
-    private Classroom classroom;
+    @OneToOne
+    @JoinColumn(name = "lesson_id")
+    private Lesson lesson;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;
 }
-

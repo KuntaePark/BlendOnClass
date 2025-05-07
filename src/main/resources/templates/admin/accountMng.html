@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
+
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+
+<div layout:fragment="main" id="main">
+    <h1>계정 관리 페이지</h1>
+    <ul th:each="account : ${accountListDtos.getContent()}">
+        <li th:text="${account.loginId}"></li>
+        <li th:text="${account.name}"></li>
+        <li th:text="${account.email}"></li>
+    </ul>
+    <form th:action="@{/admin/accounts}" th:object="${accountSearchDto}" method="get">
+        <input type="text" th:field="*{keyword}" placeholder="단어 입력"/>
+        <select th:field="*{roleType}">
+            <option th:value="${null}">역할 선택</option>
+            <option th:value="${T(com.blendonclass.constant.ROLE).STUDENT}">학생</option>
+            <option th:value="${T(com.blendonclass.constant.ROLE).TEACHER}">교사</option>
+        </select>
+        <button>검색</button>
+    </form>
+    <h2>요청 목록</h2>
+    <ul th:each="authReq : ${authReqListDtos.getContent()}">
+        <li th:text="${authReq.id}"></li>
+        <li th:text="${authReq.name}"></li>
+        <li th:text="${authReq.email}"></li>
+        <li th:text="${authReq.grade}"></li>
+        <li th:text="${authReq.classroomNum}"></li>
+        <li th:text="${authReq.authType}"></li>
+        <li th:text="${authReq.reqTime}"></li>
+    </ul>
+</div>
+</html>
