@@ -14,12 +14,12 @@ import com.blendonclass.repository.AccountRepository;
 import com.blendonclass.repository.AuthRequestRepository;
 import com.blendonclass.repository.AuthorityRepository;
 import com.blendonclass.repository.ClassroomRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;

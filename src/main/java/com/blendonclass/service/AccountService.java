@@ -11,12 +11,12 @@ import com.blendonclass.dto.admin.AccountListDto;
 import com.blendonclass.dto.admin.AccountSearchDto;
 import com.blendonclass.entity.Account;
 import com.blendonclass.repository.AccountRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
