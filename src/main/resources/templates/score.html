@@ -6,16 +6,21 @@
 
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script">
+    <script th:inline="javascript">
+        const originalData = [[${scoreDataDtos}]];
+        const subjectList = [[${subjectList}]];
+        console.log(originalData);
+    </script>
 </th:block>
 
 <div layout:fragment="main" id="main">
     <h1>학습성과 페이지</h1>
-    <div style="width:800px; height: 600px;">
-        <select id="subjectSelector" onchange="onSubjectChange()">
-            <option value="">과목 선택</option>
-        </select>
+    <div>
+<!--        <select id="subjectSelector" onchange="onSubjectChange()">-->
+<!--            <option value="">과목 선택</option>-->
+<!--        </select>-->
 
-        <select id="categorySelector" onchange="onCategoryChange()" disabled>
+        <select id="categorySelector" onchange="onCategoryChange()">
             <option value="major">대단원</option>
             <option value="minor">소단원</option>
         </select>
