@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:sec="http:/www.thymeleaf.org/extras/spring-security">
 
 <div th:fragment="header" id="header">
-    <a href="/logout">로그아웃</a>
+    <a href="/logout" sec:authorize="isAuthenticated()">로그아웃</a>
 </div>
 </html>

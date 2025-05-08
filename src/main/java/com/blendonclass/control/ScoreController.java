@@ -1,7 +1,9 @@
 package com.blendonclass.control;
 
 import com.blendonclass.constant.SUBJECT;
+import com.blendonclass.dto.LessonScoreDto;
 import com.blendonclass.dto.ScoreDataDto;
+import com.blendonclass.service.LessonService;
 import com.blendonclass.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScoreController {
     private final ScoreService scoreService;
+    private final LessonService lessonService;
 
     //todo - 함수겹침, 정리?
     @GetMapping("/student/myscore")
@@ -44,6 +47,13 @@ public class ScoreController {
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
         System.out.println("실행 시간:"+duration/1e+9 +"s");
+
+//        startTime = System.nanoTime();
+//        List<LessonScoreDto> lessonScoreDtos = scoreService.getAllLessonScores(grade, subject, id);
+//        endTime = System.nanoTime();
+//        duration = endTime - startTime;
+//        System.out.println("실행 시간2:"+duration/1e+9 +"s");
+
 
         List<String> subjectList = Arrays.stream(SUBJECT.values()).map(Enum::name).collect(Collectors.toList());
         subjectList.remove("HR");

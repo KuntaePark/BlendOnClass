@@ -1,6 +1,7 @@
 package com.blendonclass.service;
 
 import com.blendonclass.constant.SUBJECT;
+import com.blendonclass.dto.LessonScoreDto;
 import com.blendonclass.dto.ScoreDataDto;
 import com.blendonclass.dto.ScoreUnit;
 import com.blendonclass.entity.ClassroomScore;
@@ -89,6 +90,17 @@ public class ScoreService {
                     return scoreUnit;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public List<LessonScoreDto> getAllLessonScores(int grade, SUBJECT subject, Long accountId) {
+        return scoreRepository.findScoresByGradeAndSubjectAndAccountId(grade, subject, accountId);
+    }
+
+    public List<LessonScoreDto> getAllClassroomLessonScores(int grade, SUBJECT subject, Long classroomId) {
+        return null;
+//        return classroomScoreRepository.findScoresByGradeAndSubjectAndClassroomId(
+//                grade, subject, classroomId
+//        );
     }
 
 }

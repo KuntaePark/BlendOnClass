@@ -30,8 +30,8 @@ public interface ScoreRepository extends JpaRepository<Score, Long> {
     from Score s
     join s.lesson l
     join l.chapter c
-    where c.grade = :grade and c.subject = :subject
+    where c.grade = :grade and c.subject = :subject and s.account.id = :accountId
     order by l.id asc
     """)
-    List<LessonScoreDto> findScoresByGradeAndSubject(int grade, SUBJECT subject);
+    List<LessonScoreDto> findScoresByGradeAndSubjectAndAccountId(int grade, SUBJECT subject, Long accountId);
 }

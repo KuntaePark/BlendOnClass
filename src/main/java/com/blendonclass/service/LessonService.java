@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class LessonService {
     private final LessonRepository lessonRepository;
     private final ScoreRepository scoreRepository;
+    private final ClassroomScoreRepository classroomScoreRepository;
     private final LessonDetailRepository lessonDetailRepository;
     private final LessonRecordRepository lessonRecordRepository;
     private final ChapterRepository chapterRepository;
@@ -99,9 +100,7 @@ public class LessonService {
         return lessonRepository.findLessonsByGradeAndSubject(grade, subject);
     }
 
-    public List<LessonScoreDto> getAllLessonScores(int grade, SUBJECT subject) {
-        return scoreRepository.findScoresByGradeAndSubject(grade, subject);
-    }
+
 }
 
 
