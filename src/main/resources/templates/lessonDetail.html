@@ -30,7 +30,11 @@
 
     <!-- 강의 영상 -->
     <div class="mb-6">
-        <iframe width="750" height="450" src="https://www.youtube.com/embed/Raj9WbFnvdk?list=PLs4RoKjcy7OnM1Ffoqqias53Tkhn6TV_b" title="중1-1-5. 소인수분해와 최대공약수 (쉬운 방법)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe width="750" height="450"
+                th:src="${lessonDetail.mediaUrl}"
+                title="강의 영상" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
     </div>
 
     <!-- 강의 설명 -->
