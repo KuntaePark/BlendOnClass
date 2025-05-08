@@ -1,10 +1,11 @@
 package com.blendonclass.control;
 
 import com.blendonclass.dto.NoticeWriteDto;
-import com.blendonclass.service.NoticeBoardService;
+import com.blendonclass.service.board.NoticeBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,5 +24,10 @@ public class NoticeBoardController {
 
     public String getNoticeDetail(@RequestParam("id") Long nbId, Model model){
         return null;
+    }
+
+    @GetMapping("/post/notice")
+    public String notice(){
+        return "notice";
     }
 }

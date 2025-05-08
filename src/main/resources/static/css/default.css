@@ -1,0 +1,25 @@
+*margin{
+    margin : 0;
+    padding : 0;
+    box-sizing: border-box;
+}
+#main{
+    display : flex;
+    gap:100px;
+    text-align:center;
+    justify-content: center;
+}
+#notice{
+    width:200px;
+}
+#QnA{
+    width:200px;
+}
+#task{
+    width:200px;
+}
+h4{
+    height:25px;
+    border : 1px solid black;
+    border-radius: 2px;
+}

@@ -5,20 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
+    <link rel="stylesheet" href="css/default.css">
 </head>
 <body>
     <div id="main">
       <div id="notice">
         <h4 id="1">공지사항</h4>
         <a href="/post/notice">+</a>
+          <div th:each="notice : ${noticeShowDtos.getContent()}">
+              <p th:text="${notice.title}"></p>
+          </div>
       </div>
       <div id="QnA">
         <h4 id="2">QnA</h4>
-        <a href="/post/QnA">+</a>
+        <a href="/post/question">+</a>
+          <div th:each="question : ${questionShowDtos.getContent()}">
+              <p th:text="${question.title}"></p>
+          </div>
       </div>
       <div id="task">
         <h4 id="3">과제</h4>
         <a href="/post/task">+</a>
+          <div th:each="assignment : ${assignmentShowDtos.getContent()}">
+              <p th:text="${assignment.title}"></p>
+          </div>
       </div>
     </div>
 </body>

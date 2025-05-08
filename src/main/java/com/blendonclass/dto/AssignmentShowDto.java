@@ -1,5 +1,6 @@
 package com.blendonclass.dto;
 
+import com.blendonclass.entity.AssignmentBoard;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -15,6 +16,17 @@ public class AssignmentShowDto {
     private String title;
     private String context;
     private LocalDateTime writeTime;
-    private LocalTime dueDate;
+    private LocalDate dueDate;
     private String fileUrl;
+
+    public static AssignmentShowDto from(AssignmentBoard assignmentBoard) {
+        AssignmentShowDto assignmentShowDto = new AssignmentShowDto();
+        assignmentShowDto.setAbId(assignmentBoard.getId());
+        assignmentShowDto.setTitle(assignmentBoard.getTitle());
+        assignmentShowDto.setContext(assignmentBoard.getContext());
+        assignmentShowDto.setWriteTime(assignmentBoard.getWriteTime());
+        assignmentShowDto.setFileUrl(assignmentBoard.getFileUrl());
+        assignmentShowDto.setDueDate(assignmentBoard.getDueDate());
+        return assignmentShowDto;
+    }
 }
