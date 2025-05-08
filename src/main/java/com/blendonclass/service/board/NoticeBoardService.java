@@ -1,6 +1,7 @@
 package com.blendonclass.service.board;
 
 import com.blendonclass.dto.NoticeShowDto;
+import com.blendonclass.dto.NoticeWriteDto;
 import com.blendonclass.entity.NoticeBoard;
 import com.blendonclass.repository.board.NoticeBoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,9 @@ import java.util.stream.Collectors;
 public class NoticeBoardService {
     private final NoticeBoardRepository noticeBoardRepository;
 
-    public void saveNotice(NoticeBoard noticeBoard, MultipartFile multipartFile) {
-
+    public void saveNotice(NoticeWriteDto noticeWriteDto, MultipartFile multipartFile) {
+        NoticeBoard noticeBoard = NoticeBoard.toNoticeBoard(noticeWriteDto);
+        noticeBoardRepository.save(noticeBoard);
     }
 
     public void deleteNotice(Long nbId){

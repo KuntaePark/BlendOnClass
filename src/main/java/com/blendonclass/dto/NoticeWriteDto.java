@@ -9,6 +9,6 @@ public class NoticeWriteDto {
     private Long nbId;
     private Long writerId;
     private String title;
-    private String content;
+    private String context;
     private LocalDateTime writeTime;
 }

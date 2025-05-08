@@ -1,5 +1,6 @@
 package com.blendonclass.entity;
 
+import com.blendonclass.dto.NoticeWriteDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,4 +32,12 @@ public class NoticeBoard {
     @ManyToOne
     @JoinColumn(name = "auth_id")
     private Authority authority;
+
+    public static NoticeBoard toNoticeBoard(NoticeWriteDto noticeWriteDto) {
+        NoticeBoard noticeBoard = new NoticeBoard();
+        noticeBoard.setTitle(noticeWriteDto.getTitle());
+        noticeBoard.setContext(noticeWriteDto.getContext());
+        noticeBoard.setWriteTime(noticeWriteDto.getWriteTime());
+        return noticeBoard;
+    }
 }
