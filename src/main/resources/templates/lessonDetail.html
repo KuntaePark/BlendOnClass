@@ -30,11 +30,11 @@
 
     <!-- 강의 영상 -->
     <div class="mb-6">
-        <iframe th:attr="src=${lessonDetail.mediaUrl}"
-                class="w-full h-96 rounded shadow"
-                frameborder="0"
-                allowfullscreen>
-        </iframe>
+        <iframe width="750" height="450"
+                th:src="${lessonDetail.mediaUrl}"
+                title="강의 영상" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
     </div>
 
     <!-- 강의 설명 -->

@@ -5,25 +5,48 @@
       layout:decorate="~{fragment/default}">
 
 <head>
-    <meta charset="UTF-8">
-    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">BlendOnClass</title>
-<!--    script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>   <-->
+    <title>학생 홈</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <th:block layout:fragment="css"></th:block>
 </head>
 
-<!--<th:block layout:fragment="css"></th:block>-->
-<!--<th:block layout:fragment="script"></th:block>-->
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            const btn = document.getElementById("profileBtn");
+            const menu = document.getElementById("dropdownMenu");
 
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                menu.classList.toggle("hidden");
+            });
 
-<!--<div layout:fragment="main" id="main">-->
-<!--    <h1>student</h1>-->
-<!--</div>-->
+            document.addEventListener("click", (e) => {
+                if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                    menu.classList.add("hidden");
+                }
+            });
+        });
+    </script>
 
+</th:block>
 
-<body class="bg-gray-100 text-gray-800">
 <div layout:fragment="main" id="main" class="container mx-auto px-4 py-6">
+
+    <!-- 상단 프로필 드롭다운 -->
+    <div class="flex justify-end items-center space-x-2 mb-4">
+        <div class="relative">
+            <button id="profileBtn" class="w-10 h-10 rounded-full bg-gray-500 text-white font-bold">
+
+            </button>
+            <div id="dropdownMenu"
+                 class="hidden absolute right-0 mt-2 w-32 bg-white border border-gray-300 rounded shadow-md z-50">
+                <a href="/profile" class="block px-4 py-2 hover:bg-gray-100 text-sm">내 정보</a>
+                <a href="/logout" class="block px-4 py-2 hover:bg-gray-100 text-sm">로그아웃</a>
+            </div>
+        </div>
+    </div>
 
     <h1 class="text-2xl font-semibold mb-4">Student Home</h1>
 
@@ -32,16 +55,13 @@
         강의 목록
     </a>
 
-    <div class="bg-white p-4 rounded-lg shadow-md">
+    <div class="bg-white p-4 rounded-lg shadow-md mt-6">
         <h2 class="text-xl font-medium mb-3">최근 강의</h2>
 
         <div th:if="${lastLesson != null}" class="flex justify-between items-center">
             <div class="w-full">
-                <!-- 강의 제목 -->
                 <p th:text="${lastLesson.lessonTitle}" class="text-lg font-semibold text-gray-800"></p>
-
-                <!-- 진도율 바 -->
-                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-2">
                     <div th:style="|width: ${lastLesson.completeRate}%|"
                          class="bg-blue-500 h-2.5 rounded-full"></div>
                 </div>
@@ -49,14 +69,12 @@
                    th:text="|진도율: ${lastLesson.completeRate}%|"></p>
             </div>
 
-            <!-- 이어하기 / 다시하기 버튼 -->
             <div class="flex flex-col items-end ml-4">
                 <a th:if="${lastLesson.completeRate == 100}"
                    th:href="@{/lesson/restart/{id}(id=${lastLesson.lessonId})}"
                    class="bg-red-500 text-white px-2 py-1 rounded text-sm mb-1 hover:bg-red-600">
                     다시하기
                 </a>
-
                 <a th:href="@{/lesson/continue/{id}(id=${lastLesson.lessonId})}"
                    class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
                     이어하기
@@ -64,10 +82,7 @@
             </div>
         </div>
     </div>
-
-
 </div>
-</body>
 
 
 </html>

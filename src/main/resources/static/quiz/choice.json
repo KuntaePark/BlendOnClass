@@ -1,0 +1,73 @@
+[
+  {
+    "quiz_id": 1,
+    "question": "다음 중 옳은 것은?",
+    "options": [
+      { "optionNum": 1, "optionContext": "1은 합성수이다." },
+      { "optionNum": 2, "optionContext": "소수는 모두 홀수이다." },
+      { "optionNum": 3, "optionContext": "합성수는 2개의 약수를 갖는다." },
+      { "optionNum": 4, "optionContext": "4의 배수 중 소수는 없다." },
+      { "optionNum": 5, "optionContext": "20이하의 소수는 개이다." }
+    ]
+  },
+
+  {
+    "quiz_id": 2,
+    "question": "다음 중 옳은 것은? ",
+    "options": [
+      { "optionNum": 1, "optionContext": "4<sup>2</sup>=8" },
+      { "optionNum": 2, "optionContext": "3+3+3+3+=3<sup>4</sup>" },
+      { "optionNum": 3, "optionContext": "5x5x5=3<sup>5</sup>" },
+      {
+        "optionNum": 4,
+        "optionContext": "2x2x3x3x3=2<sup>3</sup>x3<sup>2</sup>"
+      },
+      { "optionNum": 5, "optionContext": "2/5x2/5x2/5=(2/5)<sup>3</sup>" }
+    ]
+  },
+
+  {
+    "quiz_id": 3,
+    "question": "다음 중 2<sup>4</sup> x 5<sup>2</sup> x 7의 약수가 아닌 것은? ",
+    "options": [
+      { "optionNum": 1, "optionContext": "8" },
+      { "optionNum": 2, "optionContext": "35" },
+      { "optionNum": 3, "optionContext": "42" },
+      {
+        "optionNum": 4,
+        "optionContext": "100"
+      },
+      { "optionNum": 5, "optionContext": "175" }
+    ]
+  },
+
+  {
+    "quiz_id": 4,
+    "question": "다음 중 소인수가 나머지와 다른 수는? ",
+    "options": [
+      { "optionNum": 1, "optionContext": "12" },
+      { "optionNum": 2, "optionContext": "18" },
+      { "optionNum": 3, "optionContext": "24" },
+      {
+        "optionNum": 4,
+        "optionContext": "30"
+      },
+      { "optionNum": 5, "optionContext": "36" }
+    ]
+  },
+
+  {
+    "quiz_id": 5,
+    "question": "다음 중 두 수가 서로소인 것을 모두 고르면? ",
+    "options": [
+      { "optionNum": 1, "optionContext": "6,15" },
+      { "optionNum": 2, "optionContext": "17,21" },
+      { "optionNum": 3, "optionContext": "24,33" },
+      {
+        "optionNum": 4,
+        "optionContext": "35,55"
+      },
+      { "optionNum": 5, "optionContext": "7,49" }
+    ]
+  }
+]

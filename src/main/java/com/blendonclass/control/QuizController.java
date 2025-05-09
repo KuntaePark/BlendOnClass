@@ -21,6 +21,13 @@ import java.util.List;
 public class QuizController {
     private final QuizService quizService;
 
+
+    // 강의메인으로 이동
+    @GetMapping("/lessonMain")
+    public String lessonMainPage() {
+        return "lessonMain"; // templates/lessonMain.html을 렌더링
+    }
+
     // 소단원 퀴즈 시작
     @GetMapping("/start")
     public String startLessonQuiz(@RequestParam Long lessonId,
@@ -29,10 +36,18 @@ public class QuizController {
         Long accountId = Long.parseLong(userDetails.getUsername());
         List<QuizDetailDto> quizList = quizService.getQuiz(lessonId, accountId, session);
 
+        if (quizList == null || quizList.isEmpty()) {
+            model.addAttribute("errorMessage", "문제가 존재하지 않습니다.");
+            return "quiz-error"; // 👉 에러 화면 따로 만들거나 메시지 처리
+        }
+
+        QuizDetailDto currentQuiz = quizList.get(0);
+
         model.addAttribute("quizList", quizList);
+        model.addAttribute("currentQuiz", currentQuiz);
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("currentIndex", 0);
-        return "quiz/quiz";
+        return"quiz";
     }
 
     // 대단원 시험 시작
@@ -43,10 +58,14 @@ public class QuizController {
         Long accountId = Long.parseLong(userDetails.getUsername());
         List<QuizDetailDto> quizList = quizService.getChapterQuiz(chapterId, accountId, session);
 
+        QuizDetailDto currentQuiz = quizList.get(0);
+
+
         model.addAttribute("quizList", quizList);
+        model.addAttribute("currentQuiz", currentQuiz);
         model.addAttribute("chapterId", chapterId);
         model.addAttribute("currentIndex", 0);
-        return "quiz/quiz";
+        return "quiz";
     }
 
     // 문제 채점
