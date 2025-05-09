@@ -2,7 +2,9 @@ package com.blendonclass.service.board;
 
 import com.blendonclass.dto.NoticeShowDto;
 import com.blendonclass.dto.NoticeWriteDto;
+import com.blendonclass.entity.Authority;
 import com.blendonclass.entity.NoticeBoard;
+import com.blendonclass.repository.AuthorityRepository;
 import com.blendonclass.repository.board.NoticeBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,8 +22,14 @@ import java.util.stream.Collectors;
 public class NoticeBoardService {
     private final NoticeBoardRepository noticeBoardRepository;
 
+    private final AuthorityRepository authorityRepository;
+
     public void saveNotice(NoticeWriteDto noticeWriteDto, MultipartFile multipartFile) {
-        NoticeBoard noticeBoard = NoticeBoard.toNoticeBoard(noticeWriteDto);
+        //계정 id와 반 id로 검색
+        Authority authority = authorityRepository.findByAccountIdAndClassroomId(noticeWriteDto.getWriterId(),noticeWriteDto.getClassroomId())
+                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다."));
+
+        NoticeBoard noticeBoard = NoticeBoard.toNoticeBoard(noticeWriteDto, authority);
         noticeBoardRepository.save(noticeBoard);
     }
 

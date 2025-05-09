@@ -11,7 +11,7 @@
     <div id="main">
       <div id="notice">
         <h4 id="1">공지사항</h4>
-        <a href="/post/notice">+</a>
+        <a th:href="@{'/post/notice?id='+${classroomId}}">+</a>
           <div th:each="notice : ${noticeShowDtos.getContent()}">
               <p th:text="${notice.title}"></p>
           </div>

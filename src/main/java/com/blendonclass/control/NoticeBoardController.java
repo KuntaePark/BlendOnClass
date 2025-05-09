@@ -1,6 +1,7 @@
 package com.blendonclass.control;
 
 import com.blendonclass.dto.NoticeWriteDto;
+import com.blendonclass.entity.Authority;
 import com.blendonclass.service.board.NoticeBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,13 +34,22 @@ public class NoticeBoardController {
     }
 
     @GetMapping("/post/notice")
-    public String notice(){
-
+    public String notice(@RequestParam("id") Long classroomId, Model model){
+        NoticeWriteDto noticeWriteDto = new NoticeWriteDto();
+        model.addAttribute("noticeWriteDto", noticeWriteDto);
+        model.addAttribute("classroomId", classroomId);
         return "notice";
     }
 
     @PostMapping("/post/notice")
-    public String save(@ModelAttribute NoticeWriteDto noticeWriteDto, MultipartFile multipartFile){
+    public String save(NoticeWriteDto noticeWriteDto,
+                       @RequestParam("id") Long classroomId,
+                       Principal principal,
+                       MultipartFile multipartFile){
+        Long id = Long.parseLong(principal.getName());
+        noticeWriteDto.setWriterId(id);
+        noticeWriteDto.setClassroomId(classroomId);
+        System.out.println("writerId = " + noticeWriteDto.getWriterId());
         noticeBoardService.saveNotice(noticeWriteDto, multipartFile);
         return "redirect:/student";
     }

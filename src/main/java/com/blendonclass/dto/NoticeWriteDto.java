@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 public class NoticeWriteDto {
     private Long nbId;
     private Long writerId;
+    private Long classroomId;
     private String title;
     private String context;
     private LocalDateTime writeTime;
+    private String fileUrl;
 }

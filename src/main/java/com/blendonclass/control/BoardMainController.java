@@ -39,6 +39,7 @@ public class BoardMainController {
 
         Page<QuestionShowDto> questionShowDtos = questionBoardService.getQuestionList(pageable, classroomId);
         model.addAttribute("questionShowDtos", questionShowDtos);
+        model.addAttribute("classroomId", classroomId);
         return "post";
     }
 

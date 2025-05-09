@@ -33,11 +33,13 @@ public class NoticeBoard {
     @JoinColumn(name = "auth_id")
     private Authority authority;
 
-    public static NoticeBoard toNoticeBoard(NoticeWriteDto noticeWriteDto) {
+    public static NoticeBoard toNoticeBoard(NoticeWriteDto noticeWriteDto, Authority authority) {
         NoticeBoard noticeBoard = new NoticeBoard();
         noticeBoard.setTitle(noticeWriteDto.getTitle());
         noticeBoard.setContext(noticeWriteDto.getContext());
         noticeBoard.setWriteTime(noticeWriteDto.getWriteTime());
+        noticeBoard.setAuthority(authority);
+        noticeBoard.setFileUrl(noticeWriteDto.getFileUrl());
         return noticeBoard;
     }
 }
