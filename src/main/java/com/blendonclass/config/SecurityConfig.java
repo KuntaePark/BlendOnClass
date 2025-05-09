@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -17,9 +18,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(
-                authorizeRequests -> authorizeRequests
-                        .requestMatchers("/error").permitAll()
-                        .anyRequest().authenticated()
+                        authorizeRequests -> authorizeRequests
+                                .requestMatchers("/student/**","/student").hasRole("STUDENT")
+                                .requestMatchers("/teacher/**","/teacher").hasRole("TEACHER")
+                                .requestMatchers("/admin/**","/admin").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
                 .formLogin(
                 form -> form
@@ -28,6 +31,11 @@ public class SecurityConfig {
                         .passwordParameter("password")
                         .successHandler(new CustomAuthenticationHandler())
                         .permitAll()
+                )
+                .logout(out -> out
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
                 );
         return http.build();
     }

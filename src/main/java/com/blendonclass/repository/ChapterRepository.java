@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ChapterRepository extends JpaRepository<Chapter, Long> {
-    List<Chapter> findByGradeAndSubject(int grade, SUBJECT subject);
+public interface ChapterRepository extends JpaRepository<Chapter, Integer> {
+
+    List<Chapter> findBySubject(SUBJECT subject);
+
+    List<Chapter> findByGradeAndSubject(int i, SUBJECT subject);
 }
