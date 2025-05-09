@@ -169,6 +169,27 @@
 
         renderQuiz(0);
 
+        document.addEventListener('visibilitychange', function (){
+            if(document.visibilityState === "hidden"){
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                fetch("/quiz/exit",{
+                    method: 'POST' ,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        [csrfHeader]: csrfToken
+                    },
+                    body: new URLSearchParams({lessonId:lessonId})
+                }).then(() => {
+                    console.log("퀴즈 종료 요청 전송");
+                }).catch(e => {
+                    console.error("퀴즈 종료 전송 실패:",e);
+                });
+            }
+        });
+
+
 
 
     </script>

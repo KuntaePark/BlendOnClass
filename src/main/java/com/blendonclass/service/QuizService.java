@@ -29,6 +29,11 @@ public class QuizService {
     // 퀴즈 5문제
     public List<QuizDetailDto> getQuiz(Long lessonId, Long accountId, HttpSession session) {
         List<Quiz> quizzes = quizRepository.findByLessonId(lessonId);
+
+        if(quizzes == null || quizzes.isEmpty()){
+            return Collections.emptyList(); // 퀴즈 없으면 아무것도 안함
+        }
+
         Collections.shuffle(quizzes);
         List<Quiz> selected = quizzes.stream().limit(5).toList();
 
@@ -52,6 +57,11 @@ public class QuizService {
                 .flatMap(lesson -> quizRepository.findByLessonId(lesson.getId()).stream())
                 .filter(q -> q.getId() <= 8) //  JSON에 실제 존재하는 문제만 포함 >> 테스트 후에 지우기!!!!!!!!!
                 .collect(Collectors.toList());
+
+        if (quizzes == null || quizzes.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         Collections.shuffle(quizzes);
         List<Quiz> selected = quizzes.stream().limit(20).toList();
 
@@ -105,7 +115,6 @@ public class QuizService {
     }
 
     // 퀴즈 종료 및 점수 반환
-    // 퀴즈 종료 및 점수 반환
     public int endQuiz(Long accountId, Long lessonId) {
         QuizOngoing ongoing = quizOngoingRepository.findByAccountIdAndLessonId(accountId, lessonId)
                 .orElseThrow(() -> new IllegalStateException("진행 중 퀴즈가 없습니다."));
@@ -134,5 +143,13 @@ public class QuizService {
         quizOngoingRepository.delete(ongoing);
         return correctNum;
     }
+
+
+    public void exitOngoingQuiz(Long accountId, Long lessonId) {
+        quizOngoingRepository.findByAccountIdAndLessonId(accountId, lessonId)
+                .ifPresent(quizOngoingRepository::delete);
+    }
+
+
 
 }
