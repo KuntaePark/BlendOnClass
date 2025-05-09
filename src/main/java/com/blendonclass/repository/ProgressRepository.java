@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProgressRepository extends JpaRepository<Progress, Long> {
+public interface ProgressRepository extends JpaRepository<Progress,Long> {
+    Progress findByClassroomIdAndStartLesson_Chapter_Subject(Long classroomId, SUBJECT subject);
     List<Progress> findByClassroomId(Long classroomId);
 
 

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
+
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+
+<div layout:fragment="main" id="main">
+    <h1>반 관리 페이지</h1>
+    <h2>1학년 1반 목록</h2>
+    <div th:each="account : ${accountListDtos}">
+        <li th:text="${account.name}"></li>
+        <li th:text="${account.email}"></li>
+        <li th:text="${account.role}"></li>
+    </div>
+</div>
+</html>

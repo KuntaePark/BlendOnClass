@@ -1,15 +1,6 @@
 package com.blendonclass.control;
 
-import com.blendonclass.constant.SUBJECT;
-import com.blendonclass.entity.Account;
-import com.blendonclass.entity.Authority;
-import com.blendonclass.entity.Classroom;
-import com.blendonclass.entity.Quiz;
-import com.blendonclass.repository.AccountRepository;
-import com.blendonclass.repository.AuthorityRepository;
-import com.blendonclass.repository.ClassroomRepository;
-import com.blendonclass.repository.QuizRepository;
-import com.blendonclass.service.ScoreService;
+import com.blendonclass.constant.ROLE;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +16,16 @@ import java.util.List;
 @Getter@Setter
 @RequiredArgsConstructor
 public class MainController {
-    private final ScoreService scoreService;
+    @GetMapping("/")
+    public String home(HttpSession session, Model model) {
+        ROLE role = (ROLE)session.getAttribute("role");
+        String redirectUrl = switch (role) {
+            case ADMIN -> "/admin";
+            case TEACHER -> "/teacher";
+            case STUDENT -> "/student";
+        };
+        return "redirect:" + redirectUrl;
+    }
 
     @GetMapping("/login")
     public String login() {
@@ -36,13 +36,8 @@ public class MainController {
     public String student(Model model) {return "studentMain";}
 
     @GetMapping("/teacher")
-    public String teacher(Model model) {
-        scoreService.getClassroomCompleteRate(1L, SUBJECT.MATH);
-        return "teacherMain";
-    }
+    public String teacher(Model model) {return "teacherMain";}
 
     @GetMapping("/admin")
     public String admin(Model model) {return "redirect:/admin/accounts";}
-
-
 }

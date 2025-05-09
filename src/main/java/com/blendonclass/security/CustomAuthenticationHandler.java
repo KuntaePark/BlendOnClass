@@ -21,6 +21,7 @@ public class CustomAuthenticationHandler implements AuthenticationSuccessHandler
         session.setAttribute("id", customUserDetails.getUsername());
         session.setAttribute("name", customUserDetails.getName());
         session.setAttribute("email", customUserDetails.getEmail());
+        session.setAttribute("role", customUserDetails.getRole());
 
         //role 체크해서 해당하는 주소로 redirect - todo
         ROLE role = customUserDetails.getRole();
