@@ -10,6 +10,18 @@
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script">
     <script th:src="@{/javascript/progress.js}"></script>
+    <script th:inline="javascript">
+        $(function() {
+        progress = [[${progress}]];
+            if(progress != null) {
+                console.log(progress);
+                startId = progress.startLessonId ?? -1;
+                endId = progress.endLessonId ?? -1;
+                console.log(startId + " " + endId);
+                showRange();
+            }
+        });
+    </script>
 </th:block>
 
 
@@ -26,6 +38,10 @@
         </select>
     </div>
     <div th:if="${subject != null}" id="progress-form" class="flex flex-col gap-2">
+        <th:block th:if="${progress.getId() != null}">
+            <p class="text-red-400">해당 과목의 진도가 존재합니다.</p>
+        </th:block>
+        <p id="warning"></p>
         <div th:if="${lessons != null}" class="flex flex-1 gap-2 overflow-x-auto">
             <button class="range-button w-10 h-10 flex-none border-2 rounded border-gray-400
                             hover:bg-gray-200"
@@ -35,6 +51,8 @@
                     th:text="${lesson.lessonId}"
                     th:value="${lesson.lessonId}"></button>
         </div>
+        <p>진도 종료일 선택</p>
+        <input id="end-date" type="date">
         <button id="submit-button" type="button" th:onclick="setProgress([[${classroomId}]])"
                 class="px-2 py-2 border-1 rounded bg-gray-200 w-40" disabled>등록하기</button>
     </div>

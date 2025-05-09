@@ -1,5 +1,6 @@
 let startId = -1;
 let endId = -1;
+let progress;
 
 function selectRange(id) {
     console.log(id);
@@ -66,14 +67,22 @@ function setProgress(classroomId) {
     const token = $("meta[name='_csrf']").attr("content");
     const header = $("meta[name='_csrf_header']").attr("content");
 
+    if(startId == progress.startLessonId && endId == progress.endLessonId) {
+        console.log('here');
+        $('#warning').text("진도가 변경되지 않았습니다.");
+        return;
+    }
+
+    progress.startLessonId = startId;
+    progress.endLessonId = endId;
+    progress.classroomId = classroomId;
+    progress.endDate = $('end-date').val();
+
     $.ajax({
         type: "POST",
         url: "/teacher/setprogress",
-        data: {
-            classroomId: classroomId,
-            startId: startId,
-            endId: endId
-        },
+        contentType: "application/json",
+        data: JSON.stringify(progress),
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);
         },
@@ -90,10 +99,11 @@ function setProgress(classroomId) {
 function onSubjectChange(classroomId,subject) {
     console.log(subject);
     if(subject) {
-        // $('#progress-form').removeClass('hidden');
+        console.log("subject");
         location.href="/teacher/progress?id="+classroomId+"&subject="+subject;
     } else {
-        // $('#progress-form').addClass('hidden');
+        console.log("nosubject");
+        location.href="/teacher/progress?id="+classroomId;
     }
 }
 
