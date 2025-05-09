@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +34,9 @@ public class StudentController {
 
     // 학생 메인 페이지 + 모든 정보 로드
     @GetMapping("/main") // URL을 "/student/main"으로 변경 (더 직관적)
-    public String studentMain(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public String studentMain(Model model, Principal principal) {
         System.out.println("📥 studentMain 호출됨");
-        if (customUserDetails == null) {
-            return "redirect:/login"; // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
-        }
-
-        Long loggedId = Long.parseLong(customUserDetails.getUsername());
+        Long loggedId = Long.parseLong(principal.getName());
 
         // 알림 데이터 (예시)
         model.addAttribute("notifications", "알림 리스트");
