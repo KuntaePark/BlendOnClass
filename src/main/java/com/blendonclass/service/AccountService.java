@@ -13,6 +13,7 @@ import com.blendonclass.entity.Account;
 import com.blendonclass.repository.AccountRepository;
 import com.blendonclass.repository.StatRepository;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -26,9 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,8 +123,8 @@ public class AccountService {
         account.setEmail(accountDto.getEmail());
     }
 
-    //엑셀 파일로 계정 일괄 생성
-    public void createAccountByFile(MultipartFile file) throws IllegalArgumentException {
+    //엑셀 파일로 계정 일괄 생성, 생성 성공 시 로그인 아이디, 비밀번호 저장된 csv 파일 전달
+    public File createAccountByFile(MultipartFile file) throws IllegalArgumentException {
         //허용되지 않은 확장자 사용 시 exception
         String fileName = file.getOriginalFilename();
         if(fileName != null && !fileName.isBlank()) {
@@ -139,6 +138,7 @@ public class AccountService {
         try (Reader reader = new InputStreamReader(file.getInputStream())) {
             CSVReader csvReader = new CSVReader(reader);
             List<String[]> records = csvReader.readAll();
+            List<String[]> results = new ArrayList<>();
 
             //첫째 줄 형식이 올바른지 체크
             String[] head = records.get(0);
@@ -154,6 +154,7 @@ public class AccountService {
 
             for(int i = 1; i < records.size(); i++) {
                 String[] record = records.get(i);
+
                 System.out.println(Arrays.toString(record));
                 //각 열에 대해 계정 생성
                 AccountDto accountDto = new AccountDto();
@@ -164,17 +165,11 @@ public class AccountService {
                 }
 
                 //역할이 유효한지 체크
-                ROLE role = null;
-                switch(record[2]) {
-                    case "학생":
-                        role = ROLE.STUDENT;
-                        break;
-                    case "교사":
-                        role = ROLE.TEACHER;
-                        break;
-                    default:
-                        throw new IllegalArgumentException((i+1) + "열: 역할 구분이 유효하지 않은 데이터가 있습니다.");
-                }
+                ROLE role = switch (record[2]) {
+                    case "학생" -> ROLE.STUDENT;
+                    case "교사" -> ROLE.TEACHER;
+                    default -> throw new IllegalArgumentException((i + 1) + "열: 역할 구분이 유효하지 않은 데이터가 있습니다.");
+                };
 
                 accountDto.setName(record[0]);
                 accountDto.setEmail(record[1]);
@@ -200,7 +195,21 @@ public class AccountService {
                 System.out.println("save");
                 accountRepository.save(account);
                 statRepository.findById("idIndex").get().addAccount();
+
+                //생성된 결과 저장
+                results.add(
+                        new String[] {record[0], record[1], record[2], loginId, password}
+                );
             }
+            
+            //생성 성공 했을 시, 생성된 로그인 아이디, 비밀번호 csv 파일로 저장
+            File tempFile = File.createTempFile("생성결과", ".csv");
+            CSVWriter csvWriter = new CSVWriter(new FileWriter(tempFile));
+            csvWriter.writeNext(new String[] {"이름", "이메일", "구분", "아이디", "비밀번호"});
+            csvWriter.writeAll(results);
+
+            return tempFile;
+            
         } catch (IOException | CsvException e) {
             throw new IllegalArgumentException("파일 처리 중 오류가 발생했습니다.");
         }
