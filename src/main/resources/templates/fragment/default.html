@@ -34,7 +34,7 @@
     <div id="body-wrap" class="flex flex-col">
         <th:block th:replace="fragment/aside::aside"></th:block>
         <div id="main-wrap"
-        class="fixed top-0 left-0 w-full h-full transition-all duration-300 ease-in-out shadow-lg">
+        class="absolute top-0 left-0 w-full transition-all duration-300 ease-in-out shadow-lg">
             <th:block th:replace="fragment/header::header"></th:block>
             <div id="main-container" class="mx-auto max-w-[1280px] px-2 px-6">
                 <th:block layout:fragment="main"></th:block>
