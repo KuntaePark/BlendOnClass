@@ -18,14 +18,14 @@
       </div>
       <div id="QnA">
         <h4 id="2">QnA</h4>
-        <a href="/post/question">+</a>
+        <a id="question" th:href="@{'/post/question?id='+${classroomId}}" >+</a>
           <div th:each="question : ${questionShowDtos.getContent()}">
-              <p th:text="${question.title}"></p>
+                <a id="answer" th:href="@{'/post/answer?id='+${question.id}}" th:text="${question.title}"></a>
           </div>
       </div>
       <div id="task">
         <h4 id="3">과제</h4>
-        <a href="/post/task">+</a>
+        <a th:href="@{'/post/task?id='+${classroomId}}">+</a>
           <div th:each="assignment : ${assignmentShowDtos.getContent()}">
               <p th:text="${assignment.title}"></p>
           </div>

@@ -1,0 +1,10 @@
+#main{
+    display:block;
+    text-align: center;
+}
+#title{
+    display: flex;
+    justify-content: center;
+    gap:200px;
+    margin-left : 305px;
+}

@@ -10,7 +10,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class AssignmentShowDto {
-    private Long abId;
+    private Long AbId;
     private String writerName;
     private String writerEmail;
     private String title;

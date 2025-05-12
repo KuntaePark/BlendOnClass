@@ -1,6 +1,7 @@
 package com.blendonclass.control;
 
 import com.blendonclass.dto.NoticeWriteDto;
+import com.blendonclass.dto.QuestionWriteDto;
 import com.blendonclass.entity.Authority;
 import com.blendonclass.service.board.NoticeBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +43,10 @@ public class NoticeBoardController {
     }
 
     @PostMapping("/post/notice")
-    public String save(NoticeWriteDto noticeWriteDto,
+    public String noticeSave(NoticeWriteDto noticeWriteDto,
                        @RequestParam("id") Long classroomId,
                        Principal principal,
-                       MultipartFile multipartFile){
+                       @RequestParam("fileUrl") MultipartFile multipartFile){
         Long id = Long.parseLong(principal.getName());
         noticeWriteDto.setWriterId(id);
         noticeWriteDto.setClassroomId(classroomId);
@@ -53,4 +54,5 @@ public class NoticeBoardController {
         noticeBoardService.saveNotice(noticeWriteDto, multipartFile);
         return "redirect:/student";
     }
+
 }

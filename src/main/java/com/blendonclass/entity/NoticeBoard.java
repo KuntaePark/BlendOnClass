@@ -39,7 +39,6 @@ public class NoticeBoard {
         noticeBoard.setContext(noticeWriteDto.getContext());
         noticeBoard.setWriteTime(noticeWriteDto.getWriteTime());
         noticeBoard.setAuthority(authority);
-        noticeBoard.setFileUrl(noticeWriteDto.getFileUrl());
         return noticeBoard;
     }
 }

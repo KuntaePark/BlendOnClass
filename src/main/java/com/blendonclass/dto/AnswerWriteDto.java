@@ -1,12 +1,22 @@
 package com.blendonclass.dto;
 
+import com.blendonclass.entity.QuestionBoard;
 import lombok.*;
 
 @Getter
 @Setter
 public class AnswerWriteDto {
-    private Long qbId;
+    private Long id;
     private String answerId;
-    private String context;
+    private String aContext;
     private String writeTime;
+
+    public static AnswerWriteDto from(QuestionBoard questionBoard) {
+        AnswerWriteDto answerWriteDto = new AnswerWriteDto();
+        answerWriteDto.setId(questionBoard.getId());
+        answerWriteDto.setAContext(questionBoard.getAContext());
+        return answerWriteDto;
+    }
+
+
 }

@@ -23,3 +23,11 @@ h4{
     border : 1px solid black;
     border-radius: 2px;
 }
+#question{
+    display:inline-block;
+    margin-bottom: 12px;
+}
+#answer{
+    display:inline-block;
+    margin-bottom: 12px;
+}

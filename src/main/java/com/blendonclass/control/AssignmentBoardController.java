@@ -6,6 +6,7 @@ import com.blendonclass.service.board.AssignmentBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,5 +35,10 @@ public class AssignmentBoardController {
 
     public String getSubmitDetail(@RequestParam("id") Long sbId, Model model) {
         return null;
+    }
+
+    @GetMapping("/post/task")
+    public String task(@RequestParam("id") Long id){
+        return "task";
     }
 }

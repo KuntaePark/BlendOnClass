@@ -1,6 +1,7 @@
 package com.blendonclass.dto;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 @Setter
@@ -12,5 +13,4 @@ public class NoticeWriteDto {
     private String title;
     private String context;
     private LocalDateTime writeTime;
-    private String fileUrl;
 }
