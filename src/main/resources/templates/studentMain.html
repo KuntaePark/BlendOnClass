@@ -38,37 +38,39 @@
     </div>
 
 
-    <a href="/student/lesson/main"
-       class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-        강의 목록
-    </a>
 
-    <div class="bg-white p-6 rounded-lg shadow-md mt-6 max-w-lg ml-4">
-        <h2 class="text-white text-base font-semibold bg-(--primary-color) inline-block px-4 py-1 rounded-md mb-3">
-            학습
-        </h2>
+    <div class="bg-white rounded-lg shadow-md mt-6 max-w-lg min-h-[180px]">
 
-        <div th:if="${lastLesson != null}" class="flex justify-between items-center">
-            <div class="w-full">
-                <p th:text="${lastLesson.lessonTitle}" class="text-lg font-semibold text-gray-800"></p>
-                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-2">
-                    <div th:style="|width: ${lastLesson.completeRate}%|"
-                         class="bg-blue-500 h-2.5 rounded-full"></div>
-                </div>
-                <p class="text-sm text-gray-600 mt-1"
-                   th:text="|진도율: ${lastLesson.completeRate}%|"></p>
+        <div class="bg-(--primary-color) w-full px-6 py-2 rounded-t-lg">
+            <div class="flex items-center space-x-2">
+                <img src="/images/alarm.png" alt="알림 아이콘" class="w-5 h-5" />
+                <h2 class="text-white text-base font-semibold">학습</h2>
             </div>
+        </div>
 
-            <div class="flex flex-col items-end ml-4">
-                <a th:if="${lastLesson.completeRate == 100}"
-                   th:href="@{/student/lesson/restart/{id}(id=${lastLesson.lessonId})}"
-                   class="bg-red-500 text-white px-2 py-1 rounded text-sm mb-1 hover:bg-red-600">
-                    다시하기
-                </a>
-                <a th:href="@{/student/lesson/continue/{id}(id=${lastLesson.lessonId})}"
-                   class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
-                    이어하기
-                </a>
+        <div class="p-6">
+            <div th:if="${lastLesson != null}" class="flex justify-between items-center">
+                <div class="w-full">
+                    <p th:text="${lastLesson.lessonTitle}" class="text-lg font-semibold text-gray-800"></p>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5 mb-2">
+                        <div th:style="|width: ${lastLesson.completeRate}%|"
+                             class="bg-(--primary-color) h-2.5 rounded-full"></div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4"
+                       th:text="|진도율: ${lastLesson.completeRate}%|"></p>
+                </div>
+
+                <div class="flex flex-wrap items-end gap-2 ml-2">
+                    <a th:if="${lastLesson.completeRate == 100}"
+                       th:href="@{/student/lesson/restart/{id}(id=${lastLesson.lessonId})}"
+                       class="bg-red-500 text-white px-2 py-1 rounded text-sm mb-1 hover:bg-red-600">
+                        다시하기
+                    </a>
+                    <a th:href="@{/student/lesson/continue/{id}(id=${lastLesson.lessonId})}"
+                       class="bg-(--primary-color) text-white px-2 py-1 rounded text-sm hover:bg-blue-500">
+                        이어하기
+                    </a>
+                </div>
             </div>
         </div>
     </div>
