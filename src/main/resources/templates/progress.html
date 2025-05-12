@@ -12,13 +12,18 @@
     <script th:src="@{/javascript/progress.js}"></script>
     <script th:inline="javascript">
         $(function() {
-        progress = [[${progress}]];
+            progress = [[${progress}]];
+            subject = [[${subject}]];
             if(progress != null) {
                 console.log(progress);
                 startId = progress.startLessonId ?? -1;
                 endId = progress.endLessonId ?? -1;
-                console.log(startId + " " + endId);
+                $('#end-date').val(progress.endDate);
                 showRange();
+            }
+
+            if(subject != null) {
+                $('#subj-select').val(subject);
             }
         });
     </script>
@@ -28,7 +33,7 @@
 <div layout:fragment="main" id="main">
     <h1>진도 설정 페이지</h1>
     <div>
-        <select th:onchange="onSubjectChange([[${classroomId}]], this.value)">
+        <select id="subj-select" th:onchange="onSubjectChange([[${classroomId}]], this.value)">
             <option value="">과목 선택</option>
             <th:block th:with="SUBJECT=${T(com.blendonclass.constant.SUBJECT)}">
                 <th:block th:each="subject : ${SUBJECT.values()}">
@@ -54,7 +59,10 @@
         <p>진도 종료일 선택</p>
         <input id="end-date" type="date">
         <button id="submit-button" type="button" th:onclick="setProgress([[${classroomId}]])"
-                class="px-2 py-2 border-1 rounded bg-gray-200 w-40" disabled>등록하기</button>
+                class="px-2 py-2 border-1 rounded bg-gray-200 w-40" disabled>
+            <th:block th:if="${progress != null}">수정하기</th:block>
+            <th:block th:unless="${progress != null}">등록하기</th:block>
+        </button>
     </div>
     <p id="startId"></p>
     <p id="endId"></p>

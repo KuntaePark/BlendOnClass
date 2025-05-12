@@ -76,7 +76,7 @@ function setProgress(classroomId) {
     progress.startLessonId = startId;
     progress.endLessonId = endId;
     progress.classroomId = classroomId;
-    progress.endDate = $('end-date').val();
+    progress.endDate = $('#end-date').val();
 
     $.ajax({
         type: "POST",

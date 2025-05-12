@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
+
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+
+<div layout:fragment="main" id="main">
+    <h1>계정 정보 수정 페이지</h1>
+    <form id="info-mod-form" th:action="@{/admin/saveInfo}" method="post"
+    th:object="${accountDto}">
+        <span th:text="*{role}"></span>
+        <input type="hidden" th:field="*{id}"/>
+        <input type="text" th:field="*{name}"/>
+        <input type="text" th:field="*{email}"/>
+        <button type="submit">수정하기</button>
+    </form>
+</div>
+</html>

@@ -30,7 +30,7 @@ public class MainController {
     }
 
     @GetMapping("/student")
-    public String student(Model model) {return "studentMain";}
+    public String student(Model model) {return "redirect:/student/main";}
 
     @GetMapping("/teacher")
     public String teacher(Model model) {return "teacherMain";}
