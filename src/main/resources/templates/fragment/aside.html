@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<div th:fragment="aside" id="aside-wrap" class="flex flex-row">
+    <aside
+            class="w-25 w-full bg-(--primary-color) text-(--text-white) flex flex-col justify-center items-center">
+        <h2>메뉴</h2>
+        <ul>
+            <li><a href="/lesson/main">강의 듣기</a></li>
+            <li><a href="/student/myscore">내 학습 성과</a></li>
+            <li><a href="#">우리 반</a></li>
+        </ul>
+    </aside>
+    <div id="hide-button" class="top-10 relative w-10 h-15 rounded-r-lg bg-(--primary-color)"
+        onclick="toggleAside()">
+    닫기</div>
+    <script>
+        function toggleAside() {
+            $('aside').toggle();
+        }
+    </script>
+</div>
+</html>

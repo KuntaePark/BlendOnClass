@@ -4,6 +4,8 @@
       xmlns:sec="http:/www.thymeleaf.org/extras/spring-security">
 
 <div th:fragment="header" id="header">
-    <a href="/logout" sec:authorize="isAuthenticated()">로그아웃</a>
+    <header class="h-15 border-1 border-gray-400">
+        <a href="/logout" sec:authorize="isAuthenticated()" class="relative right-0">로그아웃</a>
+    </header>
 </div>
 </html>
