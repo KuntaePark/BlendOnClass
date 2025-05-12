@@ -26,10 +26,19 @@
 <body>
 
 <div id="wrap">
-    <th:block th:replace="fragment/header::header"></th:block>
-    <div id="body-wrap" class="flex flex-row">
+    <div id="body-wrap" class="flex flex-col">
         <th:block th:replace="fragment/aside::aside"></th:block>
-        <th:block layout:fragment="main"></th:block>
+        <div id="main-wrap"
+        class="fixed top-0 left-0 w-full h-full transition-all duration-300 ease-in-out shadow-lg">
+            <th:block th:replace="fragment/header::header"></th:block>
+            <th:block layout:fragment="main"></th:block>
+            <div
+                    class="menu-trigger fixed top-20 left-0 w-12 h-20 bg-[#0d65d3] rounded-r-md cursor-pointer hover:bg-[#617890] transition-all duration-300 flex items-center justify-center"
+            >
+                <div class="text-white pt-10 mr-1 font-bold">열기</div>
+                <span class="text-black hover:text-[#fcfeff] text-lg font-ico"></span>
+            </div>
+        </div>
     </div>
 <!--    <th:block th:replace="fragment/footer::footer"></th:block>-->
 </div>

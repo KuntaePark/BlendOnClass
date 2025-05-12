@@ -4,22 +4,59 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <div th:fragment="aside" id="aside-wrap" class="flex flex-row">
-    <aside
-            class="w-25 w-full bg-(--primary-color) text-(--text-white) flex flex-col justify-center items-center">
-        <h2>메뉴</h2>
-        <ul>
-            <li><a href="/lesson/main">강의 듣기</a></li>
-            <li><a href="/student/myscore">내 학습 성과</a></li>
-            <li><a href="#">우리 반</a></li>
+    <nav
+            id="slide-menu"
+            class="fixed top-0 left-0 bottom-0 w-full max-w-[284px] h-full bg-[#0d65d3] -translate-x-full transition-all duration-300 ease-in-out flex flex-col items-center"
+    >
+        <a href="/student/main">
+            <img src="/images/Bicon.png" alt="대표홈아이콘" class="w-40 h-40 cursor-pointer hover:opacity-80" />
+        </a>
+        <ul
+                class="mt-5 ml-2.5 transition-all duration-300 ease-in-out space-y-2 text-[white] text-[20px] font-black"
+        >
+            <li
+                    class="lesson pt-[180px] mt-2 hover:text-[#59e9df] cursor-pointer before:content-['\e805'] before:mr-3 before:text-[#59e9df] before:font-ico"
+            >
+                <a href="/lesson/main">
+                    강의듣기
+                </a>
+            </li>
+            <li
+                    class="result pt-3 hover:text-[#59e9df] cursor-pointer before:content-['\e802'] before:mr-3 before:text-[#59e9df] before:font-ico"
+            >
+                <a href="/student/myscore">내 학습성과</a>
+            </li>
+            <li
+                    class="ourclass pt-3 hover:text-[#59e9df] cursor-pointer before:content-['\e800'] before:mr-3 before:text-[#59e9df] before:font-ico"
+            >
+                우리반
+            </li>
         </ul>
-    </aside>
-    <div id="hide-button" class="top-10 relative w-10 h-15 rounded-r-lg bg-(--primary-color)"
-        onclick="toggleAside()">
-    닫기</div>
+    </nav>
+
     <script>
-        function toggleAside() {
-            $('aside').toggle();
-        }
+        $(function () {
+            const body = document.body;
+            const menuTrigger = document.querySelector(".menu-trigger");
+
+            if (menuTrigger) {
+                menuTrigger.addEventListener("click", () => {
+                    body.classList.toggle("menu-active");
+                    const nav = document.getElementById("slide-menu");
+                    const content = document.getElementById("main-wrap");
+
+                    if (body.classList.contains("menu-active")) {
+                        nav.classList.remove("-translate-x-full");
+                        content.classList.add("translate-x-[284px]");
+                        document;
+                    } else {
+                        nav.classList.add("-translate-x-full");
+                        content.classList.remove("translate-x-[284px]");
+                        document;
+                    }
+                });
+            }
+        });
     </script>
 </div>
 </html>

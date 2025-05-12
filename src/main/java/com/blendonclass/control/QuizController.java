@@ -66,6 +66,10 @@ public class QuizController {
         model.addAttribute("currentQuiz", currentQuiz);
         model.addAttribute("chapterId", chapterId);
         model.addAttribute("currentIndex", 0);
+
+        Long lessonId = quizService.getFirstLessonIdOfChapter(chapterId);
+        model.addAttribute("lessonId", lessonId);
+
         return "quiz";
     }
 

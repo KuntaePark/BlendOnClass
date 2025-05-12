@@ -151,5 +151,11 @@ public class QuizService {
     }
 
 
-
+    public Long getFirstLessonIdOfChapter(Long chapterId) {
+        List<Lesson> lessons = lessonRepository.findByChapter_Id(chapterId);
+        if(lessons.isEmpty()) {
+            throw new IllegalStateException("해당 챕터에 소단원이 없습니다.");
+        }
+        return lessons.get(0).getId();
+    }
 }
