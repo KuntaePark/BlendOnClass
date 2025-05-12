@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/lesson")
+@RequestMapping("/student/lesson")
 @RequiredArgsConstructor
 public class LessonController {
     private final LessonService lessonService;

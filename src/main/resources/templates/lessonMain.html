@@ -13,27 +13,27 @@
 <th:block layout:fragment="script"></th:block>
 
 <body class="bg-gray-50 text-gray-900">
-<div layout:fragment="main" id="main" class="container mx-auto px-4 py-6">
+<div layout:fragment="main" id="main" >
 
     <div class="container mx-auto p-6">
         <!-- 학년 선택 -->
         <div class="mb-4 space-x-2">
-            <a th:href="@{/lesson/main(grade=1)}"
+            <a th:href="@{/student/lesson/main(grade=1)}"
                class="px-4 py-2 border border-gray-400 rounded hover:bg-blue-100">1학년</a>
-            <a th:href="@{/lesson/main(grade=2)}"
+            <a th:href="@{/student/lesson/main(grade=2)}"
                class="px-4 py-2 border rounded hover:bg-blue-100">2학년</a>
-            <a th:href="@{/lesson/main(grade=3)}"
+            <a th:href="@{/student/lesson/main(grade=3)}"
                class="px-4 py-2 border rounded hover:bg-blue-100">3학년</a>
         </div>
 
         <!-- 과목 선택: 학년이 선택된 경우에만 표시 -->
         <!-- 과목 선택 -->
         <div class="mb-6 space-x-2">
-            <a th:href="${selectedGrade != null} ? @{/lesson/main(grade=${selectedGrade}, subject='KOR')} : ''"
+            <a th:href="${selectedGrade != null} ? @{/student/lesson/main(grade=${selectedGrade}, subject='KOR')} : ''"
                class="px-4 py-2 border rounded hover:bg-green-100">국어</a>
-            <a th:href="${selectedGrade != null} ? @{/lesson/main(grade=${selectedGrade}, subject='ENG')} : ''"
+            <a th:href="${selectedGrade != null} ? @{/student/lesson/main(grade=${selectedGrade}, subject='ENG')} : ''"
                class="px-4 py-2 border rounded hover:bg-green-100">영어</a>
-            <a th:href="${selectedGrade != null} ? @{/lesson/main(grade=${selectedGrade}, subject='MATH')} : ''"
+            <a th:href="${selectedGrade != null} ? @{/student/lesson/main(grade=${selectedGrade}, subject='MATH')} : ''"
                class="px-4 py-2 border rounded hover:bg-green-100">수학</a>
         </div>
 
@@ -46,7 +46,7 @@
                     <div th:each="lesson : ${chapter.lessonDtoList}" class="relative group bg-white border rounded-lg p-4 text-center shadow hover:shadow-md transition">
 
                         <!-- 소단원 제목 -->
-                        <a th:href="@{/lesson/continue/{id}(id=${lesson.lessonId})}"
+                        <a th:href="@{/student/lesson/continue/{id}(id=${lesson.lessonId})}"
                            class="block font-semibold text-blue-700 hover:underline mb-2"
                            th:text="${lesson.lessonTitle}">소단원 제목</a>
 
@@ -56,15 +56,15 @@
 
                         <!-- 버튼들 -->
                         <div class="flex flex-col gap-2">
-                            <a th:href="@{/lesson/continue/{id}(id=${lesson.lessonId})}"
+                            <a th:href="@{/student/lesson/continue/{id}(id=${lesson.lessonId})}"
                                class="block px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition">학습하기</a>
 
                             <a th:if="${lesson.lessonType == 'NORMAL'}"
-                               th:href="@{/quiz/start(lessonId=${lesson.lessonId})}"
+                               th:href="@{/student/quiz/start(lessonId=${lesson.lessonId})}"
                                class="block px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition">퀴즈풀기</a>
 
                             <a th:if="${lesson.lessonType == 'TEST'}"
-                               th:href="@{/quiz/chapter(chapterId=${lesson.chapterId})}"
+                               th:href="@{/student/quiz/chapter(chapterId=${lesson.chapterId})}"
                                class="block px-3 py-1 bg-yellow-500 text-white text-sm rounded hover:bg-yellow-600 transition">대단원시험</a>
                         </div>
 

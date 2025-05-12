@@ -11,7 +11,7 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
-<div class="max-w-3xl mx-auto" layout:fragment="main">
+<div layout:fragment="main">
     <div class="container mx-auto px-4 py-6">
         <!-- 문제 번호 네비게이션 -->
         <div class="flex gap-2 mb-4" id="navButtons">
@@ -124,7 +124,7 @@
             const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
             const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-            fetch('/quiz/grade?lessonId=' + lessonId, {
+            fetch('/student/quiz/grade?lessonId=' + lessonId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -152,7 +152,7 @@
                 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
                 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-                fetch('/quiz/end?lessonId=' + lessonId, {
+                fetch('/student/quiz/end?lessonId=' + lessonId, {
                     method: 'POST',
                     headers: { [csrfHeader]: csrfToken }
                 }).then(() => {
@@ -163,7 +163,7 @@
         });
 
         document.getElementById('goToLessonBtn').addEventListener('click', () => {
-            window.location.href = '/quiz/lessonMain';
+            window.location.href = '/student/quiz/lessonMain';
         });
 
         renderQuiz(0);
@@ -173,7 +173,7 @@
                 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
                 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-                fetch("/quiz/exit",{
+                fetch("/student/quiz/exit",{
                     method: 'POST' ,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

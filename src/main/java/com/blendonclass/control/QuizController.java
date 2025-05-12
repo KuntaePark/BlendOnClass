@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/quiz")
+@RequestMapping("/student/quiz")
 @RequiredArgsConstructor
 public class QuizController {
     private final QuizService quizService;
