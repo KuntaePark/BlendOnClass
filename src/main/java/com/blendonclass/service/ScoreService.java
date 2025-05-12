@@ -92,15 +92,11 @@ public class ScoreService {
                 .collect(Collectors.toList());
     }
 
-    public List<LessonScoreDto> getAllLessonScores(int grade, SUBJECT subject, Long accountId) {
-        return scoreRepository.findScoresByGradeAndSubjectAndAccountId(grade, subject, accountId);
+    public List<?> getAllLessonScores(int grade, SUBJECT subject, Long id, boolean isStudent) {
+        if(isStudent) {
+            return scoreRepository.findScoresByGradeAndSubjectAndAccountId(grade, subject, id);
+        } else {
+            return classroomScoreRepository.findScoresByGradeAndSubjectAndAccountId(grade, subject, id);
+        }
     }
-
-    public List<LessonScoreDto> getAllClassroomLessonScores(int grade, SUBJECT subject, Long classroomId) {
-        return null;
-//        return classroomScoreRepository.findScoresByGradeAndSubjectAndClassroomId(
-//                grade, subject, classroomId
-//        );
-    }
-
 }

@@ -15,9 +15,9 @@ public class ClassroomScore {
     private Long id;
 
     @ColumnDefault("0")
-    private float completeRate;//반 학생들 진도율 합. 학생수로 나눠서 평균계산
+    private Float completeRate;//반 학생들 진도율 합. 학생수로 나눠서 평균계산
     @ColumnDefault("0")
-    private float attemptCount;//반 학생들 시도횟수 합. 학생수로 나눠서 평균계산
+    private Float attemptCount;//반 학생들 시도횟수 합. 학생수로 나눠서 평균계산
 
     @ManyToOne
     @JoinColumn(name="classroom_id")

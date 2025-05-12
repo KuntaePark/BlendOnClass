@@ -15,10 +15,10 @@ public class Score {
     private Long id;
 
     @ColumnDefault("0")
-    private int completeRate;// 해당 소단원의 진도 완수율 진도 기간 내 완수했을 시만 갱신
+    private Integer completeRate;// 해당 소단원의 진도 완수율 진도 기간 내 완수했을 시만 갱신
 
     @ColumnDefault("0")
-    private int attemptCount;// 시도횟수, 진도기간 내 시도했을 시 만 갱신
+    private Integer attemptCount;// 시도횟수, 진도기간 내 시도했을 시 만 갱신
 
     @ManyToOne
     @JoinColumn(name="account_id")

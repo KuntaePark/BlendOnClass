@@ -4,11 +4,12 @@ import com.blendonclass.constant.LTYPE;
 import com.blendonclass.constant.SUBJECT;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter@Setter
 @AllArgsConstructor
-public class LessonScoreDto {
+public class LessonClassroomScoreDto {
     private Long chapId;
     private int grade;
     private SUBJECT subject;
@@ -16,6 +17,6 @@ public class LessonScoreDto {
     private Long lessonId;
     private String lessonTitle;
     private LTYPE lessonType;
-    private Integer completeRate;
-    private Integer attemptCount;
+    private Float completeRate;
+    private Float attemptCount;
 }
