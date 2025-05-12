@@ -43,8 +43,10 @@
         강의 목록
     </a>
 
-    <div class="bg-white p-4 rounded-lg shadow-md mt-6">
-        <h2 class="text-xl font-medium mb-3">최근 강의</h2>
+    <div class="bg-white p-6 rounded-lg shadow-md mt-6 max-w-lg ml-4">
+        <h2 class="text-white text-base font-semibold bg-(--primary-color) inline-block px-4 py-1 rounded-md mb-3">
+            학습
+        </h2>
 
         <div th:if="${lastLesson != null}" class="flex justify-between items-center">
             <div class="w-full">

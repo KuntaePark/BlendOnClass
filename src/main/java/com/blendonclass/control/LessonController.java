@@ -60,7 +60,7 @@ public class LessonController {
         if (customUserDetails != null) {
             Long accountId = Long.parseLong(customUserDetails.getUsername());
             // lessonService.resetProgress(accountId, lessonId);
-            return "redirect:/lesson/continue/" + lessonId;
+            return "redirect:/student/lesson/continue/" + lessonId;
         } else {
             return "redirect:/login";
         }
