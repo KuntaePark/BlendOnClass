@@ -7,9 +7,8 @@
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        const originalData = [[${scoreDataDtos}]];
         const classroomId = [[${classroomId}]];
-        console.log(originalData);
+        const grade=[[${grade}]];
     </script>
 </th:block>
 
@@ -31,8 +30,9 @@
             </th:block>
         </select>
         <select id="category-select" onchange="onCategoryChange()">
-            <option value="major">대단원</option>
-            <option value="minor">소단원</option>
+            <option value="" selected>구분 선택</option>
+            <option value="chapter">대단원</option>
+            <option value="lesson">소단원</option>
         </select>
 
         <canvas id="myChart"></canvas>

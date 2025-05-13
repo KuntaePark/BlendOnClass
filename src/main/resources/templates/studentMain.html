@@ -9,26 +9,7 @@
 </head>
 
 <th:block layout:fragment="css"></th:block>
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-        document.addEventListener("DOMContentLoaded", () => {
-            const btn = document.getElementById("profileBtn");
-            const menu = document.getElementById("dropdownMenu");
-
-            btn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                menu.classList.toggle("hidden");
-            });
-
-            document.addEventListener("click", (e) => {
-                if (!menu.contains(e.target) && !btn.contains(e.target)) {
-                    menu.classList.add("hidden");
-                }
-            });
-        });
-    </script>
-
-</th:block>
+<th:block layout:fragment="script"></th:block>
 
 <div layout:fragment="main" id="main">
 

@@ -27,23 +27,16 @@ public class ScoreController {
 
     //todo - 함수겹침, 정리?
     @GetMapping("/student/myscore")
-    public String getStudentScorePage(Principal principal, Model model) {
-        Long id = Long.parseLong(principal.getName());
-        
-        //전체 성적 정보 불러오기
-        getScore(model, id,1, SUBJECT.MATH, true);
+    public String getStudentScorePage() {
         return "score";
     }
 
     @GetMapping("/teacher/myscore")
     public String getClassroomScorePage(@RequestParam("id") Long classroomId,
-                                        @RequestParam("subject") SUBJECT subject,
                                         Model model) {
-        //학년 불러오기
-        int grade = classroomRepository.findById(classroomId).get().getGrade();
-
-        //반 전체 성적 정보 불러오기
-        getScore(model, classroomId, grade, SUBJECT.MATH, false);
+        int grade = classroomRepository.findGradeById(classroomId);
+        model.addAttribute("classroomId", classroomId);
+        model.addAttribute("grade", grade);
         return "score";
     }
 
@@ -69,27 +62,5 @@ public class ScoreController {
 
         System.out.println(result);
         return ResponseEntity.ok(result);
-    }
-
-
-    public void getScore(Model model, Long id, int grade, SUBJECT subject, boolean isStudent) {
-        //전체 성적 정보 불러오기
-        long startTime = System.nanoTime();
-        List<ScoreDataDto> scoreDataDtos = scoreService.getScoreData(id, grade, subject, isStudent);
-        long endTime = System.nanoTime();
-        long duration = endTime - startTime;
-        System.out.println("실행 시간:"+duration/1e+9 +"s");
-
-//        long startTime = System.nanoTime();
-//        List<LessonScoreDto> scoreDataDtos = scoreService.getAllLessonScores(grade, subject, id, isStudent);
-//        long endTime = System.nanoTime();
-//        long duration = endTime - startTime;
-//        System.out.println("실행 시간2:"+duration/1e+9 +"s");
-
-
-        List<String> subjectList = Arrays.stream(SUBJECT.values()).map(Enum::name).collect(Collectors.toList());
-        subjectList.remove("HR");
-        model.addAttribute("scoreDataDtos", scoreDataDtos);
-        model.addAttribute("subjectList", subjectList);
     }
 }

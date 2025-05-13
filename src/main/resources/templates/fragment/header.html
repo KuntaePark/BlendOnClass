@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http:/www.thymeleaf.org/extras/spring-security">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <header th:fragment="header" id="header" class="h-20 border-1 border-gray-300 flex items-center justify-center">
     <a id="logo-icon" href="/" class="flex flex-row items-center gap-2">
@@ -25,5 +25,22 @@
             <a href="/logout" class="block px-4 py-2 hover:bg-gray-100 text-sm">로그아웃</a>
         </div>
     </div>
+    <script>
+        $(function() {
+            const btn = document.getElementById("profileBtn");
+            const menu = document.getElementById("dropdownMenu");
+
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                menu.classList.toggle("hidden");
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                    menu.classList.add("hidden");
+                }
+            });
+        })
+    </script>
 </header>
 </html>
