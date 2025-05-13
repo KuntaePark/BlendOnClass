@@ -1,6 +1,10 @@
 package com.blendonclass.control;
 
 import com.blendonclass.constant.ROLE;
+import com.blendonclass.entity.Classroom;
+import com.blendonclass.service.AlarmService;
+import com.blendonclass.service.AuthorityService;
+import com.blendonclass.service.ClassroomService;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,14 +12,22 @@ import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @Getter@Setter
 @RequiredArgsConstructor
 public class MainController {
+
+    private final AuthorityService authorityService;
+    private final AlarmService alarmService;
+
+
     @GetMapping("/")
     public String home(HttpSession session, Model model) {
         ROLE role = (ROLE)session.getAttribute("role");
@@ -35,8 +47,17 @@ public class MainController {
     @GetMapping("/student")
     public String student(Model model) {return "studentMain";}
 
-    @GetMapping("/teacher")
-    public String teacher(Model model) {return "teacherMain";}
+    @GetMapping(value={"/teacher","/teacher/{id}"})
+    public String teacher(@PathVariable("id") Optional<Long> cid, Principal principal, Model model) {
+        //이게 계정 기본키
+        Long id = Long.parseLong(principal.getName());
+        List<Classroom> cr = authorityService.getClassroomsByAccountId(id);
+        Long classroomId= cid.isEmpty() ? cr.get(0).getId() : cid.get();
+        model.addAttribute("gc", cr);
+        model.addAttribute("ar", alarmService.getAlarmByClassroomId(classroomId));
+        //todo - 반 목록 띄우기
+        return "teacherMain";
+    }
 
     @GetMapping("/admin")
     public String admin(Model model) {return "redirect:/admin/accounts";}

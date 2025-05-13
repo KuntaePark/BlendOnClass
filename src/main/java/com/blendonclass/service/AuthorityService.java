@@ -37,6 +37,14 @@ public class AuthorityService {
     private final AccountRepository accountRepository;
     private final ClassroomRepository classroomRepository;
 
+    public List<Classroom> getClassroomsByAccountId(Long accountId) {
+        List<Authority> authorities = authorityRepository.findByAccountId(accountId);
+        return authorities.stream()
+                .map(Authority::getClassroom)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
     //권한 목록을 엑셀 파일로 받아 일괄 생성
     public void addAuthorityByFile(MultipartFile file) {}
 
@@ -76,5 +84,16 @@ public class AuthorityService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(accountListDtos, pageable, accountListDtos.size());
+    }
+
+
+    public List<Classroom> getClassroomsByAccountIdAndSubjects(Long accountId, List<SUBJECT> subjects) {
+        List<Authority> authorities = authorityRepository.findByAccountId(accountId);
+
+        return authorities.stream()
+                .filter(a -> subjects.contains(a.getAuthType())) // 과목 필터링
+                .map(Authority::getClassroom)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

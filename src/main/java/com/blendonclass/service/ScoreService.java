@@ -36,10 +36,19 @@ public class ScoreService {
 
     public Float getStudentCompleteRate(Long accountId, SUBJECT subject){
         // 학생이 속한 모든 반 조회
-        Authority authority = authorityRepository.findByAccountId(accountId);
-        if(authority == null) return null;
+        List<Authority> authorities = authorityRepository.findByAccountId(accountId);
+        if (authorities == null || authorities.isEmpty()) return null;
+
+// 원하는 subject만 추출 (예: SUBJECT.HR)
+        Authority authority = authorities.stream()
+                .filter(a -> a.getAuthType() == subject)
+                .findFirst()
+                .orElse(null);
+
+        if (authority == null) return null;
 
         Long classroomId = authority.getClassroom().getId();
+
 
         //해당 반의 해당 과목 진도 조회
         Progress progress = progressRepository.findByClassroomIdAndStartLesson_Chapter_Subject(classroomId,subject);
@@ -72,14 +81,17 @@ public class ScoreService {
         //해당 반에 대한 진도 목록 전체
         List<Progress> progressList = progressRepository.findByClassroomId(classroomId);
         Progress curProgress = null;
-        for(Progress progress : progressList) {
-            if(subject == progress.getStartLesson().getChapter().getSubject()) {
+        for (Progress progress : progressList) {
+            if (subject == progress.getStartLesson().getChapter().getSubject()) {
                 curProgress = progress;
                 break;
             }
         }
         //해당 과목에 대한 진도 없음. 그냥 나감
-        if(curProgress == null) return null;
+        if (curProgress == null) return null;
+        return null;
+
+    }
 
     public List<ScoreUnit> getAllScoreOfChapter(Long chapId, Long id, boolean isStudent) {
         return lessonRepository.findByChapter_Id(chapId).stream()
