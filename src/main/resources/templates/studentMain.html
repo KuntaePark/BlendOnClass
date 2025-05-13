@@ -33,45 +33,74 @@
 <div layout:fragment="main" id="main">
 
 
-    <div class="rounded-lg mt-6 flex justify-center">
+    <div class="rounded-lg mt-12 flex justify-center">
         <img src="/images/StudentMain.png" alt="Student Home 이미지" class="max-w-full h-auto object-contain" />
     </div>
 
 
+    <div class="flex justify-between mt-12 gap-6">
 
-    <div class="bg-white rounded-lg shadow-md mt-6 max-w-lg min-h-[180px]">
+        <div class="bg-white rounded-lg shadow-lg mt-10 w-[600px] min-h-[240px]">
+                <div class="bg-(--primary-color) w-full px-6 py-3 rounded-t-lg">
 
-        <div class="bg-(--primary-color) w-full px-6 py-2 rounded-t-lg">
-            <div class="flex items-center space-x-2">
-                <img src="/images/alarm.png" alt="알림 아이콘" class="w-5 h-5" />
-                <h2 class="text-white text-base font-semibold">학습</h2>
+                    <div class="flex items-center space-x-2">
+                        <img src="/images/study.png" alt="학습 아이콘" class="w-7 h-7" />
+                        <h2 class="text-white text-xl font-semibold tracking-widest">학습</h2>
+                    </div>
+                </div>
+
+            <div class="p-6">
+                <div th:if="${lastLesson != null}" class="flex gap-6 items-center">
+
+                    <!-- 왼쪽: 강의 이미지 -->
+                    <div class="flex-[1]">
+                        <img src="/images/lecture.png"
+                             alt="강의 이미지"
+                             class="w-full h-auto object-cover rounded-lg shadow" />
+                    </div>
+
+                    <!-- 오른쪽: 텍스트 및 버튼 -->
+                    <div class="flex-[2] flex flex-col justify-between gap-2">
+                        <!-- 소단원 제목 -->
+                        <p th:text="${lastLesson.lessonTitle}"
+                           class="text-lg font-bold text-gray-800"></p>
+
+                        <!-- 진도율 바 -->
+                        <div class="w-full bg-gray-200 rounded-full h-3.5">
+                            <div th:style="|width: ${lastLesson.completeRate}%|"
+                                 class="bg-[var(--primary-color)] h-3.5 rounded-full"></div>
+                        </div>
+                        <p class="text-sm text-gray-600"
+                           th:text="|${lastLesson.completeRate}%|"></p>
+
+                        <!-- 버튼 -->
+                        <div class="flex gap-3 mt-2 justify-end">
+                            <a th:if="${lastLesson.completeRate == 100}"
+                               th:href="@{/student/lesson/restart/{id}(id=${lastLesson.lessonId}, grade=${selectedGrade}, subject=${selectedSubject})}"
+                               class="bg-white text-[var(--primary-color)] font-semibold px-5 py-2 rounded-full shadow hover:opacity-80">
+                                다시하기
+                            </a>
+                            <a th:href="@{/student/lesson/continue/{id}(id=${lastLesson.lessonId}, grade=${selectedGrade}, subject=${selectedSubject})}"
+                               class="bg-[var(--primary-color)] text-white font-semibold px-5 py-2 rounded-full shadow hover:opacity-80">
+                                이어하기
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
             </div>
+
         </div>
 
-        <div class="p-6">
-            <div th:if="${lastLesson != null}" class="flex justify-between items-center">
-                <div class="w-full">
-                    <p th:text="${lastLesson.lessonTitle}" class="text-lg font-semibold text-gray-800"></p>
-                    <div class="w-full bg-gray-200 rounded-full h-1.5 mb-2">
-                        <div th:style="|width: ${lastLesson.completeRate}%|"
-                             class="bg-(--primary-color) h-2.5 rounded-full"></div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4"
-                       th:text="|진도율: ${lastLesson.completeRate}%|"></p>
-                </div>
-
-                <div class="flex flex-wrap items-end gap-2 ml-2">
-                    <a th:if="${lastLesson.completeRate == 100}"
-                       th:href="@{/student/lesson/restart/{id}(id=${lastLesson.lessonId})}"
-                       class="bg-red-500 text-white px-2 py-1 rounded text-sm mb-1 hover:bg-red-600">
-                        다시하기
-                    </a>
-                    <a th:href="@{/student/lesson/continue/{id}(id=${lastLesson.lessonId})}"
-                       class="bg-(--primary-color) text-white px-2 py-1 rounded text-sm hover:bg-blue-500">
-                        이어하기
-                    </a>
+        <div class="bg-white rounded-lg shadow-lg mt-10 w-[600px] min-h-[240px]">
+            <div class="bg-(--primary-color) w-full px-6 py-3 rounded-t-lg">
+                <div class="flex items-center space-x-2">
+                    <img src="/images/alarm.png" alt="학습 아이콘" class="w-7 h-7" />
+                    <h2 class="text-white text-xl font-semibold tracking-widest">알람</h2>
                 </div>
             </div>
+
+
         </div>
     </div>
 </div>

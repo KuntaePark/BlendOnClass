@@ -16,62 +16,57 @@
 <div layout:fragment="main" id="main">
 
     <div class="container mx-auto p-6">
-        <!-- 학년 선택 -->
-        <div class="mb-4 space-x-2">
-            <a th:href="@{/student/lesson/main(grade=1)}"
-               class="px-4 py-2 border border-gray-400 rounded hover:bg-blue-100">1학년</a>
-            <a th:href="@{/student/lesson/main(grade=2)}"
-               class="px-4 py-2 border rounded hover:bg-blue-100">2학년</a>
-            <a th:href="@{/student/lesson/main(grade=3)}"
-               class="px-4 py-2 border rounded hover:bg-blue-100">3학년</a>
-        </div>
+        <table class="table-auto border border-gray-300 w-full text-center">
+            <tbody>
+            <!-- 학년 선택 행 -->
+            <tr class="border-b border-gray-300">
+                <th class="bg-gray-100 px-4 py-2">학년</th>
+                <td th:each="g : ${#numbers.sequence(1, 3)}" class="px-4 py-2">
+                    <a th:href="@{/student/lesson/main(grade=${g}, subject=${selectedSubject})}"
+                       th:classappend="${selectedGrade == g} ? 'border border-blue-500 bg-blue-100 rounded-full px-3 py-1' : ''">
+                        <span th:text="|${g}학년|">1학년</span>
+                    </a>
+                </td>
+            </tr>
 
-        <!-- 과목 선택: 학년이 선택된 경우에만 표시 -->
-        <!-- 과목 선택 -->
-        <div class="mb-6 space-x-2">
-            <a th:href="${selectedGrade != null} ? @{/student/lesson/main(grade=${selectedGrade}, subject='KOR')} : ''"
-               class="px-4 py-2 border rounded hover:bg-green-100">국어</a>
-            <a th:href="${selectedGrade != null} ? @{/student/lesson/main(grade=${selectedGrade}, subject='ENG')} : ''"
-               class="px-4 py-2 border rounded hover:bg-green-100">영어</a>
-            <a th:href="${selectedGrade != null} ? @{/student/lesson/main(grade=${selectedGrade}, subject='MATH')} : ''"
-               class="px-4 py-2 border rounded hover:bg-green-100">수학</a>
-        </div>
+            <!-- 과목 선택 행 -->
+            <tr>
+                <th class="bg-gray-100 px-4 py-2">과목</th>
+                <td class="px-4 py-2">
+                    <a th:href="${selectedGrade != null} ? @{/student/lesson/main(grade=${selectedGrade}, subject='KOR')} : ''"
+                       th:classappend="${selectedSubject == 'KOR'} ? 'border border-blue-500 bg-blue-100 rounded-full px-3 py-1' : ''">국어</a>
+                </td>
+                <td class="px-4 py-2">
+                    <a th:href="${selectedGrade != null} ? @{/student/lesson/main(grade=${selectedGrade}, subject='MATH')} : ''"
+                       th:classappend="${selectedSubject == 'MATH'} ? 'border border-blue-500 bg-blue-100 rounded-full px-3 py-1' : ''">수학</a>
+                </td>
+                <td class="px-4 py-2">
+                    <a th:href="${selectedGrade != null} ? @{/student/lesson/main(grade=${selectedGrade}, subject='ENG')} : ''"
+                       th:classappend="${selectedSubject == 'ENG'} ? 'border border-blue-500 bg-blue-100 rounded-full px-3 py-1' : ''">영어</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
 
 
         <!-- 대단원 + 소단원 목록: 학년과 과목 모두 선택되었을 때만 표시 -->
         <div th:if="${selectedGrade != null and selectedSubject != null}">
             <div th:each="chapter : ${chapters}" class="mb-8">
                 <h2 class="text-xl font-bold mb-2" th:text="${chapter.title}">대단원 제목</h2>
-                <div class="grid grid-cols-3 md:grid-cols-5 gap-4">
-                    <div th:each="lesson : ${chapter.lessonDtoList}" class="relative group bg-white border rounded-lg p-4 text-center shadow hover:shadow-md transition">
+                <img src="/images/lecture.png" alt="소단원 이미지" class="w-20 h-20 mb-2 object-contain" />
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div th:each="lesson : ${chapter.lessonDtoList}" class="relative groupshadow hover:shadow-md transition">
 
-                        <!-- 소단원 제목 -->
-                        <a th:href="@{/student/lesson/continue/{id}(id=${lesson.lessonId})}"
-                           class="block font-semibold text-blue-700 hover:underline mb-2"
-                           th:text="${lesson.lessonTitle}">소단원 제목</a>
 
-                        <!-- 진도율 -->
-                        <p class="text-sm text-gray-600 mb-2"
-                           th:text="|진도율: ${lesson.completeRate}%|"></p>
-
-                        <!-- 버튼들 -->
-                        <div class="flex flex-col gap-2">
-                            <a th:href="@{/student/lesson/continue/{id}(id=${lesson.lessonId})}"
-                               class="block px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition">학습하기</a>
-
-                            <a th:if="${lesson.lessonType == 'NORMAL'}"
-                               th:href="@{/student/quiz/start(lessonId=${lesson.lessonId})}"
-                               class="block px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition">퀴즈풀기</a>
-
-                            <a th:if="${lesson.lessonType == 'TEST'}"
-                               th:href="@{/student/quiz/chapter(chapterId=${lesson.chapterId})}"
-                               class="block px-3 py-1 bg-yellow-500 text-white text-sm rounded hover:bg-yellow-600 transition">대단원시험</a>
+                        <!-- 진도율 바 박스 (네모칸) -->
+                        <div class="relative w-24 h-6 border border-blue-400 rounded overflow-hidden mb-1">
+                            <div th:style="|width: ${lesson.completeRate}%;|"
+                                 class="absolute top-0 left-0 h-full bg-blue-500 transition-all"></div>
                         </div>
 
-                        <!-- 간단 설명 -->
-                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-gray-700 text-white text-xs p-2 rounded z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                            <p th:text="${lesson.lessonBrief}">간단 설명</p>
-                        </div>
+
+
                     </div>
                 </div>
             </div>
