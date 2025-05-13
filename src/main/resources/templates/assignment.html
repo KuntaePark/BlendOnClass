@@ -8,23 +8,23 @@
     <link rel="stylesheet" href="/css/assignment.css">
 </head>
 <body>
-    <div id="main">
-        <div id="title">
-            <h2 class="title">제목</h2>
-        </div>
-        <input type="text" name="title" style="width:230px;">
-        <div id="context">
-            <h2 class="context">내용</h2>
-        </div>
-        <textarea name="context" cols="30" rows="20"></textarea>
-        <div id="dueDate">
-            <h2 class="dueDate">제출기한</h2>
-        </div>
-        <input type="date" name="dueDate">
-        <div id="file">
-            <h2 class="file">파일첨부</h2>
-        </div>
-        <input type="file" name="fileUrl"><br>
+    <div id="main" th:object="${assignmentShowDto}">
+            <div id="title">
+                <h2 class="title">제목</h2>
+            </div>
+            <input type="text" name="title" style="width:230px;" th:value="${assignmentShowDto.title}">
+            <div id="context">
+                <h2 class="context">내용</h2>
+            </div>
+            <textarea name="context" cols="30" rows="20" th:text="${assignmentShowDto.context}"></textarea>
+            <div id="dueDate">
+                <h2 class="dueDate">제출기한</h2>
+            </div>
+            <input type="date" name="dueDate" th:value="${assignmentShowDto.dueDate}" readonly>
+            <div id="file">
+                <h2 class="file">파일첨부</h2>
+            </div>
+            <input type="file" name="fileUrl"><br>
     </div>
 </body>
 </html>

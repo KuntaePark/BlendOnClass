@@ -51,7 +51,6 @@ public class AssignmentBoardService {
         if (fileName != null) {
             assignmentBoard.setFileUrl("/assignment/" + fileName); // 사용자 접근용 경로
         }
-        System.out.println("assignmentBoard = " + assignmentBoard);
         assignmentBoardRepository.save(assignmentBoard);
     }
 

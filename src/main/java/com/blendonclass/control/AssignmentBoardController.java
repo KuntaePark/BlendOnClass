@@ -6,14 +6,20 @@ import com.blendonclass.dto.SubmitWriteDto;
 import com.blendonclass.entity.AssignmentBoard;
 import com.blendonclass.service.board.AssignmentBoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 
 @Controller
@@ -45,8 +51,8 @@ public class AssignmentBoardController {
         return "redirect:/student";
     }
     @GetMapping("post/task/detail")
-    public String showAssignment(@RequestParam("id") Long id, AssignmentShowDto assignmentShowDto, Model model) {
-        assignmentShowDto = assignmentBoardService.showAssignment(id);
+    public String showAssignment(@RequestParam("id") Long id, Model model) {
+        AssignmentShowDto assignmentShowDto = assignmentBoardService.showAssignment(id);
         model.addAttribute("assignmentShowDto", assignmentShowDto);
         return "assignment";
     }
