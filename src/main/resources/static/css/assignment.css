@@ -1,4 +1,11 @@
-#main{
+#assignment{
     display:block;
     text-align: center;
+}
+#main{
+    display: flex;
+    justify-content: center;
+}
+#list{
+    transform: translate(350px);
 }

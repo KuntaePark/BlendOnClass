@@ -4,17 +4,13 @@
     --text-white: white;
     --text-black: black;
     --base-font: "Noto Sans KR";
+}
 *margin{
     margin : 0;
     padding : 0;
     box-sizing: border-box;
 }
-#main{
-    display : flex;
-    gap:100px;
-    text-align:center;
-    justify-content: center;
-}
+
 .notice{
     display:block;
     margin-bottom: 12px;

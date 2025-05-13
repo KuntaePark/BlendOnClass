@@ -221,4 +221,10 @@ public class AccountService {
     }
 
 
+    public List<Account> getAllAccounts() {
+        Iterable<Account> iterable = accountRepository.findAll();
+        List<Account> accounts = new ArrayList<>();
+        iterable.forEach(accounts::add);
+        return accounts;
+    }
 }

@@ -3,7 +3,11 @@ package com.blendonclass.control;
 import com.blendonclass.dto.AssignmentShowDto;
 import com.blendonclass.dto.AssignmentWriteDto;
 import com.blendonclass.dto.SubmitWriteDto;
+import com.blendonclass.dto.admin.AccountListDto;
+import com.blendonclass.entity.Account;
 import com.blendonclass.entity.AssignmentBoard;
+import com.blendonclass.service.AccountService;
+import com.blendonclass.service.AuthorityService;
 import com.blendonclass.service.board.AssignmentBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -21,11 +25,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class AssignmentBoardController {
     private final AssignmentBoardService assignmentBoardService;
+
+    private final AccountService accountService;
+    private final AuthorityService authorityService;
 
     // private final AlarmService alarmService;
     public String deleteAssignment(@RequestParam("id") Long abId, Model model) {
@@ -51,9 +59,11 @@ public class AssignmentBoardController {
         return "redirect:/student";
     }
     @GetMapping("post/task/detail")
-    public String showAssignment(@RequestParam("id") Long id, Model model) {
-        AssignmentShowDto assignmentShowDto = assignmentBoardService.showAssignment(id);
+    public String showAssignment(@RequestParam("abId") Long abId, @RequestParam("classroomId") Long classroomId, Model model) {
+        AssignmentShowDto assignmentShowDto = assignmentBoardService.showAssignment(abId);
         model.addAttribute("assignmentShowDto", assignmentShowDto);
+        List<AccountListDto> accountListDtos = authorityService.getAllStudentsOfClassroom(classroomId); // 이 메서드는 따로 만들어야 함
+        model.addAttribute("accountListDtos", accountListDtos);
         return "assignment";
     }
 
@@ -61,8 +71,6 @@ public class AssignmentBoardController {
         return null;
     }
 
-    public String getSubmitDetail(@RequestParam("id") Long sbId, Model model) {
-        return null;
-    }
+    public String getSubmitDetail(@RequestParam("id") Long sbId, Model model) {return null;}
 
 }
