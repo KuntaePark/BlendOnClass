@@ -30,6 +30,7 @@ public class AdminAnnounceController {
         Page<SysAnnListDto> sysAnnListDtos = sysAnnService.getSysAnnList(pageable);
 
         model.addAttribute("sysAnnListDtos", sysAnnListDtos);
+        model.addAttribute("maxPage",5);
         return "admin/announceMng";
     }
 }

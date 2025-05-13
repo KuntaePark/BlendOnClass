@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +32,9 @@ public class LessonController {
             @RequestParam(required = false) Integer grade,
             @RequestParam(required = false) String subject,
             Model model,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
+            Principal principal
     ) {
-        if (customUserDetails == null) {
-            return "redirect:/login";
-        }
-
-        Long loggedId = Long.parseLong(customUserDetails.getUsername());
+        Long loggedId = Long.parseLong(principal.getName());
 
         // 모든 경우 selectedGrade, selectedSubject는 모델에 넣기
         model.addAttribute("selectedGrade", grade);

@@ -6,29 +6,48 @@
 <div th:fragment="aside" id="aside-wrap" class="flex flex-row">
     <nav
             id="slide-menu"
-            class="fixed top-0 left-0 bottom-0 w-full max-w-[200px] h-full bg-(--primary-color) -translate-x-full transition-all duration-300 ease-in-out flex flex-col items-center z-50"
-    >
+            class="fixed top-0 left-0 bottom-0 w-full max-w-[200px] bg-(--primary-color) h-full -translate-x-full transition-all duration-300 ease-in-out flex flex-col items-center z-50">
+        <div class="flex justify-end w-full">
+            <button id="sidebar-close-button" class="p-2 hover:opacity-80 hover:cursor-pointer">
+                <img src="/images/close.png" class="invert w-3 h-3" alt="끄기 아이콘"/>
+            </button>
+        </div>
         <a href="/student/main">
             <img src="/images/Bicon.png" alt="대표홈아이콘" class="w-20 h-20 cursor-pointer hover:opacity-80" />
         </a>
-        <button id="sidebar-close-button" class="absolute top-0 right-0 p-2 hover:opacity-80 hover:cursor-pointer">
-            <img src="/images/close.png" class="invert w-4 h-4"/>
-        </button>
         <br />
-        <ul class="mt-2 space-y-2 text-white text-[20px] font-bold">
-            <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
-                <img src="/images/Listening.png" alt="강의 아이콘" class="w-10 h-10" />
-                <a href="/student/lesson/main" class="leading-none">강의듣기</a>
-            </li>
-            <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
-                <img src="/images/Score.png" alt="학습성과 아이콘" class="w-9 h-9" />
-                <a href="/student/myscore" class="leading-none">내 학습성과</a>
-            </li>
-            <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
-                <img src="/images/OurClass.png" alt="우리반 아이콘" class="w-9 h-9" />
-                <span class="leading-none">우리반</span>
-            </li>
-        </ul>
+        <th:block th:if="${!session.role.role.equals('ROLE_ADMIN')}">
+            <ul class="mt-2 space-y-2 text-white text-[20px] font-bold">
+                <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
+                    <img src="/images/Listening.png" alt="강의 아이콘" class="w-10 h-10" />
+                    <a href="/student/lesson/main" class="leading-none">강의듣기</a>
+                </li>
+                <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
+                    <img src="/images/Score.png" alt="학습성과 아이콘" class="w-9 h-9" />
+                    <a href="/student/myscore" class="leading-none">내 학습성과</a>
+                </li>
+                <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
+                    <img src="/images/OurClass.png" alt="우리반 아이콘" class="w-9 h-9" />
+                    <span class="leading-none">우리반</span>
+                </li>
+            </ul>
+        </th:block>
+        <th:block th:unless="${!session.role.role.equals('ROLE_ADMIN')}">
+            <ul class="mt-2 space-y-2 text-white text-[20px] font-bold">
+                <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
+                    <img src="/images/OurClass.png" alt="우리반 아이콘" class="w-9 h-9" />
+                    <a href="/admin/accounts">계정 관리</a>
+                </li>
+                <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
+                    <img src="/images/Listening.png" alt="강의 아이콘" class="w-10 h-10" />
+                    <a href="/admin/classroom" class="leading-none">반 관리</a>
+                </li>
+                <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
+                    <img src="/images/Score.png" alt="학습성과 아이콘" class="w-9 h-9" />
+                    <a href="/admin/announce" class="leading-none">공지사항 관리</a>
+                </li>
+            </ul>
+        </th:block>
 
     </nav>
 

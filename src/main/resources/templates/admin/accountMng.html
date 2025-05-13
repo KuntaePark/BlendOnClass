@@ -10,75 +10,108 @@
 </th:block>
 
 
-<div layout:fragment="main" id="main">
-    <h1>계정 관리 페이지</h1>
-    <a href="/admin/accountGen">계정 생성</a>
-    <div id="account-list"
-        class="flex flex-col w-200">
-        <form class="flex flex-row gap-2"
-                th:action="@{/admin/accounts}" th:object="${accountSearchDto}" method="get">
-            <input type="text" th:field="*{keyword}" placeholder="단어 입력"/>
-            <select th:field="*{roleType}">
-                <option th:value="${null}">역할 선택</option>
-                <option th:value="${T(com.blendonclass.constant.ROLE).STUDENT}">학생</option>
-                <option th:value="${T(com.blendonclass.constant.ROLE).TEACHER}">교사</option>
-            </select>
-            <button>검색</button>
-        </form>
-        <table class="table-auto border-collapse border border-gray-400">
-            <thead>
+<div layout:fragment="main" id="main" class="flex flex-col gap-4 pt-16">
+    <div id="account-table-container" class="flex flex-col gap-4">
+        <div class="text-3xl">이용자 계정</div>
+        <div id="account-list"
+            class="flex flex-col w-full mt-4">
+            <div id="table-header" class="flex flex-row py-2 border-b-1 border-gray-200">
+                <form class="flex-1 flex flex-row items-center gap-2"
+                        th:action="@{/admin/accounts}" th:object="${accountSearchDto}" method="get">
+                    <input type="text" th:field="*{keyword}" placeholder="단어 입력" class="border-1 border-gray-200 rounded py-1 pr-2"/>
+                    <select th:field="*{roleType}">
+                        <option th:value="${null}">역할 선택</option>
+                        <option th:value="${T(com.blendonclass.constant.ROLE).STUDENT}">학생</option>
+                        <option th:value="${T(com.blendonclass.constant.ROLE).TEACHER}">교사</option>
+                    </select>
+                    <button type="submit" class="w-8 h-8 rounded-md bg-(--primary-color) flex items-center justify-center hover:opacity-80">
+                        <img src="/images/icon_search.png" class="min-w-4 h-4 invert">
+                    </button>
+                </form>
+                <a href="/admin/accountGen" class="w-8 h-8 rounded-md bg-(--primary-color) text-white font-bold text-2xl text-center hover:opacity-80">+</a>
+            </div>
+            <table class="table-auto border-collapse text-left mt-2">
+                <thead class="text-gray-300 font-light p-2">
+                    <tr>
+                        <th class="pl-2">이름</th>
+                        <th class="py-2">로그인 아이디</th>
+                        <th class="py-2">이메일</th>
+                        <th class="py-2">구분</th>
+                        <th class="py-2"></th>
+                    </tr>
+                </thead>
+                <tbody class="overflow-scroll">
+                    <tr class="odd:bg-gray-100 hover:bg-gray-300"
+                            th:each="account : ${accountListDtos.getContent()}"
+                            th:object="${account}"
+                            th:unless="${account.loginId.equals('admin')}">
+                        <td class="pl-2" th:text="*{name}"></td>
+                        <td th:text="*{loginId}"></td>
+                        <td th:text="*{email}"></td>
+                        <td th:text="*{role.roleName}"></td>
+                        <td class="flex flex-row justify-end gap-2 p-2">
+                            <div class="w-10 h-10 rounded-md bg-(--primary-color) flex items-center justify-center hover:opacity-80">
+                                <a th:href="@{'/admin/modifyAccount?id=' + ${account.id}}" class="w-6 h-6 flex items-center justify-center">
+                                    <img src="/images/icon_modify.png" class="min-w-6 h-6 invert">
+                                </a>
+                            </div>
+                            <button class="w-10 h-10 rounded-md bg-red-400 flex items-center justify-center  hover:opacity-80 hover:cursor-pointer"
+                                    th:onclick="deleteAccount([[*{id}]])">
+                                <img src="/images/icon_delete.png" class="min-w-6 h-6 invert">
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul id="page-select" th:with="
+            pageNum=${accountListDtos.number},
+            totalPages=${accountListDtos.totalPages},
+            totalElements=${accountListDtos.totalElements},
+            start=${(pageNum/maxPage)*maxPage+1},
+            end=${(totalPages == 0) ? 1 : (start + (maxPage - 1) < totalPages ? start + (maxPage - 1) : totalPages)}"
+            class="flex flex-row gap-2">
+                <li class="page-item" th:classappend="${accountListDtos.first}?'disabled'">
+                    <a th:onclick="'javascript:page(' + ${pageNum - 1} + ')'" aria-label='Prev' class="page-link">
+                        <span aria-hidden='true'>Prev</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${pageNum eq page-1}?'active':''">
+                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+                </li>
+
+                <li class="page-item" th:classappend="${accountListDtos.last}?'disabled'">
+                    <a th:onclick="'javascript:page(' + ${pageNum + 1} + ')'" aria-label='Next' class="page-link">
+                        <span aria-hidden='true'>Next</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="request-table-container" class="border-1">
+        <div class="text-3xl">권한 요청</div>
+        <table class="table-auto border-collapse border border-gray-400 text-left">
+            <thead class="text-gray-300 font-normal">
                 <tr>
-                    <th class="px-4 py-2">이름</th>
-                    <th>로그인 아이디</th>
+                    <th>이름</th>
                     <th>이메일</th>
+                    <th>학년</th>
+                    <th>반</th>
+                    <th>권한 종류</th>
+                    <th>요청일시</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="py-2"
-                        th:each="account : ${accountListDtos.getContent()}"
-                        th:object="${account}"
-                        th:unless="${account.loginId.equals('admin')}">
-                    <td th:text="${account.name}"></td>
-                    <td th:text="${account.loginId}"></td>
-                    <td th:text="${account.email}"></td>
-                    <td>
-                        <a  th:href="@{'/admin/modifyAccount?id=' + ${account.id}}"
-                                class="px-2 py-2">
-                            정보 수정
-                        </a>
-                    </td>
-                    <td>
-                        <button class="px-2 py-2 text-white bg-red-500"
-                                th:onclick="deleteAccount([[*{id}]])">
-                            계정 삭제
-                        </button>
-                    </td>
+                <tr th:each="authReq : ${authReqListDtos.getContent()}">
+                    <td th:text="${authReq.name}"></td>
+                    <td th:text="${authReq.email}"></td>
+                    <td th:text="${authReq.grade}"></td>
+                    <td th:text="${authReq.classroomNum}"></td>
+                    <td th:text="${authReq.authType}"></td>
+                    <td th:text="${authReq.reqTime}"></td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <h2>요청 목록</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>이름</th>
-                <th>이메일</th>
-                <th>학년</th>
-                <th>반</th>
-                <th>권한 종류</th>
-                <th>요청일시</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="authReq : ${authReqListDtos.getContent()}">
-                <td th:text="${authReq.name}"></td>
-                <td th:text="${authReq.email}"></td>
-                <td th:text="${authReq.grade}"></td>
-                <td th:text="${authReq.classroomNum}"></td>
-                <td th:text="${authReq.authType}"></td>
-                <td th:text="${authReq.reqTime}"></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    </div>
 </html>
