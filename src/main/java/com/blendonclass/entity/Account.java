@@ -13,7 +13,7 @@ public class Account {
     @Column(name = "account_id")
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String loginId;
 
     @Column(nullable = false, length = 20)
@@ -22,7 +22,7 @@ public class Account {
     @Column(nullable = false, length = 32)
     private String name;
 
-    @Column(nullable = false, length = 128)
+    @Column(nullable = false, length = 128, unique = true)
     private String email;
 
     @Column(nullable = false)

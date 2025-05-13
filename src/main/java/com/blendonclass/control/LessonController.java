@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/lesson")
+@RequestMapping("/student/lesson")
 @RequiredArgsConstructor
 public class LessonController {
     private final LessonService lessonService;
@@ -39,19 +39,15 @@ public class LessonController {
 
         Long loggedId = Long.parseLong(customUserDetails.getUsername());
 
-        // ✅ 최근 강의 목록 대신 챕터 기준으로 모든 강의 불러오기
-        Long defaultChapterId = 1L;
-        List<LessonDto> recentLessons = lessonService.getAllLessonsOfChapter(defaultChapterId, loggedId);
-        model.addAttribute("recentLessons", recentLessons);
+        // 모든 경우 selectedGrade, selectedSubject는 모델에 넣기
+        model.addAttribute("selectedGrade", grade);
+        model.addAttribute("selectedSubject", subject);
 
-        // ✅ 학년 + 과목이 선택되었을 때만 챕터 목록 조회
+        // 과목 선택되었을 때만 챕터 로딩
         if (grade != null && subject != null) {
-            SUBJECT subjectEnum = SUBJECT.valueOf(subject.toUpperCase()); // String → SUBJECT 변환
+            SUBJECT subjectEnum = SUBJECT.valueOf(subject.toUpperCase());
             model.addAttribute("chapters", lessonService.getAllChapters(grade, subjectEnum, loggedId));
         }
-
-            model.addAttribute("selectedGrade", grade);
-            model.addAttribute("selectedSubject", subject);
 
         return "lessonMain";
     }

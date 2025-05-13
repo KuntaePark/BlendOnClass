@@ -45,7 +45,7 @@ public class MainController {
     }
 
     @GetMapping("/student")
-    public String student(Model model) {return "studentMain";}
+    public String student(Model model) {return "redirect:/student/main";}
 
     @GetMapping(value={"/teacher","/teacher/{id}"})
     public String teacher(@PathVariable("id") Optional<Long> cid, Principal principal, Model model) {

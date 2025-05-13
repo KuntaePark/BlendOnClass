@@ -49,7 +49,6 @@ public class ScoreService {
 
         Long classroomId = authority.getClassroom().getId();
 
-
         //해당 반의 해당 과목 진도 조회
         Progress progress = progressRepository.findByClassroomIdAndStartLesson_Chapter_Subject(classroomId,subject);
         if(progress == null) return null;
@@ -120,14 +119,11 @@ public class ScoreService {
                 .collect(Collectors.toList());
     }
 
-    public List<LessonScoreDto> getAllLessonScores(int grade, SUBJECT subject, Long accountId) {
-        return scoreRepository.findScoresByGradeAndSubjectAndAccountId(grade, subject, accountId);
-    }
-
-    public List<LessonScoreDto> getAllClassroomLessonScores(int grade, SUBJECT subject, Long classroomId) {
-        return null;
-//        return classroomScoreRepository.findScoresByGradeAndSubjectAndClassroomId(
-//                grade, subject, classroomId
-//        );
+    public List<?> getAllLessonScores(int grade, SUBJECT subject, Long id, boolean isStudent) {
+        if(isStudent) {
+            return scoreRepository.findScoresByGradeAndSubjectAndAccountId(grade, subject, id);
+        } else {
+            return classroomScoreRepository.findScoresByGradeAndSubjectAndAccountId(grade, subject, id);
+        }
     }
 }

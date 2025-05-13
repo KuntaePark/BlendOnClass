@@ -16,6 +16,11 @@
     <!--  chart.js  -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/css/default.css">
 
     <th:block layout:fragment="css"></th:block>
@@ -26,8 +31,24 @@
 <body>
 
 <div id="wrap">
-    <th:block th:replace="fragment/header::header"></th:block>
-    <th:block layout:fragment="main"></th:block>
+    <div id="body-wrap" class="flex flex-col">
+        <th:block th:replace="fragment/aside::aside"></th:block>
+        <div id="main-wrap"
+        class="absolute top-0 left-0 w-full transition-all duration-300 ease-in-out shadow-lg">
+            <th:block th:replace="fragment/header::header"></th:block>
+            <div id="main-container" class="mx-auto max-w-[1280px] px-2 px-6">
+                <th:block layout:fragment="main"></th:block>
+                <div
+                        class="menu-trigger absolute top-24 left-0 w-10 h-16 bg-[#0d65d3] rounded-r-md cursor-pointer hover:bg-[#617890] transition-all duration-300 flex items-center justify-center"
+                >
+                    <div class="p-auto">
+                        <img src="/images/right-arrow.png" alt="화살표 아이콘" class="invert w-6 h-6"/>
+                    </div>
+                    <span class="text-black hover:text-[#fcfeff] text-lg font-ico"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 <!--    <th:block th:replace="fragment/footer::footer"></th:block>-->
 </div>
 

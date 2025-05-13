@@ -7,13 +7,11 @@
 <head>
     <meta charset="UTF-8">
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">강의 상세</title>
-    <!--    script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>   <-->
-    <script src="https://cdn.tailwindcss.com"></script>
 
     <th:block layout:fragment="css"></th:block>
 </head>
 <body class="bg-gray-50 text-gray-800">
-<div layout:fragment="main" class="container mx-auto px-4 py-6">
+<div layout:fragment="main" >
 
     <!-- 강의 ID (선택 표시) -->
     <div class="text-sm text-gray-500 mb-2">
@@ -23,10 +21,10 @@
 
 <!--    강의 넘기기-->
     <a th:if="${prevLessonId != null}"
-       th:href="'/lesson/continue/' + ${prevLessonId}"> 이전 강의</a>
+       th:href="'/student/lesson/continue/' + ${prevLessonId}"> 이전 강의</a>
 
     <a th:if="${nextLessonId != null}"
-       th:href="'/lesson/continue/' + ${nextLessonId}">다음 강의 </a>
+       th:href="'/student/lesson/continue/' + ${nextLessonId}">다음 강의 </a>
 
     <!-- 강의 영상 -->
     <div class="mb-6">

@@ -27,11 +27,11 @@ public interface ScoreRepository extends JpaRepository<Score, Long> {
         c.id, c.grade, c.subject, c.title, l.id, l.lessonTitle,
             l.lessonType, s.completeRate, s.attemptCount
         )
-    from Score s
-    join s.lesson l
-    join l.chapter c
-    where c.grade = :grade and c.subject = :subject and s.account.id = :accountId
-    order by l.id asc
+            from Chapter c
+                         join Lesson l on l.chapter = c
+                         left join Score s on s.lesson = l and s.account.id = :accountId
+                         where c.grade = :grade and c.subject = :subject
+                         order by l.id asc
     """)
     List<LessonScoreDto> findScoresByGradeAndSubjectAndAccountId(int grade, SUBJECT subject, Long accountId);
 }

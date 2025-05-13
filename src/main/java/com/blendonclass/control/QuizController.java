@@ -5,6 +5,7 @@ import com.blendonclass.dto.QuizDetailDto;
 import com.blendonclass.dto.QuizGradedDto;
 import com.blendonclass.service.CustomUserDetails;
 import com.blendonclass.service.QuizService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/quiz")
+@RequestMapping("/student/quiz")
 @RequiredArgsConstructor
 public class QuizController {
     private final QuizService quizService;
@@ -65,6 +66,10 @@ public class QuizController {
         model.addAttribute("currentQuiz", currentQuiz);
         model.addAttribute("chapterId", chapterId);
         model.addAttribute("currentIndex", 0);
+
+        Long lessonId = quizService.getFirstLessonIdOfChapter(chapterId);
+        model.addAttribute("lessonId", lessonId);
+
         return "quiz";
     }
 
@@ -86,5 +91,33 @@ public class QuizController {
         Long accountId = Long.parseLong(userDetails.getUsername());
         return quizService.endQuiz(accountId, lessonId);
     }
+
+    @PostMapping("/exit")
+    @ResponseBody
+    public void exitQuiz(HttpServletRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        System.out.println("exitQuiz 호출됨");
+
+        if(userDetails == null){
+            System.out.println("사용자 정보 없다.");
+            return;
+        }
+
+        Long accountId = Long.parseLong(userDetails.getUsername());
+        String lessonIdStr = request.getParameter("lessonId");
+
+        if (lessonIdStr != null) {
+            Long lessonId = Long.parseLong(lessonIdStr);
+            System.out.println("🔎 lessonId: " + lessonId);
+            quizService.exitOngoingQuiz(accountId, lessonId);
+        }else{
+            System.out.println("lessonId 없다.");
+        }
+    }
+
+
+
+
+
 
 }

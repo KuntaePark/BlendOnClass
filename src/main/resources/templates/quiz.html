@@ -7,12 +7,11 @@
 <head>
     <meta charset="UTF-8">
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">BlendOnClass</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
-<div class="max-w-3xl mx-auto" layout:fragment="main">
+<div layout:fragment="main">
     <div class="container mx-auto px-4 py-6">
         <!-- 문제 번호 네비게이션 -->
         <div class="flex gap-2 mb-4" id="navButtons">
@@ -125,7 +124,7 @@
             const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
             const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-            fetch('/quiz/grade?lessonId=' + lessonId, {
+            fetch('/student/quiz/grade?lessonId=' + lessonId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -153,7 +152,7 @@
                 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
                 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-                fetch('/quiz/end?lessonId=' + lessonId, {
+                fetch('/student/quiz/end?lessonId=' + lessonId, {
                     method: 'POST',
                     headers: { [csrfHeader]: csrfToken }
                 }).then(() => {
@@ -164,10 +163,31 @@
         });
 
         document.getElementById('goToLessonBtn').addEventListener('click', () => {
-            window.location.href = '/quiz/lessonMain';
+            window.location.href = '/student/quiz/lessonMain';
         });
 
         renderQuiz(0);
+
+        document.addEventListener('visibilitychange', function (){
+            if(document.visibilityState === "hidden"){
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                fetch("/student/quiz/exit",{
+                    method: 'POST' ,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        [csrfHeader]: csrfToken
+                    },
+                    body: new URLSearchParams({lessonId:lessonId})
+                }).then(() => {
+                    console.log("퀴즈 종료 요청 전송");
+                }).catch(e => {
+                    console.error("퀴즈 종료 전송 실패:",e);
+                });
+            }
+        });
+
 
 
 
