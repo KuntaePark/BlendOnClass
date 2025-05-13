@@ -32,13 +32,13 @@
 
 <div id="wrap">
     <div id="body-wrap" class="flex flex-col">
-        <th:block th:replace="fragment/aside::aside"></th:block>
+        <th:block th:replace="fragment/aside::aside" th:if="${!session.role.role.equals('ROLE_TEACHER')}"></th:block>
         <div id="main-wrap"
-        class="absolute top-0 left-0 w-full transition-all duration-300 ease-in-out shadow-lg">
+        class="absolute top-0 left-0 w-full transition-all duration-300 ease-in-out">
             <th:block th:replace="fragment/header::header"></th:block>
             <div id="main-container" class="mx-auto max-w-[1280px] px-2 px-6">
                 <th:block layout:fragment="main"></th:block>
-                <div
+                <div th:if="${!session.role.role.equals('ROLE_TEACHER')}"
                         class="menu-trigger absolute top-24 left-0 w-10 h-16 bg-[#0d65d3] rounded-r-md cursor-pointer hover:bg-[#617890] transition-all duration-300 flex items-center justify-center"
                 >
                     <div class="p-auto">

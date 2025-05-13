@@ -1,6 +1,7 @@
 package com.blendonclass.control;
 
 import com.blendonclass.constant.ROLE;
+import com.blendonclass.entity.Authority;
 import com.blendonclass.entity.Classroom;
 import com.blendonclass.service.AlarmService;
 import com.blendonclass.service.AuthorityService;
@@ -47,17 +48,24 @@ public class MainController {
     @GetMapping("/student")
     public String student(Model model) {return "redirect:/student/main";}
 
-    @GetMapping(value={"/teacher","/teacher/{id}"})
+    @GetMapping(value={"/teacher", "/teacher/{id}"})
     public String teacher(@PathVariable("id") Optional<Long> cid, Principal principal, Model model) {
-        //이게 계정 기본키
         Long id = Long.parseLong(principal.getName());
-        List<Classroom> cr = authorityService.getClassroomsByAccountId(id);
-        Long classroomId= cid.isEmpty() ? cr.get(0).getId() : cid.get();
-        model.addAttribute("gc", cr);
+
+        // Authority에서 반 + 과목을 함께 가져옴
+        List<Authority> authorities = authorityService.getAuthoritiesByAccountId(id);
+        for(Authority auth : authorities) {
+            System.out.println(auth);
+        }
+        // 경로변수 id가 없으면, 첫 번째 권한의 반을 기본으로 사용
+        Long classroomId = cid.orElse(authorities.get(0).getClassroom().getId());
+
+        model.addAttribute("authorities", authorities); // authority 객체 전체 전달
         model.addAttribute("ar", alarmService.getAlarmByClassroomId(classroomId));
-        //todo - 반 목록 띄우기
+
         return "teacherMain";
     }
+
 
     @GetMapping("/admin")
     public String admin(Model model) {return "redirect:/admin/accounts";}

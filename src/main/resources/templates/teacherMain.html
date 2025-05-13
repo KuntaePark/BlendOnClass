@@ -4,34 +4,89 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragment/default}">
 
+<!-- Head 영역은 fragment/default에서 처리되므로 여기엔 필요 없음 -->
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script"></th:block>
 
+<!-- ✅ 본문 시작 -->
+<th:block layout:fragment="main">
 
-<div layout:fragment="main" id="main">
-    <div th:each="round : ${gc}">
-        <div th:text="${round.grade}">
-         </div>
-        <a th:href="'/teacher/'+${round.id}" th:text="${round.classroomNum}">
-        </a>
+    <!-- ✅ 전체 wrapper: 화면 중앙 정렬 + 높이 통일 -->
+    <!-- ✅ 전체 wrapper: 화면 중앙 정렬 -->
+    <div class="flex justify-center mt-12 w-full">
+        <div class="flex flex-col items-start w-[980px]">
+
+            <!-- 상단 알림 + 버튼 + 반 목록 -->
+            <div class="flex flex-row gap-8 items-stretch h-[320px] w-full">
+
+                <!-- 알림 박스 -->
+                <div class="bg-white rounded-lg shadow-lg w-[500px] flex flex-col">
+                    <div class="bg-blue-600 w-full px-6 py-2 rounded-t-lg">
+                        <div class="flex items-center space-x-2">
+                            <img src="/images/alarm.png" alt="알람 아이콘" class="w-6 h-6" />
+                            <h2 class="text-white text-xl font-semibold tracking-widest">알람</h2>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 px-6 py-2 border-b border-gray-300 text-sm font-semibold text-gray-700 bg-gray-50">
+                        <div class="text-center">메세지</div>
+                        <div class="text-center">등록일</div>
+                    </div>
+                    <div class="px-6 py-2 space-y-3 overflow-y-auto flex-1">
+                        <th:block th:each="alarm : ${ar}">
+                            <div class="grid grid-cols-2 border-b border-dotted pb-2">
+                                <div class="text-center text-gray-800 text-sm font-medium">
+                                    <span th:text="${alarm.message}">알림 내용</span>
+                                </div>
+                                <div class="text-center text-sm text-gray-500">
+                                    <span th:text="${#temporals.format(alarm.alarmTime, 'yyyy-MM-dd (E)')}"></span>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+
+                <!-- 버튼 박스 -->
+                <div class="bg-gray-100 rounded-xl shadow-lg px-6 py-6 flex flex-col justify-center items-center w-[200px]">
+                    <a href="/teacher/myscore?id=1"
+                       class="bg-blue-600 text-white text-sm font-semibold w-full px-4 py-3 mb-3 rounded hover:bg-blue-700 text-center shadow">
+                        학습 성과
+                    </a>
+                    <a href="/teacher/teacher/classrooms?id=1"
+                       class="bg-blue-600 text-white text-sm font-semibold w-full px-4 py-3 mb-3 rounded hover:bg-blue-700 text-center shadow">
+                        우리반게시판
+                    </a>
+                    <a href="/teacher/progress?id=1"
+                       class="bg-blue-600 text-white text-sm font-semibold w-full px-4 py-3 rounded hover:bg-blue-700 text-center shadow">
+                        진도 설정
+                    </a>
+                </div>
+
+                <!-- 반 목록 -->
+                <div class="bg-blue-600 text-white rounded-2xl p-6 flex flex-col justify-start items-center gap-4 shadow-lg w-[220px]">
+                    <div class="text-xl font-bold text-center">1학년</div>
+                    <th:block th:each="auth : ${authorities}">
+                        <a th:href="@{/teacher/{id}(id=${auth.classroom.id})}"
+                           class="block px-4 py-2 bg-white text-blue-700 rounded-md font-semibold hover:bg-blue-100 text-center w-full">
+                            [[${auth.classroom.grade}]]학년 [[${auth.classroom.classroomNum}]]반 ([[${auth.authType.subject}]])
+                        </a>
+                    </th:block>
+                </div>
+            </div>
+
+            <!-- ✅ 진도율 박스: 알람 + 버튼 박스 너비와 동일하게 설정 -->
+            <div class="mt-10 w-[730px]">
+                <div class="text-xl font-bold text-gray-800 mb-2">영어</div>
+                <div class="relative w-full h-6 bg-blue-100 rounded-full overflow-hidden">
+                    <div class="absolute top-0 left-0 h-full bg-blue-500" style="width: 70%;"></div>
+                </div>
+                <div class="mt-1 text-right font-semibold text-gray-700">70%</div>
+            </div>
+
+        </div>
     </div>
 
-<div th:each="alarm : ${ar}">
-
-    <div th:text="${alarm.message}">
-    </div>
-
-    <div th:text="${alarm.alarmTime}">
-    </div>
 
 
 
-
-</div>
-
-
-    <h1>교사</h1>
-    <a href="/teacher/myscore?id=1">1반 학습성과 페이지</a>
-    <a href="/teacher/progress?id=1">1반 진도 설정 페이지</a>
-</div>
+</th:block>
 </html>

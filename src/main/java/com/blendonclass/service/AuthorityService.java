@@ -96,4 +96,11 @@ public class AuthorityService {
                 .distinct()
                 .collect(Collectors.toList());
     }
+
+    public List<Authority> getAuthoritiesByAccountId(Long accountId) {
+        return authorityRepository.findByAccountId(accountId).stream()
+                .filter(a -> a != null && a.getClassroom() != null) // 💥 null 방지
+                .collect(Collectors.toList());
+    }
+
 }
