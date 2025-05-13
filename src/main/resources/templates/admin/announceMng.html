@@ -20,7 +20,7 @@
                 <thead class="text-gray-300 font-light p-2">
                 <tr>
                     <th class="pl-2">번호</th>
-                    <th class="py-2">제목</th>
+                    <th class="py-2 w-[60%]">제목</th>
                     <th class="py-2">작성시간</th>
                     <th class="py-2"></th>
                 </tr>
@@ -45,29 +45,31 @@
                 </tr>
                 </tbody>
             </table>
-            <ul id="page-select" th:with="
-            pageNum=${sysAnnListDtos.number},
-            totalPages=${sysAnnListDtos.totalPages},
-            totalElements=${sysAnnListDtos.totalElements},
-            start=${(pageNum/maxPage)*maxPage+1},
-            end=${(totalPages == 0) ? 1 : (start + (maxPage - 1) < totalPages ? start + (maxPage - 1) : totalPages)}"
-                class="flex flex-row gap-2">
-                <li class="page-item" th:classappend="${sysAnnListDtos.first}?'disabled'">
-                    <a th:onclick="'javascript:page(' + ${pageNum - 1} + ')'" aria-label='Prev' class="page-link">
-                        <span aria-hidden='true'>Prev</span>
-                    </a>
-                </li>
+            <div id="paging-container" class="flex justify-center">
+                <ul id="page-select" th:with="
+                pageNum=${sysAnnListDtos.number},
+                totalPages=${sysAnnListDtos.totalPages},
+                totalElements=${sysAnnListDtos.totalElements},
+                start=${(pageNum/maxPage)*maxPage+1},
+                end=${(totalPages == 0) ? 1 : (start + (maxPage - 1) < totalPages ? start + (maxPage - 1) : totalPages)}"
+                    class="flex flex-row gap-2">
+                    <li class="page-item" th:classappend="${sysAnnListDtos.first}?'disabled'">
+                        <a th:onclick="'javascript:page(' + ${pageNum - 1} + ')'" aria-label='Prev' class="page-link">
+                            <span aria-hidden='true'>Prev</span>
+                        </a>
+                    </li>
 
-                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${pageNum eq page-1}?'active':''">
-                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
-                </li>
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${pageNum eq page-1}?'active':''">
+                        <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+                    </li>
 
-                <li class="page-item" th:classappend="${sysAnnListDtos.last}?'disabled'">
-                    <a th:onclick="'javascript:page(' + ${pageNum + 1} + ')'" aria-label='Next' class="page-link">
-                        <span aria-hidden='true'>Next</span>
-                    </a>
-                </li>
-            </ul>
+                    <li class="page-item" th:classappend="${sysAnnListDtos.last}?'disabled'">
+                        <a th:onclick="'javascript:page(' + ${pageNum + 1} + ')'" aria-label='Next' class="page-link">
+                            <span aria-hidden='true'>Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

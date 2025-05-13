@@ -5,16 +5,37 @@
       layout:decorate="~{fragment/default}">
 
 <th:block layout:fragment="css"></th:block>
-<th:block layout:fragment="script"></th:block>
+<th:block layout:fragment="script">
+    <script th:src="@{/javascript/classroomMng.js}"></script>
+</th:block>
 
 
-<div layout:fragment="main" id="main">
-    <h1>반 관리 페이지</h1>
-    <h2>1학년 1반 목록</h2>
-    <div th:each="account : ${accountListDtos}">
-        <li th:text="${account.name}"></li>
-        <li th:text="${account.email}"></li>
-        <li th:text="${account.role}"></li>
+<div layout:fragment="main" id="main" class="flex flex-col w-full border-1">
+    <div id="page-title" class="text-3xl">
+        반 관리
+    </div>
+    <div id="button-set">
+        <button>권한 일괄 추가</button>
+        <button>반 초기화</button>
+        <button>반 일괄 추가</button>
+    </div>
+    <div id="wrap" class="flex flex-row">
+        <div id="class-list-container">
+            <select id="grade-select">
+                <option value="">학년 선택</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+            </select>
+            <ul id="class-list">
+                <li>1반</li>
+                <li>2반</li>
+                <li>3반</li>
+            </ul>
+        </div>
+        <div id="account-list">
+
+        </div>
     </div>
 </div>
 </html>
