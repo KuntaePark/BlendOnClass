@@ -4,11 +4,54 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragment/default}">
 
+<head>
+    <title>학생 홈</title>
+</head>
+
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script"></th:block>
 
-
 <div layout:fragment="main" id="main">
-    <h1>학생</h1>
+
+
+    <div class="rounded-lg mt-6 flex justify-center">
+        <img src="/images/StudentMain.png" alt="Student Home 이미지" class="max-w-full h-auto object-contain" />
+    </div>
+
+
+    <a href="/student/lesson/main"
+       class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        강의 목록
+    </a>
+
+    <div class="bg-white p-4 rounded-lg shadow-md mt-6">
+        <h2 class="text-xl font-medium mb-3">최근 강의</h2>
+
+        <div th:if="${lastLesson != null}" class="flex justify-between items-center">
+            <div class="w-full">
+                <p th:text="${lastLesson.lessonTitle}" class="text-lg font-semibold text-gray-800"></p>
+                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                    <div th:style="|width: ${lastLesson.completeRate}%|"
+                         class="bg-blue-500 h-2.5 rounded-full"></div>
+                </div>
+                <p class="text-sm text-gray-600 mt-1"
+                   th:text="|진도율: ${lastLesson.completeRate}%|"></p>
+            </div>
+
+            <div class="flex flex-col items-end ml-4">
+                <a th:if="${lastLesson.completeRate == 100}"
+                   th:href="@{/student/lesson/restart/{id}(id=${lastLesson.lessonId})}"
+                   class="bg-red-500 text-white px-2 py-1 rounded text-sm mb-1 hover:bg-red-600">
+                    다시하기
+                </a>
+                <a th:href="@{/student/lesson/continue/{id}(id=${lastLesson.lessonId})}"
+                   class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
+                    이어하기
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 </html>

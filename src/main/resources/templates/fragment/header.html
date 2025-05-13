@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<header th:fragment="header" id="header" class="h-20 border-1 border-gray-300 flex items-center justify-center">
+    <a id="logo-icon" href="/" class="flex flex-row items-center gap-2">
+        <div class="flex items-center justify-center w-8 h-8 overflow-hidden">
+            <img src="/images/icon_blue.png" class="min-w-20 h-20 mt-3"/>
+        </div>
+        <span class="text-[20px] font-bold text-(--primary-color)">BlendOnC</span>
+    </a>
+
+    <!-- 상단 프로필 드롭다운 -->
+    <div id="profile-box" class="absolute right-0 flex flex-row justify-end items-center gap-2 p-2 ml-4">
+        <div class="flex flex-col">
+            <span><b th:text="${session.name}"></b>&nbsp님</span>
+            <span th:text="${session.email}" class="text-gray-400"></span>
+        </div>
+        <button id="profileBtn" class="w-14 h-14 rounded-full bg-gray-500 text-white font-bold flex items-center overflow-hidden border-1 hover:opacity-80">
+        </button>
+        <div id="dropdownMenu"
+             class="hidden absolute top-[100%] right-0 mt-2 w-32 bg-white border border-gray-300 rounded shadow-md z-50">
+            <a href="/profile" class="block px-4 py-2 hover:bg-gray-100 text-sm">내 정보</a>
+            <a href="/logout" class="block px-4 py-2 hover:bg-gray-100 text-sm">로그아웃</a>
+        </div>
+    </div>
+    <script>
+        $(function() {
+            const btn = document.getElementById("profileBtn");
+            const menu = document.getElementById("dropdownMenu");
+
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                menu.classList.toggle("hidden");
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                    menu.classList.add("hidden");
+                }
+            });
+        })
+    </script>
+</header>
+</html>

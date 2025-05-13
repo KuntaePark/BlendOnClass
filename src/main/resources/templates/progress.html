@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script">
+    <script th:src="@{/javascript/progress.js}"></script>
+    <script th:inline="javascript">
+        $(function() {
+            progress = [[${progress}]];
+            subject = [[${subject}]];
+            if(progress != null) {
+                console.log(progress);
+                startId = progress.startLessonId ?? -1;
+                endId = progress.endLessonId ?? -1;
+                $('#end-date').val(progress.endDate);
+                showRange();
+            }
+
+            if(subject != null) {
+                $('#subj-select').val(subject);
+            }
+        });
+    </script>
+</th:block>
+
+
+<div layout:fragment="main" id="main">
+    <h1>진도 설정 페이지</h1>
+    <div>
+        <select id="subj-select" th:onchange="onSubjectChange([[${classroomId}]], this.value)">
+            <option value="">과목 선택</option>
+            <th:block th:with="SUBJECT=${T(com.blendonclass.constant.SUBJECT)}">
+                <th:block th:each="subject : ${SUBJECT.values()}">
+                    <option th:if="${subject != SUBJECT.HR}" th:value="${subject}" th:text="${subject.getSubject()}"></option>
+                </th:block>
+            </th:block>
+        </select>
+    </div>
+    <div th:if="${subject != null}" id="progress-form" class="flex flex-col gap-2">
+        <th:block th:if="${progress.getId() != null}">
+            <p class="text-red-400">해당 과목의 진도가 존재합니다.</p>
+        </th:block>
+        <p id="warning"></p>
+        <div th:if="${lessons != null}" class="flex flex-1 gap-2 overflow-x-auto">
+            <button class="range-button w-10 h-10 flex-none border-2 rounded border-gray-400
+                            hover:bg-gray-200"
+                    type="button"
+                    th:each="lesson : ${lessons}"
+                    th:onclick="selectRange([[${lesson.lessonId}]])"
+                    th:text="${lesson.lessonId}"
+                    th:value="${lesson.lessonId}"></button>
+        </div>
+        <p>진도 종료일 선택</p>
+        <input id="end-date" type="date">
+        <button id="submit-button" type="button" th:onclick="setProgress([[${classroomId}]])"
+                class="px-2 py-2 border-1 rounded bg-gray-200 w-40" disabled>
+            <th:block th:if="${progress != null}">수정하기</th:block>
+            <th:block th:unless="${progress != null}">등록하기</th:block>
+        </button>
+    </div>
+    <p id="startId"></p>
+    <p id="endId"></p>
+</div>
+</html>

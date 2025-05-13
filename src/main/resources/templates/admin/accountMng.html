@@ -5,34 +5,80 @@
       layout:decorate="~{fragment/default}">
 
 <th:block layout:fragment="css"></th:block>
-<th:block layout:fragment="script"></th:block>
+<th:block layout:fragment="script">
+    <script th:src="@{/javascript/accountMng.js}"></script>
+</th:block>
 
 
 <div layout:fragment="main" id="main">
     <h1>계정 관리 페이지</h1>
-    <ul th:each="account : ${accountListDtos.getContent()}">
-        <li th:text="${account.loginId}"></li>
-        <li th:text="${account.name}"></li>
-        <li th:text="${account.email}"></li>
-    </ul>
-    <form th:action="@{/admin/accounts}" th:object="${accountSearchDto}" method="get">
-        <input type="text" th:field="*{keyword}" placeholder="단어 입력"/>
-        <select th:field="*{roleType}">
-            <option th:value="${null}">역할 선택</option>
-            <option th:value="${T(com.blendonclass.constant.ROLE).STUDENT}">학생</option>
-            <option th:value="${T(com.blendonclass.constant.ROLE).TEACHER}">교사</option>
-        </select>
-        <button>검색</button>
-    </form>
+    <a href="/admin/accountGen">계정 생성</a>
+    <div id="account-list"
+        class="flex flex-col w-200">
+        <form class="flex flex-row gap-2"
+                th:action="@{/admin/accounts}" th:object="${accountSearchDto}" method="get">
+            <input type="text" th:field="*{keyword}" placeholder="단어 입력"/>
+            <select th:field="*{roleType}">
+                <option th:value="${null}">역할 선택</option>
+                <option th:value="${T(com.blendonclass.constant.ROLE).STUDENT}">학생</option>
+                <option th:value="${T(com.blendonclass.constant.ROLE).TEACHER}">교사</option>
+            </select>
+            <button>검색</button>
+        </form>
+        <table class="table-auto border-collapse border border-gray-400">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2">이름</th>
+                    <th>로그인 아이디</th>
+                    <th>이메일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="py-2"
+                        th:each="account : ${accountListDtos.getContent()}"
+                        th:object="${account}"
+                        th:unless="${account.loginId.equals('admin')}">
+                    <td th:text="${account.name}"></td>
+                    <td th:text="${account.loginId}"></td>
+                    <td th:text="${account.email}"></td>
+                    <td>
+                        <a  th:href="@{'/admin/modifyAccount?id=' + ${account.id}}"
+                                class="px-2 py-2">
+                            정보 수정
+                        </a>
+                    </td>
+                    <td>
+                        <button class="px-2 py-2 text-white bg-red-500"
+                                th:onclick="deleteAccount([[*{id}]])">
+                            계정 삭제
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <h2>요청 목록</h2>
-    <ul th:each="authReq : ${authReqListDtos.getContent()}">
-        <li th:text="${authReq.id}"></li>
-        <li th:text="${authReq.name}"></li>
-        <li th:text="${authReq.email}"></li>
-        <li th:text="${authReq.grade}"></li>
-        <li th:text="${authReq.classroomNum}"></li>
-        <li th:text="${authReq.authType}"></li>
-        <li th:text="${authReq.reqTime}"></li>
-    </ul>
+    <table>
+        <thead>
+            <tr>
+                <th>이름</th>
+                <th>이메일</th>
+                <th>학년</th>
+                <th>반</th>
+                <th>권한 종류</th>
+                <th>요청일시</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="authReq : ${authReqListDtos.getContent()}">
+                <td th:text="${authReq.name}"></td>
+                <td th:text="${authReq.email}"></td>
+                <td th:text="${authReq.grade}"></td>
+                <td th:text="${authReq.classroomNum}"></td>
+                <td th:text="${authReq.authType}"></td>
+                <td th:text="${authReq.reqTime}"></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 </html>

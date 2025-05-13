@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
+
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">BlendOnClass</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<div layout:fragment="main">
+    <div class="container mx-auto px-4 py-6">
+        <!-- 문제 번호 네비게이션 -->
+        <div class="flex gap-2 mb-4" id="navButtons">
+            <button th:each="i : ${#numbers.sequence(1, quizList.size())}"
+                    class="nav-button w-8 h-8 text-center leading-8 rounded-full text-white bg-blue-300"
+                    type="button"
+                    th:text="${i}"></button>
+        </div>
+
+        <!-- 문제 및 선택지 영역 -->
+        <div>
+            <div id="quizQuestion" class="text-lg font-semibold mb-4">문제 로딩 중...</div>
+        </div>
+        <div id="optionsBox" class="mb-4"></div>
+        <input type="hidden" id="studentAnswer" />
+
+        <button id="submitBtn" class="bg-green-500 text-white px-4 py-2 rounded">제출</button>
+        <button id="nextBtn" class="hidden bg-blue-500 text-white px-4 py-2 rounded ml-2">다음</button>
+
+        <!-- 해설 모달 -->
+        <div id="solutionModal" class="hidden bg-white border rounded p-4 mt-6 shadow">
+            <p id="resultText" class="font-bold text-lg mb-2"></p>
+            <p id="solutionText" class="text-sm text-gray-700"></p>
+        </div>
+
+        <!-- 결과 모달 -->
+        <div id="finalModal" class="hidden bg-white border rounded p-6 mt-6 shadow text-center">
+            <p id="finalResultText" class="text-xl font-bold mb-4"></p>
+            <button id="goToLessonBtn" class="bg-indigo-500 text-white px-4 py-2 rounded">강의 메인으로</button>
+        </div>
+    </div>
+
+    <!-- 스크립트 -->
+    <script th:inline="javascript">
+        const quizList = /*[[${quizList}]]*/ [];
+        const lessonId = /*[[${lessonId}]]*/ 0;
+        let currentIndex = 0;
+        let correctCount = 0;
+        const answeredStatus = Array(quizList.length).fill(false);
+
+        const quizQuestion = document.getElementById('quizQuestion');
+        const optionsBox = document.getElementById('optionsBox');
+        const studentAnswerInput = document.getElementById('studentAnswer');
+        const resultText = document.getElementById('resultText');
+        const solutionText = document.getElementById('solutionText');
+        const solutionModal = document.getElementById('solutionModal');
+        const finalModal = document.getElementById('finalModal');
+        const finalResultText = document.getElementById('finalResultText');
+        const submitBtn = document.getElementById('submitBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function renderQuiz(index) {
+            const currentQuiz = quizList[index];
+            currentIndex = index;
+            submitBtn.classList.remove('hidden');
+            nextBtn.classList.add('hidden');
+            solutionModal.classList.add('hidden');
+
+            document.querySelectorAll('.nav-button').forEach((btn, idx) => {
+                btn.classList.remove('bg-gray-300', 'bg-blue-800', 'bg-blue-300');
+                if (idx === currentIndex) {
+                    btn.classList.add('bg-gray-300');
+                } else if (answeredStatus[idx]) {
+                    btn.classList.add('bg-blue-800');
+                } else {
+                    btn.classList.add('bg-blue-300');
+                }
+            });
+
+            fetch(currentQuiz.contextJson)
+                .then(res => res.json())
+                .then(data => {
+                    const quizData = data.find(q => q.quiz_id === currentQuiz.quizId);
+                    quizQuestion.innerHTML = quizData?.question || '문제를 찾을 수 없습니다.';
+
+                    if (currentQuiz.quizType === 'CHOICE') {
+                        optionsBox.innerHTML = '';
+                        quizData.options.forEach(opt => {
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.innerHTML = `${opt.optionNum}. ${opt.optionContext}`;
+                            btn.classList.add('option-btn', 'border', 'p-2', 'rounded', 'mb-2', 'block', 'w-full', 'text-left');
+                            btn.setAttribute('data-answer', opt.optionNum);
+                            btn.addEventListener('click', () => {
+                                studentAnswerInput.value = opt.optionNum;
+                                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('bg-blue-100'));
+                                btn.classList.add('bg-blue-100');
+                            });
+                            optionsBox.appendChild(btn);
+                        });
+                    } else {
+                        optionsBox.innerHTML = `<input type="text" id="studentAnswer" class="border p-2 w-full" placeholder="답을 입력하세요" />`;
+                    }
+                });
+        }
+
+        document.querySelectorAll('.nav-button').forEach((btn, idx) => {
+            btn.addEventListener('click', () => renderQuiz(idx));
+        });
+
+        submitBtn.addEventListener('click', () => {
+            const currentQuiz = quizList[currentIndex];
+            const studentAnswer = document.getElementById('studentAnswer').value;
+
+            if (!studentAnswer) {
+                alert('답을 입력하세요.');
+                return;
+            }
+
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/student/quiz/grade?lessonId=' + lessonId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                },
+                body: JSON.stringify({ quizId: currentQuiz.quizId, studentAnswer })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    resultText.textContent = data.correct ? '정답입니다!' : '오답입니다.';
+                    solutionText.innerHTML = (data.solution || '해설이 없습니다.').replace(/\\n/g, '<br>');
+                    solutionModal.classList.remove('hidden');
+                    submitBtn.classList.add('hidden');
+                    nextBtn.classList.remove('hidden');
+
+                    if (data.correct) correctCount++;
+                    answeredStatus[currentIndex] = true;
+                });
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < quizList.length - 1) {
+                renderQuiz(currentIndex + 1);
+            } else {
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                fetch('/student/quiz/end?lessonId=' + lessonId, {
+                    method: 'POST',
+                    headers: { [csrfHeader]: csrfToken }
+                }).then(() => {
+                    finalResultText.textContent = `총 ${quizList.length}문제 중 ${correctCount}문제 정답!`;
+                    finalModal.classList.remove('hidden');
+                });
+            }
+        });
+
+        document.getElementById('goToLessonBtn').addEventListener('click', () => {
+            window.location.href = '/student/quiz/lessonMain';
+        });
+
+        renderQuiz(0);
+
+        document.addEventListener('visibilitychange', function (){
+            if(document.visibilityState === "hidden"){
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                fetch("/student/quiz/exit",{
+                    method: 'POST' ,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        [csrfHeader]: csrfToken
+                    },
+                    body: new URLSearchParams({lessonId:lessonId})
+                }).then(() => {
+                    console.log("퀴즈 종료 요청 전송");
+                }).catch(e => {
+                    console.error("퀴즈 종료 전송 실패:",e);
+                });
+            }
+        });
+
+
+
+
+    </script>
+</div>
+
+</html>
