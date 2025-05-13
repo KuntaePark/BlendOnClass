@@ -11,23 +11,23 @@
     <div id="main">
       <div id="notice">
         <h4 id="1">공지사항</h4>
-        <a th:href="@{'/post/notice?id='+${classroomId}}">+</a>
+        <a class="notice" th:href="@{'/post/notice?id='+${classroomId}}">+</a>
           <div th:each="notice : ${noticeShowDtos.getContent()}">
-              <p th:text="${notice.title}"></p>
+              <a id="noticeDetail" th:href="@{'/post/notice/detail?id='+${notice.nbId}}" th:text="${notice.title}"></a>
           </div>
       </div>
       <div id="QnA">
         <h4 id="2">QnA</h4>
-        <a id="question" th:href="@{'/post/question?id='+${classroomId}}" >+</a>
+        <a class="question" th:href="@{'/post/question?id='+${classroomId}}" >+</a>
           <div th:each="question : ${questionShowDtos.getContent()}">
                 <a id="answer" th:href="@{'/post/answer?id='+${question.id}}" th:text="${question.title}"></a>
           </div>
       </div>
       <div id="task">
         <h4 id="3">과제</h4>
-        <a th:href="@{'/post/task?id='+${classroomId}}">+</a>
+        <a id="as" th:href="@{'/post/task?id='+${classroomId}}">+</a>
           <div th:each="assignment : ${assignmentShowDtos.getContent()}">
-              <p th:text="${assignment.title}"></p>
+              <a class="task" th:href="@{'post/task/detail?id='+${assignment.AbId}}" th:text="${assignment.title}"></a>
           </div>
       </div>
     </div>

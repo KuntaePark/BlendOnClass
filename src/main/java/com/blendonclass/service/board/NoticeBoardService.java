@@ -56,6 +56,7 @@ public class NoticeBoardService {
 
     public void deleteNotice(Long nbId){
 
+        noticeBoardRepository.deleteById(nbId);
     }
 
     public NoticeShowDto getNoticeDetail(Long nbId){
@@ -67,5 +68,11 @@ public class NoticeBoardService {
                 .stream().map(NoticeShowDto::from).collect(Collectors.toList());
 
         return new PageImpl<>(noticeList, pageable, noticeList.size());
+    }
+
+    public NoticeShowDto findById(Long id) {
+        NoticeBoard noticeBoard = noticeBoardRepository.findById(id).orElse(null);
+        NoticeShowDto noticeShowDto = NoticeShowDto.from(noticeBoard);
+        return noticeShowDto;
     }
 }

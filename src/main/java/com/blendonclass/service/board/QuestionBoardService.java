@@ -40,8 +40,8 @@ public class QuestionBoardService {
         questionBoardRepository.save(questionBoard);
     }
 
-    public void deleteQuestion(Long qbId){
-
+    public void deleteQuestion(Long id){
+        questionBoardRepository.deleteById(id);
     }
 
     public void saveAnswer(Long qbId, Long accountId, String aContext){
@@ -54,7 +54,14 @@ public class QuestionBoardService {
         questionBoardRepository.save(questionBoard);
     }
 
-    public void deleteAnswer(Long id){
+    public void deleteAnswer(Long id, Long accountId){
+
+        QuestionBoard questionBoard = questionBoardRepository.findById(id).orElse(null);
+        questionBoard.setAccount(null);
+        questionBoard.setAWriteTime(null);
+        questionBoard.setAContext(null);
+
+        questionBoardRepository.save(questionBoard);
 
     }
 

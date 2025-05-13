@@ -10,6 +10,7 @@ public class AssignmentWriteDto {
     private Long id;
     private Long writerId;
     private String title;
+    private Long classroomId;
     private String context;
     private LocalDateTime writeTime;
     private LocalDate dueDate;

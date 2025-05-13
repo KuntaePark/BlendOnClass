@@ -9,8 +9,16 @@
     text-align:center;
     justify-content: center;
 }
+.notice{
+    display:block;
+    margin-bottom: 12px;
+}
 #notice{
     width:200px;
+}
+#noticeDetail{
+    display: block;
+    margin-bottom: 12px;
 }
 #QnA{
     width:200px;
@@ -29,5 +37,17 @@ h4{
 }
 #answer{
     display:inline-block;
+    margin-bottom: 12px;
+}
+.question{
+    display:block;
+    margin-bottom: 12px;
+}
+.task{
+    display:block;
+    margin-bottom: 12px;
+}
+#as{
+    display:block;
     margin-bottom: 12px;
 }

@@ -26,17 +26,21 @@ public class QuestionBoardController {
     public String saveQuestion(QuestionWriteDto questionDto, Model model){
         return null;
     }
-
-    public String deleteQuestion(@RequestParam("id") Long qbId, Model model){
-        return null;
+    @PostMapping("post/question/delete")
+    public String deleteQuestion(@RequestParam("id") Long qbId){
+        questionBoardService.deleteQuestion(qbId);
+        return "redirect:/student";
     }
 
     public String saveAnswer(AnswerWriteDto answerWriteDto, Model model){
         return null;
     }
 
-    public String deleteAnswer(@RequestParam("id") Long qbId, Model model){
-        return null;
+    @PostMapping("/post/answer/delete")
+    public String deleteAnswer(@RequestParam("id") Long qbId, Principal principal){
+        Long id = Long.parseLong(principal.getName());
+        questionBoardService.deleteAnswer(qbId, id);
+        return "redirect:/student";
     }
 
     public String getQuestionDetail(@RequestParam("id") Long qbId, Model model){
