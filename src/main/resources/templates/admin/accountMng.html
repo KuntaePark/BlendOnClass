@@ -10,16 +10,16 @@
 </th:block>
 
 
-<div layout:fragment="main" id="main" class="flex flex-col gap-4 pt-16">
+<div layout:fragment="main" id="main" class="flex flex-col gap-4 p-4 border-1 rounded-lg border-gray-300 mt-2">
     <div id="account-table-container" class="flex flex-col gap-4">
-        <div class="text-3xl">이용자 계정</div>
+        <div class="text-2xl font-bold">이용자 계정</div>
         <div id="account-list"
-            class="flex flex-col w-full mt-4">
+            class="flex flex-col w-full mt-2">
 <!--            table header : 계정 검색용-->
-            <div id="table-header" class="flex flex-row py-2 border-b-1 border-gray-200">
+            <div id="table-header" class="flex flex-row py-2 border-b-1 gap-2 items-center border-gray-200">
                 <form class="flex-1 flex flex-row items-center gap-2"
                         th:action="@{/admin/accounts}" th:object="${accountSearchDto}" method="get">
-                    <input type="text" th:field="*{keyword}" placeholder="단어 입력" class="border-1 border-gray-200 rounded py-1 pr-2"/>
+                    <input type="text" th:field="*{keyword}" placeholder="단어 입력" class="border-1 border-gray-200 rounded-full px-2 py-1 w-full"/>
                     <select th:field="*{roleType}">
                         <option th:value="${null}">역할 선택</option>
                         <option th:value="${T(com.blendonclass.constant.ROLE).STUDENT}">학생</option>

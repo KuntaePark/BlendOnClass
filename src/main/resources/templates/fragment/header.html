@@ -3,8 +3,8 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<header th:fragment="header" id="header" class="h-16 border-b-1 border-gray-300 flex items-center justify-center">
-    <a id="logo-icon" href="/" class="flex flex-row items-center gap-2">
+<header th:fragment="header" id="header" class="h-18 border-b-1 border-gray-300 flex items-center justify-center p-4">
+    <a id="logo-icon" href="/" class="flex flex-row items-center gap-2 ml-2">
         <div class="flex items-center justify-center w-8 h-8 overflow-hidden">
             <img th:src="@{'/images/icons/'+${session.role.role.equals('ROLE_ADMIN')?'icon_gray.png':'icon_blue.png'}}" class="min-w-20 h-20 mt-3" alt="아이콘"/>
         </div>
@@ -12,7 +12,7 @@
     </a>
 
     <!-- 상단 프로필 드롭다운 -->
-    <div id="profile-box" class="absolute right-0 flex flex-row justify-end items-center gap-2 p-4 ml-4">
+    <div id="profile-box" class="absolute right-0 flex flex-row justify-end items-center gap-2">
         <div class="flex flex-col text-sm">
             <span ><b th:text="${session.name}"></b>&nbsp님</span>
             <span th:text="${session.email}" class="text-gray-400"></span>

@@ -7,17 +7,7 @@
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script">
     <script th:src="@{/javascript/classroomMng.js}"></script>
-    <script th:inline="javascript">
-        function onAddClick() {
-            //
-            $('#modal').toggle();
-            $('#background-overlay').toggle();
-        }
-        function closeModal() {
-            $('#modal').toggle();
-            $('#background-overlay').toggle();
-        }
-    </script>
+    <script th:src="@{/javascript/modal.js}"></script>
 </th:block>
 
 
@@ -26,12 +16,12 @@
         반 관리
     </div>
     <div id="button-set">
-        <button>권한 일괄 추가</button>
-        <button>반 초기화</button>
-        <button>반 일괄 추가</button>
+        <button type="button" onclick="openModal($('#modal-reset-classroom'))">반 초기화</button>
+        <button type="button" onclick="openModal($('#modal-add-classroom'))">반 추가</button>
     </div>
     <div id="wrap" class="flex flex-row">
         <div id="class-list-container" class="flex-1">
+            <span>반 목록</span>
             <ul id="class-list">
                 <li th:each="classroomDto : ${classroomDtos}" th:object="${classroomDto}">
                     <a th:text="*{grade+'학년 '+classroomNum+'반'}" th:href="@{'/admin/classroom?id='+*{id}}"></a>
@@ -40,24 +30,56 @@
         </div>
         <div id="classroom-account-list" class="flex-1">
             <div id="table-header" class="flex justify-end">
-                <button onclick="onAddClick()" class="w-8 h-8 rounded-md bg-(--primary-color) text-white font-bold text-2xl text-center hover:opacity-80">+</button>
+                <button onclick="openModal($('#modal-add-account'))" class="w-8 h-8 rounded-md bg-(--primary-color) text-white font-bold text-2xl text-center hover:opacity-80">+</button>
             </div>
             <th:block th:if="${accountListDtos != null}">
-                <div th:replace="fragment/account-table :: accountTable(${accountListDtos},
-                ~{fragment/account-table::classroommng-action})"></div>
+                <div th:replace="~{fragment/account-table :: accountTable(${accountListDtos},
+                ~{fragment/account-table::classroommng-action})}"></div>
             </th:block>
         </div>
     </div>
-    <div id="modal" class="w-[1200px] h-[800px] fixed top-[50vh] left-[50vw] -translate-x-[50%] -translate-y-[50%] bg-white rounded border-1 border-gray-300 z-50 hidden">
-        <div class="text-3xl">권한 추가하기</div>
-        <button id="modal-close-button" onclick=closeModal() class="w-4 h-4 absolute top-0 right-0 flex justify-center items-center">
-            <img src="/images/icons/close.png" alt="창 닫기 아이콘">
-        </button>
+    <div id="modal-add-account" class="modal w-[1200px] h-[800px]">
+        <div class="modal-header flex flex-row items-center border-b-1 border-gray-300 pb-2">
+            <div class="text-3xl flex-1">권한 추가하기</div>
+            <button onclick=closeModal($('#modal-add-account')) class="modal-close-button w-4 h-4 mr-2">
+                <img src="/images/icons/close.png" class="m-auto" alt="창 닫기 아이콘">
+            </button>
+        </div>
         <div id="modal-account-list">
-            <th:block th:replace="fragment/account-table::accountTable(${allAccountListDtos.getContent()},
-            ~{fragment/account-table::classroom-modal-action})"></th:block>
+            <th:block th:replace="~{fragment/account-table::accountTable(${allAccountListDtos.getContent()},
+            ~{fragment/account-table::classroom-modal-action})}"></th:block>
         </div>
     </div>
-    <div id="background-overlay" class="fixed w-[100vw] h-[100vh] top-0 left-0 bg-gray-400 opacity-50 z-40 hidden"></div>
+    <div id="modal-add-classroom" class="modal w-[400px] h-[600px]">
+        <div id="" class="modal-header flex flex-row items-center">
+            <div class="text-3xl flex-1">반 추가하기</div>
+            <button onclick=closeModal($('#modal-add-classroom')) class="modal-close-button w-4 h-4 mr-2">
+                <img src="/images/icons/close.png" class="m-auto" alt="창 닫기 아이콘">
+            </button>
+        </div>
+        <div id="class-add-form" class="border-1 w-full">
+            <form id="class-input">
+                <select id="grade-select">
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                </select>
+                <span>학년</span>
+                <input type="number" id="classroomNum">
+                <span>반</span>
+                <button type="submit">추가</button>
+            </form>
+            <ul id="to-add-list">
+            </ul>
+        </div>
+    </div>
+    <div id="modal-reset-classroom" class="modal w-[400px] h-[300px]">
+        <div>전체 반을 초기화합니다. 현재 존재하는 모든 반 및 관련 권한이 삭제되지만, 계정 정보는 남습니다. 계속하시겠습니까?</div>
+        <div>
+            <button class="text-white bg-red-400">확인</button>
+            <button class="border-1 border-gray-300 bg-white" onclick="closeModal($('#modal-reset-classroom'))">취소</button>
+        </div>
+    </div>
+    <div id="background-overlay" onclick="closeAllModal()" class="fixed w-[100vw] h-[100vh] top-0 left-0 opacity-80 bg-gray-400 z-40 hidden"></div>
 </div>
 </html>
