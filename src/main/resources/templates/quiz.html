@@ -13,6 +13,8 @@
 
 <div layout:fragment="main">
     <div class="container mx-auto px-4 py-6">
+
+        <h2 class="text-2xl font-bold mb-4" th:text="${lessonTitle}">소단원 제목</h2>
         <!-- 문제 번호 네비게이션 -->
         <div class="flex gap-2 mb-4" id="navButtons">
             <button th:each="i : ${#numbers.sequence(1, quizList.size())}"
@@ -25,7 +27,7 @@
         <div>
             <div id="quizQuestion" class="text-lg font-semibold mb-4">문제 로딩 중...</div>
         </div>
-        <div id="optionsBox" class="mb-4"></div>
+        <div id="optionsBox" class="mb-4 w-1/4 mx-auto space-y-2"></div>
         <input type="hidden" id="studentAnswer" />
 
         <button id="submitBtn" class="bg-green-500 text-white px-4 py-2 rounded">제출</button>
