@@ -1,6 +1,7 @@
 package com.blendonclass.entity;
 
 import com.blendonclass.constant.SUBJECT;
+import com.blendonclass.dto.AssignmentWriteDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,4 +38,12 @@ public class AssignmentBoard {
     private Authority authority;
 
 
+    public static AssignmentBoard from(AssignmentWriteDto assignmentWriteDto, Authority authority) {
+        AssignmentBoard assignmentBoard = new AssignmentBoard();
+        assignmentBoard.title = assignmentWriteDto.getTitle();
+        assignmentBoard.context = assignmentWriteDto.getContext();
+        assignmentBoard.dueDate = assignmentWriteDto.getDueDate();
+        assignmentBoard.authority = authority;
+        return assignmentBoard;
+    }
 }

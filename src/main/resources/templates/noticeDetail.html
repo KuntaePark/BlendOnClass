@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/noticeDetail.css">
+</head>
+<body>
+  <div th:each="notice:${noticeShowDto}">
+    <form th:action="@{'/post/notice/detail?id='+${noticeShowDto.nbId}}" method="post" enctype="multipart/form-data">
+      <h2>제목</h2>
+      <div th:text="${noticeShowDto.title}"></div>
+      <h2>내용</h2>
+      <div th:text="${noticeShowDto.context}"></div>
+      <h2>파일첨부</h2>
+      <a id="file" th:href="@{${noticeShowDto.fileUrl}}" target="_blank">파일</a><br>
+      <button>글삭제</button>
+    </form>
+  </div>
+</body>
+</html>

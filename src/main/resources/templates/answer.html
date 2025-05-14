@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <div th:object="${questionShowDto}">
+        <h2>질문</h2>
+        <p th:text="*{title}"></p>
+        <h2>내용</h2>
+        <p th:text="*{qContext}"></p>
+        <th:block th:if="*{aContext == null}">
+            <form th:action="@{'/post/answer?id='+*{id}}" method="post">
+                <h2>답변 작성</h2>
+                <textarea name="aContext" cols="30" rows="10"></textarea>
+                <button>글작성</button>
+            </form>
+        </th:block>
+        <h2>답변</h2>
+        <form th:action="@{'/post/answer/delete?id='+*{id}}" method="post">
+            <p th:text="*{aContext}"></p>
+            <button>답변 삭제</button>
+        </form>
+        <form th:action="@{'/post/question/delete?id='+*{id}}" method="post">
+            <button>질문 삭제</button>
+        </form>
+    </div>
+</body>
+</html>

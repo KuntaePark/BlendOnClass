@@ -3,6 +3,7 @@ package com.blendonclass.service;
     권한 관련 서비스
  */
 
+import com.blendonclass.constant.ROLE;
 import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.admin.AccountListDto;
 import com.blendonclass.dto.admin.AuthReqListDto;
@@ -75,6 +76,18 @@ public class AuthorityService {
                 .map(authority -> AccountListDto.from(authority.getAccount()))
                 .collect(Collectors.toList());
 
+        return accountListDtos;
+    }
+
+    public List<AccountListDto> getAllStudentsOfClassroom(Long classroommId) {
+        Classroom classroom = classroomRepository.findById(classroommId).get();
+        List<Authority> authorities = authorityRepository.findByClassroom(classroom);
+        List<AccountListDto> accountListDtos = new ArrayList<>();
+        for (Authority authority : authorities) {
+            if(authority.getAccount().getRole() == ROLE.STUDENT){
+                accountListDtos.add(AccountListDto.from(authority.getAccount()));
+            }
+        }
         return accountListDtos;
     }
 }
