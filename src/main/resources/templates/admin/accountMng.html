@@ -20,7 +20,7 @@
                 <form class="flex-1 flex flex-row items-center gap-2"
                         th:action="@{/admin/accounts}" th:object="${accountSearchDto}" method="get">
                     <!-- 검색 바 -->
-                    <th:block th:replace="~{fragment/components::searchBar}"></th:block>
+                    <th:block th:replace="~{fragment/components::searchBar(${accountSearchDto})}"></th:block>
                 </form>
                 <a href="/admin/accountGen" class="w-8 h-8 rounded-md bg-(--primary-color) text-white font-bold text-2xl text-center hover:opacity-80">+</a>
             </div>
