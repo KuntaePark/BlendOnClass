@@ -26,6 +26,7 @@ public class QuizService {
     private final ScoreRepository scoreRepository;
     private final ChapterRepository chapterRepository;
 
+
     // 퀴즈 5문제
     public List<QuizDetailDto> getQuiz(Long lessonId, Long accountId, HttpSession session) {
         List<Quiz> quizzes = quizRepository.findByLessonId(lessonId);
