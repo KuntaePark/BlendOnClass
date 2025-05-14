@@ -19,21 +19,14 @@
             <div id="table-header" class="flex flex-row py-2 border-b-1 gap-2 items-center border-gray-200">
                 <form class="flex-1 flex flex-row items-center gap-2"
                         th:action="@{/admin/accounts}" th:object="${accountSearchDto}" method="get">
-                    <input type="text" th:field="*{keyword}" placeholder="단어 입력" class="border-1 border-gray-200 rounded-full px-2 py-1 w-full"/>
-                    <select th:field="*{roleType}">
-                        <option th:value="${null}">역할 선택</option>
-                        <option th:value="${T(com.blendonclass.constant.ROLE).STUDENT}">학생</option>
-                        <option th:value="${T(com.blendonclass.constant.ROLE).TEACHER}">교사</option>
-                    </select>
-                    <button type="submit" class="w-8 h-8 rounded-md bg-(--primary-color) flex items-center justify-center hover:opacity-80">
-                        <img src="/images/icons/icon_search.png" class="min-w-4 h-4 invert">
-                    </button>
+                    <!-- 검색 바 -->
+                    <th:block th:replace="~{fragment/components::searchBar}"></th:block>
                 </form>
                 <a href="/admin/accountGen" class="w-8 h-8 rounded-md bg-(--primary-color) text-white font-bold text-2xl text-center hover:opacity-80">+</a>
             </div>
             <th:block th:replace="fragment/account-table :: accountTable(${accountListDtos.getContent()},~{fragment/account-table::accountmng-action})"></th:block>
 
-<!--            paging-->
+            <!--  paging  -->
             <ul id="page-select" th:with="
             pageNum=${accountListDtos.number},
             totalPages=${accountListDtos.totalPages},

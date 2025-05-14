@@ -7,6 +7,7 @@ package com.blendonclass.control.admin;
 import com.blendonclass.dto.admin.AccountListDto;
 import com.blendonclass.dto.admin.AccountSearchDto;
 import com.blendonclass.dto.admin.ClassroomDto;
+import com.blendonclass.dto.admin.ClassroomGenRequest;
 import com.blendonclass.entity.Classroom;
 import com.blendonclass.repository.ClassroomRepository;
 import com.blendonclass.service.AccountService;
@@ -16,10 +17,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -51,9 +55,16 @@ public class AdminClassroomController {
         return"admin/classroomMng";
     }
 
-    @GetMapping("/admin/clasroom/getAccounts")
-    public ResponseEntity<?> getAccountsOfClassroom(@RequestParam("id") Long classroomId) {
-
-        return null;
+    @PostMapping("admin/classroom/add")
+    public ResponseEntity<String> addClassroom(@RequestBody List<ClassroomDto> classroomDtos) {
+        for(ClassroomDto classroomDto : classroomDtos) {
+            System.out.println(classroomDto.getGrade()+ " " + classroomDto.getClassroomNum());
+        }
+        try {
+            classroomService.addClassroom(classroomDtos);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+        return ResponseEntity.ok("success");
     }
 }
