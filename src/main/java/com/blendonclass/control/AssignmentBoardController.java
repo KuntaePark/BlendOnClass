@@ -2,6 +2,7 @@ package com.blendonclass.control;
 
 import com.blendonclass.dto.AssignmentShowDto;
 import com.blendonclass.dto.AssignmentWriteDto;
+import com.blendonclass.dto.SubmitStudentListDto;
 import com.blendonclass.dto.SubmitWriteDto;
 import com.blendonclass.dto.admin.AccountListDto;
 import com.blendonclass.entity.Account;
@@ -9,6 +10,7 @@ import com.blendonclass.entity.AssignmentBoard;
 import com.blendonclass.service.AccountService;
 import com.blendonclass.service.AuthorityService;
 import com.blendonclass.service.board.AssignmentBoardService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -62,11 +65,21 @@ public class AssignmentBoardController {
     public String showAssignment(@RequestParam("abId") Long abId, @RequestParam("classroomId") Long classroomId, Model model) {
         AssignmentShowDto assignmentShowDto = assignmentBoardService.showAssignment(abId);
         model.addAttribute("assignmentShowDto", assignmentShowDto);
-        List<AccountListDto> accountListDtos = authorityService.getAllStudentsOfClassroom(classroomId); // 이 메서드는 따로 만들어야 함
-        model.addAttribute("accountListDtos", accountListDtos);
+
+        //과제 제출자 목록
+        List<SubmitStudentListDto> submitStudentListDtos = assignmentBoardService.getSubmitStudentList(abId, classroomId);
+        model.addAttribute("submitStudentListDtos", submitStudentListDtos);
+
+        //반 학생 목록
         return "assignment";
     }
-
+    @PostMapping("/post/submit")
+    public String submit(@ModelAttribute SubmitWriteDto submitWriteDto,
+                         @ModelAttribute SubmitStudentListDto submitStudentListDto,
+                         MultipartFile multipartFile) {
+        assignmentBoardService.saveSubmit(submitWriteDto, submitStudentListDto, multipartFile);
+        return "redirect:/student";
+    }
     public String deleteSubmit(@RequestParam("id") Long sbId, Model model) {
         return null;
     }

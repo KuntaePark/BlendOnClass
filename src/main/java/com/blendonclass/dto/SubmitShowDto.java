@@ -5,6 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 @Getter
 @Setter
+@AllArgsConstructor
 public class SubmitShowDto {
     private Long sbId;
     private Long abId;

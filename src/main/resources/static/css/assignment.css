@@ -9,3 +9,7 @@
 #list{
     transform: translate(350px);
 }
+button{
+    display: block;
+    text-align: center;
+}
