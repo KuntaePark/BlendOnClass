@@ -15,4 +15,6 @@ public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
 
     @Query("select c.grade from Classroom c where c.id = :classroomId")
     int findGradeById(Long classroomId);
+
+    List<Classroom> findAllByOrderByGradeAscClassroomNumAsc();
 }

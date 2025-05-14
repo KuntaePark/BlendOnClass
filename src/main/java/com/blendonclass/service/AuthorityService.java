@@ -68,13 +68,13 @@ public class AuthorityService {
     }
 
     //특정 반의 권한 보유자 모두 조회
-    public Page<AccountListDto> getAllAccountsOfClassroom(int grade, int classroomNum,Pageable pageable){
-        Classroom classroom = classroomRepository.findByGradeAndClassroomNum(grade, classroomNum);
+    public List<AccountListDto> getAllAccountsOfClassroom(Long classroomId){
+        Classroom classroom = classroomRepository.findById(classroomId).get();
         List<Authority> authorities = authorityRepository.findByClassroom(classroom);
         List<AccountListDto> accountListDtos = authorities.stream()
                 .map(authority -> AccountListDto.from(authority.getAccount()))
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(accountListDtos, pageable, accountListDtos.size());
+        return accountListDtos;
     }
 }

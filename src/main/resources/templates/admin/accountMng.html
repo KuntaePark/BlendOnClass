@@ -15,6 +15,7 @@
         <div class="text-3xl">이용자 계정</div>
         <div id="account-list"
             class="flex flex-col w-full mt-4">
+<!--            table header : 계정 검색용-->
             <div id="table-header" class="flex flex-row py-2 border-b-1 border-gray-200">
                 <form class="flex-1 flex flex-row items-center gap-2"
                         th:action="@{/admin/accounts}" th:object="${accountSearchDto}" method="get">
@@ -25,44 +26,14 @@
                         <option th:value="${T(com.blendonclass.constant.ROLE).TEACHER}">교사</option>
                     </select>
                     <button type="submit" class="w-8 h-8 rounded-md bg-(--primary-color) flex items-center justify-center hover:opacity-80">
-                        <img src="/images/icon_search.png" class="min-w-4 h-4 invert">
+                        <img src="/images/icons/icon_search.png" class="min-w-4 h-4 invert">
                     </button>
                 </form>
                 <a href="/admin/accountGen" class="w-8 h-8 rounded-md bg-(--primary-color) text-white font-bold text-2xl text-center hover:opacity-80">+</a>
             </div>
-            <table class="table-auto border-collapse text-left mt-2">
-                <thead class="text-gray-300 font-light p-2">
-                    <tr>
-                        <th class="pl-2">이름</th>
-                        <th class="py-2">로그인 아이디</th>
-                        <th class="py-2">이메일</th>
-                        <th class="py-2">구분</th>
-                        <th class="py-2"></th>
-                    </tr>
-                </thead>
-                <tbody class="overflow-scroll">
-                    <tr class="odd:bg-gray-100 hover:bg-gray-300"
-                            th:each="account : ${accountListDtos.getContent()}"
-                            th:object="${account}"
-                            th:unless="${account.loginId.equals('admin')}">
-                        <td class="pl-2" th:text="*{name}"></td>
-                        <td th:text="*{loginId}"></td>
-                        <td th:text="*{email}"></td>
-                        <td th:text="*{role.roleName}"></td>
-                        <td class="flex flex-row justify-end gap-2 p-2">
-                            <div class="w-10 h-10 rounded-md bg-(--primary-color) flex items-center justify-center hover:opacity-80">
-                                <a th:href="@{'/admin/modifyAccount?id=' + ${account.id}}" class="w-6 h-6 flex items-center justify-center">
-                                    <img src="/images/icon_modify.png" class="min-w-6 h-6 invert">
-                                </a>
-                            </div>
-                            <button class="w-10 h-10 rounded-md bg-red-400 flex items-center justify-center  hover:opacity-80 hover:cursor-pointer"
-                                    th:onclick="deleteAccount([[*{id}]])">
-                                <img src="/images/icon_delete.png" class="min-w-6 h-6 invert">
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <th:block th:replace="fragment/account-table :: accountTable(${accountListDtos.getContent()},~{fragment/account-table::accountmng-action})"></th:block>
+
+<!--            paging-->
             <ul id="page-select" th:with="
             pageNum=${accountListDtos.number},
             totalPages=${accountListDtos.totalPages},

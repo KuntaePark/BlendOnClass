@@ -7,6 +7,17 @@
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script">
     <script th:src="@{/javascript/classroomMng.js}"></script>
+    <script th:inline="javascript">
+        function onAddClick() {
+            //
+            $('#modal').toggle();
+            $('#background-overlay').toggle();
+        }
+        function closeModal() {
+            $('#modal').toggle();
+            $('#background-overlay').toggle();
+        }
+    </script>
 </th:block>
 
 
@@ -20,22 +31,33 @@
         <button>반 일괄 추가</button>
     </div>
     <div id="wrap" class="flex flex-row">
-        <div id="class-list-container">
-            <select id="grade-select">
-                <option value="">학년 선택</option>
-                <option value=1>1</option>
-                <option value=2>2</option>
-                <option value=3>3</option>
-            </select>
+        <div id="class-list-container" class="flex-1">
             <ul id="class-list">
-                <li>1반</li>
-                <li>2반</li>
-                <li>3반</li>
+                <li th:each="classroomDto : ${classroomDtos}" th:object="${classroomDto}">
+                    <a th:text="*{grade+'학년 '+classroomNum+'반'}" th:href="@{'/admin/classroom?id='+*{id}}"></a>
+                </li>
             </ul>
         </div>
-        <div id="account-list">
-
+        <div id="classroom-account-list" class="flex-1">
+            <div id="table-header" class="flex justify-end">
+                <button onclick="onAddClick()" class="w-8 h-8 rounded-md bg-(--primary-color) text-white font-bold text-2xl text-center hover:opacity-80">+</button>
+            </div>
+            <th:block th:if="${accountListDtos != null}">
+                <div th:replace="fragment/account-table :: accountTable(${accountListDtos},
+                ~{fragment/account-table::classroommng-action})"></div>
+            </th:block>
         </div>
     </div>
+    <div id="modal" class="w-[1200px] h-[800px] fixed top-[50vh] left-[50vw] -translate-x-[50%] -translate-y-[50%] bg-white rounded border-1 border-gray-300 z-50 hidden">
+        <div class="text-3xl">권한 추가하기</div>
+        <button id="modal-close-button" onclick=closeModal() class="w-4 h-4 absolute top-0 right-0 flex justify-center items-center">
+            <img src="/images/icons/close.png" alt="창 닫기 아이콘">
+        </button>
+        <div id="modal-account-list">
+            <th:block th:replace="fragment/account-table::accountTable(${allAccountListDtos.getContent()},
+            ~{fragment/account-table::classroom-modal-action})"></th:block>
+        </div>
+    </div>
+    <div id="background-overlay" class="fixed w-[100vw] h-[100vh] top-0 left-0 bg-gray-400 opacity-50 z-40 hidden"></div>
 </div>
 </html>

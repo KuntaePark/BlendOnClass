@@ -5,31 +5,55 @@ package com.blendonclass.control.admin;
  */
 
 import com.blendonclass.dto.admin.AccountListDto;
+import com.blendonclass.dto.admin.AccountSearchDto;
 import com.blendonclass.dto.admin.ClassroomDto;
+import com.blendonclass.entity.Classroom;
+import com.blendonclass.repository.ClassroomRepository;
+import com.blendonclass.service.AccountService;
 import com.blendonclass.service.AuthorityService;
+import com.blendonclass.service.ClassroomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class AdminClassroomController {
+    private final ClassroomService classroomService;
     private final AuthorityService authorityService;
+    private final AccountService accountService;
 
     @GetMapping("/admin/classroom")
-    public String getClassroomMngPage(@RequestParam("page")Optional<Integer> page, Model model) {
-        //예시로 1학년 1반 데이터만
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
-        Page<AccountListDto> accountListDtos = authorityService.getAllAccountsOfClassroom(1, 1, pageable);
-        model.addAttribute("accountListDtos", accountListDtos);
+    public String getClassroomMngPage(AccountSearchDto accountSearchDto,
+                                      @RequestParam("accPage") Optional<Integer> accPage,
+                                      @RequestParam(name = "id", required = false) Long classroomId, Model model) {
+        List<ClassroomDto> classroomDtos = classroomService.findAll();
+        model.addAttribute("classroomDtos", classroomDtos);
+
+        List<AccountListDto> accountListDtos = null;
+        if(classroomId != null) {
+            accountListDtos = authorityService.getAllAccountsOfClassroom(classroomId);
+            model.addAttribute("accountListDtos", accountListDtos);
+        }
+
+        Pageable accPageable = PageRequest.of(accPage.orElse(0), 10);
+        Page<AccountListDto> allAccountListDtos = accountService.searchAccountList(accPageable, accountSearchDto);
+        model.addAttribute("allAccountListDtos", allAccountListDtos);
         return"admin/classroomMng";
     }
 
+    @GetMapping("/admin/clasroom/getAccounts")
+    public ResponseEntity<?> getAccountsOfClassroom(@RequestParam("id") Long classroomId) {
+
+        return null;
+    }
 }
