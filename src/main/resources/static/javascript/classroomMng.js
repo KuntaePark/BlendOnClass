@@ -25,8 +25,21 @@ function updateList() {
     const toAddList = $("#to-add-list");
     toAddList.empty();
     if(toAddClasses.length > 0) {
-        toAddClasses.forEach((elem) => {
+        toAddClasses.forEach((elem, idx) => {
             const listElem = document.createElement("li");
+            $(listElem).text(elem.grade+"학년 "+elem.classroomNum+"반");
+            $(listElem).val(idx);
+            const deleteBtn = document.createElement("button");
+            $(deleteBtn).addClass('ml-2');
+            $(deleteBtn).on('click', function() {
+                //해당 요소 지우기
+                const liIdx = $(this).parent().val();
+                $(this).parent().remove();
+                toAddClasses.splice(idx, 1);
+                updateList();
+            })
+            deleteBtn.innerHTML = "<img src=\"/images/icons/close.png\" class=\"w-2 h-2\" alt=\"삭제 아이콘\">"
+            $(listElem).append(deleteBtn);
             $("#to-add-list").append(listElem);
         })
     }

@@ -4,7 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<header th:fragment="header" id="header" class="h-18 border-b-1 border-gray-300 flex items-center justify-center p-4">
+<header th:fragment="header" id="header" class="min-h-18 border-b-1 border-gray-300 flex items-center justify-center p-4">
     <!-- 메인 로고 -->
     <a id="logo-icon" href="/" class="flex flex-row items-center gap-2">
         <div class="flex items-center justify-center w-8 h-8 overflow-hidden">
@@ -28,10 +28,6 @@
         </div>
     </div>
 
-    <!-- 정보 수정 모달 -->
-    <div id="update-info" class="modal w-[400px] h-[600px]">
-
-    </div>
     <script>
         $(function() {
             const btn = document.getElementById("profileBtn");

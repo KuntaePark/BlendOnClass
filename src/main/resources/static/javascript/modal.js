@@ -1,5 +1,4 @@
 function openModal(e) {
-    console.log(e);
     e.toggle();
     $('#background-overlay').toggle();
 }
@@ -9,6 +8,6 @@ function closeModal(e) {
 }
 
 function closeAllModal() {
-    $('.modal').hide();
+    $('.modal-container').hide();
     $('#background-overlay').toggle();
 }

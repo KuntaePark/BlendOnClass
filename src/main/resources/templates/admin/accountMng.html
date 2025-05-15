@@ -11,18 +11,19 @@
 
 
 <th:block layout:fragment="main">
-    <div id="main" class="flex flex-col gap-4 p-4 border-1 rounded-lg border-gray-300 mt-4">
-        <div class="text-2xl font-bold">계정 관리</div>
-        <div id="account-list"
-            class="flex flex-col w-full mt-2">
-<!--            table header : 계정 검색용-->
+    <div class="main-container">
+        <div class="title-box">
+            <span>계정 관리</span>
+            <span class="text-base font-light">계정 검색, 추가, 삭제 및 정보수정</span>
+        </div>
+        <div>
             <div id="table-header" class="flex flex-row py-2 border-b-1 gap-2 items-center border-gray-200">
                 <form class="flex-1 flex flex-row items-center gap-2"
                         th:action="@{/admin/accounts}" method="get">
                     <!-- 검색 바 -->
                     <th:block th:replace="~{fragment/components::searchBar}"></th:block>
                 </form>
-                <a href="/admin/accountGen" class="w-8 h-8 rounded-md bg-(--primary-color) text-white font-bold text-2xl text-center hover:opacity-80">+</a>
+                <a href="/admin/accountGen" class="rectangle-button bg-(--primary-color)">계정 추가</a>
             </div>
             <th:block th:replace="fragment/account-table :: accountTable(${accountListDtos.getContent()},~{fragment/account-table::accountmng-action})"></th:block>
 
@@ -52,5 +53,5 @@
             </ul>
         </div>
     </div>
-    </th:block>
+</th:block>
 </html>

@@ -5,7 +5,7 @@
 
 <!-- 계정 검색용 검색 바 -->
 <th:block th:fragment="searchBar">
-    <div th:object="${accountSearchDto}" class="w-[400px] h-8 ring-1 ring-gray-300 rounded-full border-gray-300 flex flex-row items-center gap-2 p-2">
+    <div th:object="${accountSearchDto}" class="w-[400px] h-10 ring-1 ring-gray-300 rounded-full border-gray-300 flex flex-row items-center gap-2 p-2">
         <select th:fleld="*{roleType}" class="focus:outline-none pb-[1px] w-14 text-sm">
             <option th:value="${null}">구분</option>
             <option th:value="${T(com.blendonclass.constant.ROLE).STUDENT}">학생</option>
