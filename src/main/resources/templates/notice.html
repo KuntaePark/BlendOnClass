@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/notice.css">
+</head>
+<body>
+    <div id="main">
+        <form th:action="@{'/post/notice?id='+${classroomId}}" th:object="${noticeWriteDto}" method="post" enctype="multipart/form-data">
+            <h2>제목</h2>
+            <input type="text" name="title" th:field="*{title}">
+            <h2>내용</h2>
+            <textarea name="context" cols="30" rows="20" th:field="*{context}"></textarea>
+            <h2>파일첨부</h2>
+            <input type="file" name="fileUrl"> <br>
+            <input type="submit" id="submit" value="글작성">
+        </form>
+    </div>
+</body>
+</html>

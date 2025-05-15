@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragment/default}">
+
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+
+<div layout:fragment="main" id="main" class="flex flex-row">
+    <div th:object="${assignmentShowDto}" class="flex-1">
+        <div th:text="*{title}"></div>
+        <div th:text="*{context}"></div>
+        <div th:text="*{#temporals.format(dueDate,'YYYY-MM-dd')}"></div>
+    </div>
+    <button sec:authorize="hasRole('ROLE_STUDENT')" type="button">제출하기</button>
+    <div sec:authorize="hasRole('ROLE_TEACHER')" id="submit-list" class="w-[200px] flex flex-col">
+        <h2>제출자 목록</h2>
+        <div  th:each="submit:${submitStudentListDtos}" th:object="${submit}">
+            <a id="detail" th:href="@{'/post/submit/detail?sbId='*{sbId}}">
+                <p th:text="*{email}"></p>
+                <p th:text="*{name}"></p>
+                <p th:text="*{isSubmit?'제출완료':'제출안함'}"></p>
+            </a>
+        </div>
+    </div>
+</div>
+</html>

@@ -39,16 +39,18 @@ public class AdminAccountController {
                                     @RequestParam("authReqPage") Optional<Integer> authReqPage,
                                     Model model) {
         //계정 목록
-        Pageable accPageable = PageRequest.of(accPage.orElse(0), 10);
+        Pageable accPageable = PageRequest.of(accPage.orElse(0), 5);
         Page<AccountListDto> accountListDtos = accountService.searchAccountList(accPageable, accountSearchDto);
+
         
         //권한 요청 목록
-        Pageable authReqPageable = PageRequest.of(authReqPage.orElse(0), 10);
+        Pageable authReqPageable = PageRequest.of(authReqPage.orElse(0), 5);
         Page<AuthReqListDto> authReqListDtos = authorityService.getAuthReqList(authReqPageable);
 
         model.addAttribute("accountListDtos", accountListDtos);
         model.addAttribute("accountSearchDto", accountSearchDto);
         model.addAttribute("authReqListDtos", authReqListDtos);
+        model.addAttribute("maxPage", 5);
         return "admin/accountMng";
     }
 

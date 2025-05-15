@@ -1,0 +1,13 @@
+#main{
+    display:block;
+    text-align: center;
+}
+#title{
+    display: flex;
+    justify-content: center;
+}
+#button{
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+}

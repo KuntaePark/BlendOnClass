@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,36 +32,42 @@ public class LessonController {
             @RequestParam(required = false) Integer grade,
             @RequestParam(required = false) String subject,
             Model model,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
+            Principal principal
     ) {
-        if (customUserDetails == null) {
-            return "redirect:/login";
+        Long loggedId = Long.parseLong(principal.getName());
+
+        // 선택된 경우에만 모델에 추가
+        if (grade != null) {
+            model.addAttribute("selectedGrade", grade);
         }
 
-        Long loggedId = Long.parseLong(customUserDetails.getUsername());
+        if (subject != null) {
+            model.addAttribute("selectedSubject", subject);
+        }
 
-        // 모든 경우 selectedGrade, selectedSubject는 모델에 넣기
-        model.addAttribute("selectedGrade", grade);
-        model.addAttribute("selectedSubject", subject);
-
-        // 과목 선택되었을 때만 챕터 로딩
+        // 학년과 과목이 모두 선택되었을 때만 챕터 목록 로딩
         if (grade != null && subject != null) {
-            SUBJECT subjectEnum = SUBJECT.valueOf(subject.toUpperCase());
-            model.addAttribute("chapters", lessonService.getAllChapters(grade, subjectEnum, loggedId));
+            try {
+                SUBJECT subjectEnum = SUBJECT.valueOf(subject.toUpperCase());
+                model.addAttribute("chapters", lessonService.getAllChapters(grade, subjectEnum, loggedId));
+            } catch (IllegalArgumentException e) {
+                // 예외 처리: 잘못된 값이면 아무것도 안 함 (선택 안 된 상태로 유지)
+            }
         }
-
         return "lessonMain";
     }
 
     // 다시하기 (진도 초기화 후 상세로 이동)
     @GetMapping("/restart/{lessonId}")
     public String restartLesson(@PathVariable Long lessonId,
+                                @RequestParam(required = false) Integer grade,
+                                @RequestParam(required = false) String subject,
                                 HttpSession session,
                                 @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (customUserDetails != null) {
             Long accountId = Long.parseLong(customUserDetails.getUsername());
             // lessonService.resetProgress(accountId, lessonId);
-            return "redirect:/lesson/continue/" + lessonId;
+            return "redirect:/student/lesson/continue/" + lessonId + "?grade=" + grade + "&subject=" +subject;
         } else {
             return "redirect:/login";
         }
@@ -68,12 +75,18 @@ public class LessonController {
 
     // 이어하기 (상세페이지 진입)
     @GetMapping("/continue/{lessonId}")
-    public String continueLesson(@PathVariable Long lessonId, Model model) {
+    public String continueLesson(@PathVariable Long lessonId,
+                                 @RequestParam(required = false) Integer grade,
+                                 @RequestParam(required = false) String subject,
+                                 Model model) {
         LessonDetailDto detailDto = lessonService.getLessonDetail(lessonId);
         model.addAttribute("lessonDetail", detailDto);
 
         model.addAttribute("prevLessonId", lessonService.getPrevLessonId(lessonId));
         model.addAttribute("nextLessonId", lessonService.getNextLessonId(lessonId));
+        model.addAttribute("grade", grade);
+        model.addAttribute("subject", subject);
+
 
         return "lessonDetail";
     }

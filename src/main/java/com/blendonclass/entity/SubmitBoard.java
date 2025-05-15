@@ -1,5 +1,8 @@
 package com.blendonclass.entity;
 
+import com.blendonclass.dto.AssignmentShowDto;
+import com.blendonclass.dto.SubmitStudentListDto;
+import com.blendonclass.dto.SubmitWriteDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,4 +36,13 @@ public class SubmitBoard {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+
+
+    public static SubmitBoard from(AssignmentShowDto assignmentShowDto, Account account, AssignmentBoard assignmentBoard) {
+        SubmitBoard submitBoard = new SubmitBoard();
+        submitBoard.setContext(assignmentShowDto.getContext());
+        submitBoard.setAssignmentBoard(assignmentBoard);
+        submitBoard.setAccount(account);
+        return submitBoard;
+    }
 }

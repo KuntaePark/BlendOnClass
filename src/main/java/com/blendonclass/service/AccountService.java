@@ -16,10 +16,8 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -221,4 +219,10 @@ public class AccountService {
     }
 
 
+    public List<Account> getAllAccounts() {
+        Iterable<Account> iterable = accountRepository.findAll();
+        List<Account> accounts = new ArrayList<>();
+        iterable.forEach(accounts::add);
+        return accounts;
+    }
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="accountTable(accountData, actionColumn)">
+    <table class="admin-table w-full">
+        <thead>
+        <tr>
+            <th class="pl-2">이름</th>
+            <th class="py-2">로그인 아이디</th>
+            <th class="py-2">이메일</th>
+            <th class="py-2">구분</th>
+            <th class="py-2"></th>
+        </tr>
+        </thead>
+        <tbody class="overflow-scroll">
+        <tr
+            th:each="account : ${accountData}"
+            th:object="${account}"
+            th:unless="${account.loginId.equals('admin')}">
+            <td class="pl-2" th:text="*{name}"></td>
+            <td th:text="*{loginId}"></td>
+            <td th:text="*{email}"></td>
+            <td th:text="*{role.roleName}"></td>
+            <td class="action-column">
+                <div th:replace="${actionColumn}">default</div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</th:block>
+
+<th:block th:fragment="accountmng-action">
+    <div class="square-button-10 bg-(--primary-color)">
+        <a th:href="@{'/admin/modifyAccount?id=' + ${account.id}}" class="w-6 h-6 flex items-center justify-center">
+            <img src="/images/icons/icon_modify.png" class="min-w-6 h-6 invert">
+        </a>
+    </div>
+    <button class="square-button-10 bg-red-500"
+            th:onclick="deleteAccount([[*{id}]])">
+        <img src="/images/icons/icon_delete.png" class="min-w-6 h-6 invert">
+    </button>
+</th:block>
+</html>
+
+<th:block th:fragment="classroommng-action">
+    aaaa
+</th:block>
+
+<th:block th:fragment="classroom-modal-action">
+    bbbb
+</th:block>

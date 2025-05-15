@@ -88,9 +88,11 @@ function setProgress(classroomId) {
         },
         success: function(result, status) {
             console.log(status);
+            resolve(result);
         },
         error: function(xhr, status, error) {
             console.log(xhr.status+ " " + xhr.statusText);
+            reject(xhr.responseText);
         }
     });
 

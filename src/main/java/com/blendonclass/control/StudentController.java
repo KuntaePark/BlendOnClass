@@ -38,12 +38,12 @@ public class StudentController {
         System.out.println("📥 studentMain 호출됨");
         Long loggedId = Long.parseLong(principal.getName());
 
-        // 알림 데이터 (예시)
-        model.addAttribute("notifications", "알림 리스트");
-
-        // 최근 수강한 강의1개 + 진도율 포함된 dto
         LessonDto lastLessonDto = lessonService.getLastLesson(loggedId);
         model.addAttribute("lastLesson", lastLessonDto);
+
+        model.addAttribute("selectedGrade", lastLessonDto.getGrade());
+        model.addAttribute("selectedSubject", lastLessonDto.getSubject());
+        model.addAttribute("notifications", "알림 리스트");
 
 
 

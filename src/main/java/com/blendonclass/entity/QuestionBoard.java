@@ -1,8 +1,10 @@
 package com.blendonclass.entity;
 
+import com.blendonclass.dto.QuestionWriteDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter@Setter
 @EntityListeners(AuditingEntityListener.class)
+@ToString
 public class QuestionBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +41,14 @@ public class QuestionBoard {
     @ManyToOne
     @JoinColumn(name = "answerer_id", referencedColumnName = "account_id")
     private Account account;
+
+    public static QuestionBoard toQuestionSaveBoard(QuestionWriteDto questionWriteDto, Authority authority, Account account) {
+        QuestionBoard questionBoard = new QuestionBoard();
+        //questionBoard.setId(questionWriteDto.getId());
+        questionBoard.setTitle(questionWriteDto.getTitle());
+        questionBoard.setQContext(questionWriteDto.getQContext());
+        questionBoard.setAuthority(authority);
+        questionBoard.setAccount(account);
+        return questionBoard;
+    }
 }

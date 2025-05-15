@@ -2,7 +2,6 @@ package com.blendonclass.service;
 
 import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.ProgressDto;
-import com.blendonclass.entity.Lesson;
 import com.blendonclass.entity.Progress;
 import com.blendonclass.repository.ClassroomRepository;
 import com.blendonclass.repository.LessonRepository;
@@ -10,8 +9,6 @@ import com.blendonclass.repository.ProgressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

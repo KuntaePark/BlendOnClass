@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/task.css">
+</head>
+<body>
+    <div id="main">
+        <form th:action="@{'/post/task?id='+${classroomId}}" method="post" enctype="multipart/form-data">
+            <div id="title">
+                <h2 class="title">제목</h2>
+            </div>
+            <input type="text" name="title" style="width:230px;">
+            <div id="context">
+                <h2 class="context">내용</h2>
+            </div>
+            <textarea name="context" cols="30" rows="20"></textarea>
+            <div id="dueDate">
+                <h2 class="dueDate">제출기한</h2>
+            </div>
+            <input type="date" name="dueDate">
+            <div id="file">
+                <h2 class="file">파일첨부</h2>
+            </div>
+            <input type="file" name="fileUrl"><br>
+            <div id="button">
+                <button id="btn">과제 게시</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script>
+    document.getElementById("btn").addEventListener("click", function(){
+        alert("과제가 게시되었습니다.");
+    });
+</script>

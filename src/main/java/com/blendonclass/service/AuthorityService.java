@@ -3,6 +3,7 @@ package com.blendonclass.service;
     권한 관련 서비스
  */
 
+import com.blendonclass.constant.ROLE;
 import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.admin.AccountListDto;
 import com.blendonclass.dto.admin.AuthReqListDto;
@@ -25,8 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @RequiredArgsConstructor
@@ -76,14 +75,31 @@ public class AuthorityService {
     }
 
     //특정 반의 권한 보유자 모두 조회
-    public Page<AccountListDto> getAllAccountsOfClassroom(int grade, int classroomNum,Pageable pageable){
-        Classroom classroom = classroomRepository.findByGradeAndClassroomNum(grade, classroomNum);
+    public List<AccountListDto> getAllAccountsOfClassroom(Long classroomId){
+        Classroom classroom = classroomRepository.findById(classroomId).get();
         List<Authority> authorities = authorityRepository.findByClassroom(classroom);
         List<AccountListDto> accountListDtos = authorities.stream()
                 .map(authority -> AccountListDto.from(authority.getAccount()))
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(accountListDtos, pageable, accountListDtos.size());
+        return accountListDtos;
+    }
+
+    public List<AccountListDto> getAllStudentsOfClassroom(Long classroommId) {
+        Classroom classroom = classroomRepository.findById(classroommId).get();
+        List<Authority> authorities = authorityRepository.findByClassroom(classroom);
+        List<AccountListDto> accountListDtos = new ArrayList<>();
+        for (Authority authority : authorities) {
+            if(authority.getAccount().getRole() == ROLE.STUDENT){
+                accountListDtos.add(AccountListDto.from(authority.getAccount()));
+            }
+        }
+        return accountListDtos;
+    }
+
+    public Long getClassroomIdOfStudent(Long studentId) {
+        Authority authority = authorityRepository.findByAccount_Id(studentId);
+        return authority.getClassroom().getId();
     }
 
 

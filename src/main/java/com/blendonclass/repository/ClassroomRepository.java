@@ -1,7 +1,5 @@
 package com.blendonclass.repository;
 
-import com.blendonclass.constant.SUBJECT;
-import com.blendonclass.dto.LessonScoreDto;
 import com.blendonclass.entity.Classroom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +14,6 @@ public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
 
     @Query("select c.grade from Classroom c where c.id = :classroomId")
     int findGradeById(Long classroomId);
+
+    List<Classroom> findAllByOrderByGradeAscClassroomNumAsc();
 }
