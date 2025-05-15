@@ -1,6 +1,5 @@
 package com.blendonclass.repository;
 
-import com.blendonclass.entity.Account;
 import com.blendonclass.entity.Authority;
 import com.blendonclass.entity.Classroom;
 import org.springframework.data.jpa.repository.JpaRepository;

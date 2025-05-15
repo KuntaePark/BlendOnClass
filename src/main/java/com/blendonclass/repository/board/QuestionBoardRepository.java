@@ -1,6 +1,5 @@
 package com.blendonclass.repository.board;
 
-import com.blendonclass.entity.NoticeBoard;
 import com.blendonclass.entity.QuestionBoard;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

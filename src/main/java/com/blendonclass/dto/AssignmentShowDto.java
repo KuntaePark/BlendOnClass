@@ -2,11 +2,9 @@ package com.blendonclass.dto;
 
 import com.blendonclass.entity.AssignmentBoard;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Setter

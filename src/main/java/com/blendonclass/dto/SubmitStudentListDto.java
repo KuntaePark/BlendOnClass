@@ -1,8 +1,5 @@
 package com.blendonclass.dto;
 
-import com.blendonclass.entity.Account;
-import com.blendonclass.entity.AssignmentBoard;
-import com.blendonclass.entity.SubmitBoard;
 import lombok.*;
 
 @Getter

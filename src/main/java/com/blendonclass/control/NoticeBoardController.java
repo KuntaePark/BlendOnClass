@@ -2,15 +2,11 @@ package com.blendonclass.control;
 
 import com.blendonclass.dto.NoticeShowDto;
 import com.blendonclass.dto.NoticeWriteDto;
-import com.blendonclass.dto.QuestionWriteDto;
-import com.blendonclass.entity.Authority;
-import com.blendonclass.entity.NoticeBoard;
 import com.blendonclass.service.board.NoticeBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;

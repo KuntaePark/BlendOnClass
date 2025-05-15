@@ -2,7 +2,6 @@ package com.blendonclass.repository;
 
 import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.LessonClassroomScoreDto;
-import com.blendonclass.dto.LessonScoreDto;
 import com.blendonclass.entity.ClassroomScore;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

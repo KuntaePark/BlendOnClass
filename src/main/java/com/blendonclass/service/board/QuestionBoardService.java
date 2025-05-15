@@ -1,10 +1,8 @@
 package com.blendonclass.service.board;
 
 import com.blendonclass.dto.AnswerWriteDto;
-import com.blendonclass.dto.AssignmentShowDto;
 import com.blendonclass.dto.QuestionShowDto;
 import com.blendonclass.dto.QuestionWriteDto;
-import com.blendonclass.entity.Account;
 import com.blendonclass.entity.Authority;
 import com.blendonclass.entity.QuestionBoard;
 import com.blendonclass.repository.AccountRepository;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

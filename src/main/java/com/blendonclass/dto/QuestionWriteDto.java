@@ -3,7 +3,6 @@ package com.blendonclass.dto;
 import com.blendonclass.entity.QuestionBoard;
 import lombok.*;
 
-import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString

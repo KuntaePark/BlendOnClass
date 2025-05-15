@@ -1,14 +1,7 @@
 package com.blendonclass.service;
 
 import com.blendonclass.constant.SUBJECT;
-import com.blendonclass.dto.LessonScoreDto;
-import com.blendonclass.dto.ScoreDataDto;
-import com.blendonclass.dto.ScoreUnit;
-import com.blendonclass.entity.ClassroomScore;
-import com.blendonclass.dto.ProgressListDto;
 import com.blendonclass.entity.Authority;
-import com.blendonclass.entity.Lesson;
-import com.blendonclass.entity.Progress;
 import com.blendonclass.entity.Progress;
 import com.blendonclass.entity.Score;
 import com.blendonclass.repository.*;
@@ -17,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
