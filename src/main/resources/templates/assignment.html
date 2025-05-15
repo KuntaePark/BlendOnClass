@@ -1,50 +1,30 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-    <link rel="stylesheet" href="/css/assignment.css">
-</head>
-<body>
-    <form th:action="@{/post/submit}" th:object="${assignmentShowDto}" method="post" enctype="multipart/form-data">
-        <div id="main">
-            <div id="assignment">
-                    <div id="title">
-                        <h2 class="title">제목</h2>
-                    </div>
-                    <input type="text"  style="width:230px;" th:field="*{title}">
-                    <div id="context">
-                        <h2 class="context">내용</h2>
-                    </div>
-                    <input type="hidden" name="isSubmit" value="false" />
-                    <textarea  cols="30" rows="20" th:field="*{context}"></textarea>
-                    <div id="dueDate">
-                        <h2 class="dueDate">제출기한</h2>
-                    </div>
-                    <input type="date" th:field="*{dueDate}" readonly>
-                    <div id="file">
-                        <h2 class="file">파일첨부</h2>
-                    </div>
-                    <input type="file" name="afileUrl"><br>
-                    <input type="hidden" name="abId" th:field="*{abId}"/>
-            </div>
-            <div id="list">
-                <button type="submit">제출하기</button>
-                <h2>제출자 목록</h2>
-                <div th:each="submit:${submitStudentListDtos}" th:object="${submit}">
-                    <a id="detail" th:href="@{/post/submit/detail}">
-                        <p th:text="*{email}"></p>
-                        <p th:text="*{name}"></p>
-                        <p th:text="*{isSubmit ? '제출완료':'제출안함'}"></p>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </form>
-</body>
-</html>
-<script>
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragment/default}">
 
-</script>
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+
+<div layout:fragment="main" id="main" class="flex flex-row">
+    <div th:object="${assignmentShowDto}" class="flex-1">
+        <div th:text="*{title}"></div>
+        <div th:text="*{context}"></div>
+        <div th:text="*{#temporals.format(dueDate,'YYYY-MM-dd')}"></div>
+    </div>
+    <button sec:authorize="hasRole('ROLE_STUDENT')" type="button">제출하기</button>
+    <div sec:authorize="hasRole('ROLE_TEACHER')" id="submit-list" class="w-[200px] flex flex-col">
+        <h2>제출자 목록</h2>
+        <div  th:each="submit:${submitStudentListDtos}" th:object="${submit}">
+            <a id="detail" th:href="@{'/post/submit/detail?sbId='*{sbId}}">
+                <p th:text="*{email}"></p>
+                <p th:text="*{name}"></p>
+                <p th:text="*{isSubmit?'제출완료':'제출안함'}"></p>
+            </a>
+        </div>
+    </div>
+</div>
+</html>

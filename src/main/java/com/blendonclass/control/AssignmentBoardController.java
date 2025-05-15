@@ -3,18 +3,10 @@ package com.blendonclass.control;
 import com.blendonclass.dto.AssignmentShowDto;
 import com.blendonclass.dto.AssignmentWriteDto;
 import com.blendonclass.dto.SubmitStudentListDto;
-import com.blendonclass.dto.SubmitWriteDto;
 import com.blendonclass.service.AccountService;
 import com.blendonclass.service.AuthorityService;
 import com.blendonclass.service.board.AssignmentBoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -76,10 +68,9 @@ public class AssignmentBoardController {
         return null;
     }
     @GetMapping("/post/submit/detail")
-    public String getSubmitDetail(AssignmentShowDto assignmentShowDto, Model model) {
-        assignmentShowDto = assignmentBoardService.getSubmitDetail(assignmentShowDto.getAbId());
-        model.addAttribute("assignmentShowDto", assignmentShowDto);
-        return "submitDetail";
+    public String getSubmitDetail(@RequestParam("sbId") Long sbId, Model model) {
+        //제출물 불러오기
+        return null;
     }
 
 }

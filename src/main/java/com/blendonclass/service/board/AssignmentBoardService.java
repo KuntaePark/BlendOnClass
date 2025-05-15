@@ -135,7 +135,7 @@ public class AssignmentBoardService {
             if(exists) {
                 continue;
             } else {
-                submitStudentListDtos.add(new SubmitStudentListDto(account.getId(), abId, account.getName(), account.getEmail(), false));
+                submitStudentListDtos.add(new SubmitStudentListDto(account.getId(), abId, null, account.getName(), account.getEmail(), false));
             }
         }
         //필요할 경우 이름으로 정렬

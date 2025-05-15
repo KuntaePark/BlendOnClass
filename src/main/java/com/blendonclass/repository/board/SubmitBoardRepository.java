@@ -16,7 +16,7 @@ public interface SubmitBoardRepository extends JpaRepository<SubmitBoard, Long> 
     //해당 반의 해당 과제 제출물 전부 검색
     @Query("""
         select new com.blendonclass.dto.SubmitStudentListDto (
-                a.id, ab.id, a.name, a.email, true
+                a.id, ab.id, sb.id, a.name, a.email, true
                 )
                 from SubmitBoard sb join sb.assignmentBoard ab join ab.authority auth join auth.classroom c join auth.account a
                 where ab.id = :abId and c.id = :classroomId

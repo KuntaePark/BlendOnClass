@@ -88,4 +88,9 @@ public class AuthorityService {
         }
         return accountListDtos;
     }
+
+    public Long getClassroomIdOfStudent(Long studentId) {
+        Authority authority = authorityRepository.findByAccount_Id(studentId);
+        return authority.getClassroom().getId();
+    }
 }

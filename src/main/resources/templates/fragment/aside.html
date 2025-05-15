@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <div th:fragment="aside" id="aside-wrap" class="flex flex-row">
@@ -16,7 +17,7 @@
             <img src="/images/Bicon.png" alt="대표홈아이콘" class="w-20 h-20 cursor-pointer hover:opacity-80" />
         </a>
         <br />
-        <th:block th:if="${!session.role.role.equals('ROLE_ADMIN')}">
+        <th:block sec:authorize="hasRole('ROLE_STUDENT')">
             <ul class="mt-2 space-y-2 text-white text-[20px] font-bold">
                 <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
                     <img src="/images/Listening.png" alt="강의 아이콘" class="w-10 h-10" />
@@ -32,7 +33,7 @@
                 </li>
             </ul>
         </th:block>
-        <th:block th:unless="${!session.role.role.equals('ROLE_ADMIN')}">
+        <th:block sec:authorize="hasRole('ROLE_ADMIN')">
             <ul class="mt-2 space-y-2 text-white text-[20px] font-bold">
                 <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
                     <img src="/images/OurClass.png" alt="우리반 아이콘" class="w-9 h-9" />
