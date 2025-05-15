@@ -39,7 +39,7 @@ public class AdminAccountController {
                                     @RequestParam("authReqPage") Optional<Integer> authReqPage,
                                     Model model) {
         //계정 목록
-        Pageable accPageable = PageRequest.of(accPage.orElse(0), 5);
+        Pageable accPageable = PageRequest.of(accPage.orElse(0), 10);
         Page<AccountListDto> accountListDtos = accountService.searchAccountList(accPageable, accountSearchDto);
 
         

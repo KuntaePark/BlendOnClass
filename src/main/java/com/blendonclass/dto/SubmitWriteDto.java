@@ -1,5 +1,6 @@
 package com.blendonclass.dto;
 
+import com.blendonclass.entity.SubmitBoard;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ public class SubmitWriteDto {
     private Long sbId;
     private Long abId;
     private Long writerId;
-    private Long classroomId;
     private String context;
     private LocalDateTime writeTime;
+
 }

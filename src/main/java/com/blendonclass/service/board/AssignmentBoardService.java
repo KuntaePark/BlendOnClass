@@ -74,11 +74,18 @@ public class AssignmentBoardService {
         return assignmentShowDto;
     }
 
-    public void saveSubmit(AssignmentShowDto assignmentShowDto, MultipartFile multipartFile, Long id) {
-        Account account = accountRepository.findById(id)
-                .orElseThrow(()-> new IllegalStateException("해당 계정이 존재하지 않습니다. id=" + id));
-        AssignmentBoard assignmentBoard = assignmentBoardRepository.findById(assignmentShowDto.getAbId())
-                .orElseThrow(()-> new IllegalStateException("해당 과제가 존재하지 않습니다. id=" + assignmentShowDto.getAbId()));
+    public void saveSubmit(SubmitWriteDto submitWriteDto, MultipartFile multipartFile) {
+        //id 기반 관련 entity 모두 조회
+        AssignmentBoard assignmentBoard = assignmentBoardRepository.findById(submitWriteDto.getAbId()).get();
+        Account account = accountRepository.findById(submitWriteDto.getWriterId()).get();
+        
+        //새 entity 생성
+        SubmitBoard submitBoard = new SubmitBoard();
+        submitBoard.setContext(submitWriteDto.getContext());
+        submitBoard.setAccount(account);
+        submitBoard.setAssignmentBoard(assignmentBoard);
+
+        //파일 저장
         String fileName = null;
         if (multipartFile != null && !multipartFile.isEmpty()) {
             try {
@@ -91,7 +98,7 @@ public class AssignmentBoardService {
                 throw new RuntimeException("파일 업로드 실패", e);
             }
         }
-        SubmitBoard submitBoard = SubmitBoard.from(assignmentShowDto, account, assignmentBoard);
+
         if (fileName != null) {
             submitBoard.setFileUrl("/submit/" + fileName); // 사용자 접근용 경로
         }
@@ -102,10 +109,8 @@ public class AssignmentBoardService {
 
     }
 
-    public AssignmentShowDto getSubmitDetail(Long abId){
-        SubmitBoard submitBoard = submitBoardRepository.findById(abId).orElse(null);
-        AssignmentShowDto assignmentShowDto = AssignmentShowDto.assignmentShowDtofrom(submitBoard);
-        return assignmentShowDto;
+    public SubmitShowDto getSubmitDetail(Long sbId){
+        return SubmitShowDto.from(submitBoardRepository.findById(sbId).get());
     }
 
     public Page<AssignmentShowDto> getAssignmentList(Pageable pageable, Long classroomId){

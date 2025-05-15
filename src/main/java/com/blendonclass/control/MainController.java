@@ -62,6 +62,7 @@ public class MainController {
 
         model.addAttribute("authorities", authorities); // authority 객체 전체 전달
         model.addAttribute("ar", alarmService.getAlarmByClassroomId(classroomId));
+        model.addAttribute("classroomId", classroomId);
 
         return "teacherMain";
     }

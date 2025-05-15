@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-</head>
-<body>
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
 
-</body>
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+
+<div layout:fragment="main" id="main">
+    <div th:object="${submitShowDto}">
+        <div th:text="*{context}"></div>
+        <div th:text="*{writerName}"></div>
+        <div th:text="*{writerEmail}"></div>
+    </div>
+</div>
 </html>

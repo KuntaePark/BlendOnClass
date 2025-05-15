@@ -24,7 +24,7 @@ public class ScoreService {
 
     public Float getStudentCompleteRate(Long accountId, SUBJECT subject){
         // 학생이 속한 모든 반 조회
-        Authority authority = authorityRepository.findByAccountId(accountId);
+        Authority authority = authorityRepository.findByAccount_Id(accountId);
         if(authority == null) return null;
 
         Long classroomId = authority.getClassroom().getId();

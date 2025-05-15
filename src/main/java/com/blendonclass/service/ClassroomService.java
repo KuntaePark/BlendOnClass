@@ -29,8 +29,8 @@ public class ClassroomService {
         List<Classroom> classrooms = classroomRepository.findAll();
         classroomDtos.forEach(classroomDto -> {
             Classroom newClassroom = classroomDto.to();
-            for(Classroom classroom : classrooms) {
-                if(classroom.getGrade() == newClassroom.getGrade() && classroom.getClassroomNum() == newClassroom.getClassroomNum()) {
+            for (Classroom classroom : classrooms) {
+                if (classroom.getGrade() == newClassroom.getGrade() && classroom.getClassroomNum() == newClassroom.getClassroomNum()) {
                     throw new IllegalArgumentException("이미 존재하는 반이 있습니다.");
                 }
             }
@@ -39,12 +39,12 @@ public class ClassroomService {
     }
 
     // 학년 전체 반 목록 조회
-    public List<Classroom> getClassroomByGrade(){
+    public List<Classroom> getClassroomByGrade() {
         return classroomRepository.findAll();
     }
 
     // 특정 학년 + 반 번호로 반 정보 조회
-    public Classroom getClassroomByGradeAndNum(int grade, int classroomNum){
+    public Classroom getClassroomByGradeAndNum(int grade, int classroomNum) {
         return classroomRepository.findByGradeAndClassroomNum(grade, classroomNum);
     }
 }
