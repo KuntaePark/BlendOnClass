@@ -14,6 +14,11 @@ public interface ClassroomScoreRepository extends JpaRepository<ClassroomScore, 
 
     ClassroomScore findByLessonIdAndClassroomId(Long lessonId, Long classroomId);
 
+
+//    List<LessonScoreDto> findScoresByGradeAndSubjectAndClassroomId(int grade, SUBJECT subject, Long classroomId);
+    List<ClassroomScore> findByClassroomIdOrderByLessonIdAsc(Long classroomId);
+    List<ClassroomScore> findByClassroomIdAndLessonIdBetweenOrderByLessonIdAsc(Long classroomId, Long lessonId1, Long lessonId2);
+    float findAvgCompleteRateByClassroomIdAndLessonIdBetween(Long classroomId, Long lessonId1, Long lessonId2);
     @Query("""
     select new com.blendonclass.dto.LessonClassroomScoreDto(
         c.id, c.grade, c.subject, c.title, l.id, l.lessonTitle,

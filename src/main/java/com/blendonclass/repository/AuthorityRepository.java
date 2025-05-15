@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
-    Authority findByAccountId(Long accountId);
+    List<Authority> findByAccountId(Long accountId);
 
     List<Authority> findByClassroom(Classroom classroom);
 

@@ -37,4 +37,14 @@ public class ClassroomService {
             classroomRepository.save(newClassroom);
         });
     }
+
+    // 학년 전체 반 목록 조회
+    public List<Classroom> getClassroomByGrade(){
+        return classroomRepository.findAll();
+    }
+
+    // 특정 학년 + 반 번호로 반 정보 조회
+    public Classroom getClassroomByGradeAndNum(int grade, int classroomNum){
+        return classroomRepository.findByGradeAndClassroomNum(grade, classroomNum);
+    }
 }
