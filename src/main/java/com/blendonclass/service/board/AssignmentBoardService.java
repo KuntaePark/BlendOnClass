@@ -70,15 +70,31 @@ public class AssignmentBoardService {
     public AssignmentShowDto showAssignment(Long id){
         AssignmentBoard assignmentBoard = assignmentBoardRepository.findById(id).orElse(null);
         AssignmentShowDto assignmentShowDto = AssignmentShowDto.from(assignmentBoard);
+
         return assignmentShowDto;
     }
 
-    public void saveSubmit(SubmitWriteDto submitWriteDto, SubmitStudentListDto submitStudentListDto, MultipartFile multipartFile) {
-        Account account = accountRepository.findById(submitStudentListDto.getAccountId())
-                .orElseThrow(()-> new IllegalStateException("해당 계정이 존재하지 않습니다. id=" + submitStudentListDto.getAccountId()));
-        AssignmentBoard assignmentBoard = assignmentBoardRepository.findById(submitStudentListDto.getAbId())
-                .orElseThrow(()-> new IllegalStateException("해당 과제가 존재하지 않습니다. id=" + submitStudentListDto.getAbId()));
-        SubmitBoard submitBoard = SubmitBoard.from(submitWriteDto, account, assignmentBoard);
+    public void saveSubmit(AssignmentShowDto assignmentShowDto, MultipartFile multipartFile, Long id) {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(()-> new IllegalStateException("해당 계정이 존재하지 않습니다. id=" + id));
+        AssignmentBoard assignmentBoard = assignmentBoardRepository.findById(assignmentShowDto.getAbId())
+                .orElseThrow(()-> new IllegalStateException("해당 과제가 존재하지 않습니다. id=" + assignmentShowDto.getAbId()));
+        String fileName = null;
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            try {
+                String uploadDir = "C:/submit/"; // 예: /home/ubuntu/uploads/ 또는 C:/uploads/
+                fileName = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
+                Path filePath = Paths.get(uploadDir + fileName);
+                Files.createDirectories(filePath.getParent()); // 폴더 없으면 생성
+                multipartFile.transferTo(filePath.toFile());
+            } catch (IOException e) {
+                throw new RuntimeException("파일 업로드 실패", e);
+            }
+        }
+        SubmitBoard submitBoard = SubmitBoard.from(assignmentShowDto, account, assignmentBoard);
+        if (fileName != null) {
+            submitBoard.setFileUrl("/submit/" + fileName); // 사용자 접근용 경로
+        }
         submitBoardRepository.save(submitBoard);
     }
 
@@ -86,8 +102,10 @@ public class AssignmentBoardService {
 
     }
 
-    public SubmitShowDto getSubmitDetail(Long sbId){
-        return null;
+    public AssignmentShowDto getSubmitDetail(Long abId){
+        SubmitBoard submitBoard = submitBoardRepository.findById(abId).orElse(null);
+        AssignmentShowDto assignmentShowDto = AssignmentShowDto.assignmentShowDtofrom(submitBoard);
+        return assignmentShowDto;
     }
 
     public Page<AssignmentShowDto> getAssignmentList(Pageable pageable, Long classroomId){

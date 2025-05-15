@@ -8,6 +8,13 @@ import com.blendonclass.service.AccountService;
 import com.blendonclass.service.AuthorityService;
 import com.blendonclass.service.board.AssignmentBoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,16 +67,19 @@ public class AssignmentBoardController {
         return "assignment";
     }
     @PostMapping("/post/submit")
-    public String submit(@ModelAttribute SubmitWriteDto submitWriteDto,
-                         @ModelAttribute SubmitStudentListDto submitStudentListDto,
-                         MultipartFile multipartFile) {
-        assignmentBoardService.saveSubmit(submitWriteDto, submitStudentListDto, multipartFile);
-        return "redirect:/student";
+    public String submit(AssignmentShowDto assignmentShowDto, @RequestParam("afileUrl") MultipartFile multipartFile, Principal principal){
+        assignmentBoardService.saveSubmit(assignmentShowDto, multipartFile, Long.parseLong(principal.getName()));
+        return "assignment";
     }
+
     public String deleteSubmit(@RequestParam("id") Long sbId, Model model) {
         return null;
     }
-
-    public String getSubmitDetail(@RequestParam("id") Long sbId, Model model) {return null;}
+    @GetMapping("/post/submit/detail")
+    public String getSubmitDetail(AssignmentShowDto assignmentShowDto, Model model) {
+        assignmentShowDto = assignmentBoardService.getSubmitDetail(assignmentShowDto.getAbId());
+        model.addAttribute("assignmentShowDto", assignmentShowDto);
+        return "submitDetail";
+    }
 
 }
