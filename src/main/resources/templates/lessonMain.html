@@ -75,10 +75,10 @@
                         <div th:each="lesson : ${chapter.lessonDtoList}"
                              class="lesson-box w-15 h-15 relative border-4 border-(--primary-color) rounded-lg cursor-pointer overflow-hidden"
                              th:with="
-                                 learnUrl=@{/student/lesson/continue/{id}(id=${lesson.lessonId})},
-                                 quizUrl=${lesson.lessonType == T(com.blendonclass.constant.LTYPE).NORMAL}
-                                         ? @{/student/quiz/start(lessonId=${lesson.lessonId})}
-                                         : @{/student/quiz/chapter(chapterId=${lesson.chapterId})}
+                                 learnUrl=@{/student/lesson/continue/{id}(id=${lesson.lessonId}, grade=${selectedGrade}, subject=${selectedSubject})},
+                                 quizUrl = ${lesson.lessonType == T(com.blendonclass.constant.LTYPE).NORMAL}
+                                        ? @{/student/quiz/start(lessonId=${lesson.lessonId}, grade=${selectedGrade}, subject=${selectedSubject})}
+                                        : @{/student/quiz/chapter(chapterId=${lesson.chapterId}, grade=${selectedGrade}, subject=${selectedSubject})}
                                 "
                              th:attr="data-title=${lesson.lessonTitle},
                                 data-brief=${lesson.lessonBrief},

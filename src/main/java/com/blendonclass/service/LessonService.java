@@ -100,6 +100,21 @@ public class LessonService {
         return lessonRepository.findLessonsByGradeAndSubject(grade, subject);
     }
 
+    public LessonDetailDto getLessonDetailSafe(Long lessonId) {
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new EntityNotFoundException("강의가 존재하지 않습니다."));
+        LessonDetail detail = lessonDetailRepository.findByLessonId(lessonId);
+
+        if(detail == null){
+            detail = new LessonDetail();
+            detail.setId(lessonId);
+            detail.setContext("상세 설명 없음");
+            detail.setMediaUrl(null);
+        }
+        return LessonDetailDto.from(lesson,detail);
+
+    }
+
 
 }
 

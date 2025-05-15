@@ -13,7 +13,7 @@
 
 <body class="bg-white text-gray-900">
     <div layout:fragment="main">
-        <div class="container mx-auto px-4 py-6">
+        <div class="container items-center mb-6">
 
             <!-- 선택한 학년 과목 표시 -->
             <div class="text-sm text-gray-500 mb-1 mt-3">
@@ -21,24 +21,36 @@
                 <span th:if="${subject != null}" th:text="${subject}"></span>
             </div>
 
-            <h2 class="text-2xl font-bold mb-4" th:text="${lessonTitle}">소단원 제목</h2>
-            <!-- 문제 번호 네비게이션 -->
-            <div class="flex gap-2 mb-4" id="navButtons">
-                <button th:each="i : ${#numbers.sequence(1, quizList.size())}"
-                        class="nav-button w-8 h-8 text-center leading-8 rounded-full text-white bg-blue-300"
-                        type="button"
-                        th:text="${i}"></button>
-            </div>
+            <div class="flex justify-between">
+                <h2 class="text-xl font-bold text-gray-800 mb-4" th:text="${lessonTitle}">소단원 제목</h2>
 
-            <!-- 문제 및 선택지 영역 -->
-            <div>
-                <div id="quizQuestion" class="text-lg font-semibold mb-4">문제 로딩 중...</div>
+                    <!-- 문제 번호 네비게이션 -->
+                    <div class="flex gap-2 mb-4 justify-end" id="navButtons">
+                        <button th:each="i : ${#numbers.sequence(1, quizList.size())}"
+                                class="nav-button w-10 h-10 text-center leading-8 rounded-full text-white bg-blue-300"
+                                type="button"
+                                th:text="${i}"></button>
+                    </div>
             </div>
-            <div id="optionsBox" class="mb-4 w-1/4 mx-auto space-y-2"></div>
-            <input type="hidden" id="studentAnswer" />
+                <div class="container relative pb-28">
+                    <!-- 문제 및 선택지 영역 -->
+                    <div class="mb-4">
+                        <div id="quizQuestion" class="text-lg font-semibold mb-4 text-left">문제 로딩 중...</div>
+                        <div id="optionsBox" class="mb-4 w-full max-w-md space-y-2 text-left"></div>
+                        <input type="hidden" id="studentAnswer" />
+                    </div>
 
-            <button id="submitBtn" class="bg-green-500 text-white px-4 py-2 rounded">제출</button>
-            <button id="nextBtn" class="hidden bg-blue-500 text-white px-4 py-2 rounded ml-2">다음</button>
+                </div>
+
+                <!-- 버튼은 고정 위치 -->
+                <div class="fixed bottom-[240px] right-[calc((100%-1280px)/2)] z-50">
+                    <div class="flex gap-2">
+                        <button id="submitBtn" class="bg-(--primary-color) text-white px-4 py-2 rounded-lg cursor-pointer">제출</button>
+                        <button id="skipBtn" class="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-pointer">건너뛰기</button>
+                        <button id="nextBtn" class="hidden bg-(--primary-color) text-white px-4 py-2 rounded ml-2">다음</button>
+                    </div>
+                </div>
+
 
             <!-- 해설 모달 -->
             <div id="solutionModal" class="hidden bg-white border rounded p-4 mt-6 shadow">
@@ -47,10 +59,16 @@
             </div>
 
             <!-- 결과 모달 -->
-            <div id="finalModal" class="hidden bg-white border rounded p-6 mt-6 shadow text-center">
+            <div id="finalModal"
+                 class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+            bg-white border border-gray-300 rounded-lg shadow-lg z-50
+            w-[400px] max-w-[90%] p-6 text-center">
                 <p id="finalResultText" class="text-xl font-bold mb-4"></p>
-                <button id="goToLessonBtn" class="bg-indigo-500 text-white px-4 py-2 rounded">강의 메인으로</button>
+                <button id="goToLessonBtn" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">
+                    강의 메인으로
+                </button>
             </div>
+
         </div>
 
         <!-- 스크립트 -->
@@ -197,6 +215,26 @@
                 }
             });
 
+            const skipBtn = document.getElementById('skipBtn');
+
+            skipBtn.addEventListener('click', () => {
+                if (currentIndex < quizList.length - 1) {
+                    answeredStatus[currentIndex] = true; // 선택 없이도 건너뛴 것으로 처리
+                    renderQuiz(currentIndex + 1);
+                } else {
+                    // 마지막 문제에서 건너뛰었으면 자동 종료 처리
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                    fetch('/student/quiz/end?lessonId=' + lessonId, {
+                        method: 'POST',
+                        headers: { [csrfHeader]: csrfToken }
+                    }).then(() => {
+                        finalResultText.textContent = `총 ${quizList.length}문제 중 ${correctCount}문제 정답!`;
+                        finalModal.classList.remove('hidden');
+                    });
+                }
+            });
 
 
 

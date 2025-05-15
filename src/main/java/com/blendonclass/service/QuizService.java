@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class QuizService {
     private final QuizRepository quizRepository;
     private final LessonRepository lessonRepository;
+    private final LessonDetailRepository lessonDetailRepository;
     private final QuizOngoingRepository quizOngoingRepository;
     private final AccountRepository accountRepository;
     private final ScoreRepository scoreRepository;
@@ -90,6 +91,7 @@ public class QuizService {
         dto.setQuizId(quiz.getId());
         dto.setQuizType(quiz.getQuizType());
         dto.setContextJson(quiz.getContextJson());
+
         return dto;
     }
 

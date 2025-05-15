@@ -1,6 +1,8 @@
 package com.blendonclass.control;
 
 import com.blendonclass.dto.*;
+import com.blendonclass.entity.Lesson;
+import com.blendonclass.entity.LessonDetail;
 import com.blendonclass.service.CustomUserDetails;
 import com.blendonclass.service.LessonService;
 import com.blendonclass.service.QuizService;
@@ -46,8 +48,9 @@ public class QuizController {
 
         QuizDetailDto currentQuiz = quizList.get(0);
 
-        LessonDetailDto lessonDetail = lessonService.getLessonDetail(lessonId);
-        model.addAttribute("lessonDetail", lessonDetail.getTitle());
+        LessonDetailDto lessonDetail = lessonService.getLessonDetailSafe(lessonId);
+        model.addAttribute("lessonTitle", lessonDetail.getTitle());
+
 
         model.addAttribute("quizList", quizList);
         model.addAttribute("currentQuiz", currentQuiz);
@@ -78,9 +81,12 @@ public class QuizController {
         model.addAttribute("subject", subject);
 
         Long lessonId = quizService.getFirstLessonIdOfChapter(chapterId);
-        LessonDetailDto lessonDetail = lessonService.getLessonDetail(lessonId);
         model.addAttribute("lessonId", lessonId);
-        model.addAttribute("lessonDetail", lessonDetail.getTitle());
+
+        LessonDetailDto lessonDetail = lessonService.getLessonDetailSafe(lessonId);
+        model.addAttribute("lessonTitle", lessonDetail.getTitle());
+
+
 
         return "quiz";
     }
