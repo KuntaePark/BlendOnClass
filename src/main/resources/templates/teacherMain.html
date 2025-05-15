@@ -82,8 +82,8 @@
                                                 th:href="@{/teacher/{id}(id=${auth.classroom.id})}"
                                                 class="inline-flex items-center justify-center h-6 px-2 rounded-md text-sm font-medium whitespace-nowrap"
                                                 th:classappend="${
-              inner.authType.subject == '담임' ? 'bg-gray-300 text-gray-800' :
-              inner.authType.subject == '영어' ? 'bg-blue-200 text-blue-800' :
+              inner.authType.subject == '담임' ? 'bg-red-400 text-white-800 font-bold' :
+              inner.authType.subject == '영어' ? 'bg-amber-400 text-white-800 font-bold' :
               inner.authType.subject == '국어' ? 'bg-indigo-200 text-indigo-800' :
               inner.authType.subject == '수학' ? 'bg-amber-200 text-amber-800' :
               'bg-gray-100 text-gray-700'
