@@ -5,10 +5,6 @@ import com.blendonclass.entity.Authority;
 import com.blendonclass.entity.Progress;
 import com.blendonclass.entity.Score;
 import com.blendonclass.repository.*;
-import com.blendonclass.repository.AuthorityRepository;
-import com.blendonclass.repository.ClassroomScoreRepository;
-import com.blendonclass.repository.ProgressRepository;
-import com.blendonclass.repository.ScoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,16 +24,8 @@ public class ScoreService {
 
     public Float getStudentCompleteRate(Long accountId, SUBJECT subject){
         // 학생이 속한 모든 반 조회
-        List<Authority> authorities = authorityRepository.findByAccountId(accountId);
-        if (authorities == null || authorities.isEmpty()) return null;
-
-// 원하는 subject만 추출 (예: SUBJECT.HR)
-        Authority authority = authorities.stream()
-                .filter(a -> a.getAuthType() == subject)
-                .findFirst()
-                .orElse(null);
-
-        if (authority == null) return null;
+        Authority authority = authorityRepository.findByAccount_Id(accountId);
+        if(authority == null) return null;
 
         Long classroomId = authority.getClassroom().getId();
 

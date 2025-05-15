@@ -46,15 +46,15 @@
                 <ul class="flex flex-col justify-center divide-y divide-gray-300 bg-gray-100 text-[--primary-color] text-[20px] font-bold p-4 rounded-lg w-[200px] h-full">
                     <li class="flex items-center gap-3 py-6 hover:text-[#59e9df] cursor-pointer">
                         <img src="/images/Scoreblack.png" alt="학습성과 아이콘" class="w-9 h-9" />
-                        <a href="/student/myscore" class="flex-1 leading-none">학습 성과</a>
+                        <a th:href="@{'/teacher/myscore?id='+${classroomId}}" class="flex-1 leading-none">학습 성과</a>
                     </li>
                     <li class="flex items-center gap-3 py-6 hover:text-[#59e9df] cursor-pointer">
                         <img src="/images/OurClassblack.png" alt="우리반 아이콘" class="w-9 h-9" />
-                        <span class="flex-1 leading-none">우리반 게시판</span>
+                        <a th:href="@{'board?id='+${classroomId}}" class="flex-1 leading-none">우리반 게시판</a>
                     </li>
                     <li class="flex items-center gap-3 py-6 hover:text-[#59e9df] cursor-pointer">
                         <img src="/images/Progress.png" alt="진도 아이콘" class="w-10 h-10" />
-                        <a href="/student/lesson/main" class="flex-1 leading-none">진도 설정</a>
+                        <a th:href="@{'/teacher/progress?id='+${classroomId}}" class="flex-1 leading-none">진도 설정</a>
                     </li>
                 </ul>
 

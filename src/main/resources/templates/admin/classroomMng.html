@@ -16,7 +16,7 @@
 </th:block>
 
 
-<div layout:fragment="main" id="main" class="flex flex-col w-full border-1">
+<div layout:fragment="main" id="main" class="flex flex-col w-full h-full border-1">
     <div id="page-title" class="text-3xl">
         반 관리
     </div>
@@ -34,10 +34,18 @@
             </ul>
         </div>
         <div id="classroom-account-list" class="flex-1">
-            <div id="table-header" class="flex justify-end">
-                <button onclick="openModal($('#modal-add-account'))" class="w-8 h-8 rounded-md bg-(--primary-color) text-white font-bold text-2xl text-center hover:opacity-80">+</button>
-            </div>
+            <span>소속 계정 목록</span>
             <th:block th:if="${accountListDtos != null}">
+            <div id="table-header" class="flex justify-end">
+                <form class="flex-1 flex flex-row items-center gap-2"
+                      th:action="@{/admin/accounts}" method="get">
+                    <!-- 검색 바 -->
+                    <th:block th:replace="~{fragment/components::searchBar}"></th:block>
+                </form>
+                <button onclick="openModal($('#modal-add-account'))" class="square-button-10 bg-(--primary-color)">
+                    <span class="text-white text-3xl">+</span>
+                </button>
+            </div>
                 <div th:replace="~{fragment/account-table :: accountTable(${accountListDtos},
                 ~{fragment/account-table::classroommng-action})}"></div>
             </th:block>

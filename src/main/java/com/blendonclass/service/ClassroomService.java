@@ -16,11 +16,6 @@ import java.util.List;
 public class ClassroomService {
     private final ClassroomRepository classroomRepository;
 
-    // 학년 전체 반 목록 조회
-    public List<Classroom> getClassroomByGrade() {
-        return classroomRepository.findAll();
-    }
-
     public List<ClassroomDto> findAll() {
         List<Classroom> classrooms = classroomRepository.findAllByOrderByGradeAscClassroomNumAsc();
         List<ClassroomDto> classroomDtos = new ArrayList<>();
@@ -28,11 +23,6 @@ public class ClassroomService {
             classroomDtos.add(ClassroomDto.from(classroom));
         }
         return classroomDtos;
-    }
-
-    // 특정 학년 + 반 번호로 반 정보 조회
-    public Classroom getClassroomByGradeAndNum(int grade, int classroomNum) {
-        return classroomRepository.findByGradeAndClassroomNum(grade, classroomNum);
     }
 
     public void addClassroom(List<ClassroomDto> classroomDtos) {
@@ -46,5 +36,15 @@ public class ClassroomService {
             }
             classroomRepository.save(newClassroom);
         });
+    }
+
+    // 학년 전체 반 목록 조회
+    public List<Classroom> getClassroomByGrade() {
+        return classroomRepository.findAll();
+    }
+
+    // 특정 학년 + 반 번호로 반 정보 조회
+    public Classroom getClassroomByGradeAndNum(int grade, int classroomNum) {
+        return classroomRepository.findByGradeAndClassroomNum(grade, classroomNum);
     }
 }

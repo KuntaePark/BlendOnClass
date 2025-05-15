@@ -15,11 +15,13 @@
         <div th:text="*{context}"></div>
         <div th:text="*{#temporals.format(dueDate,'YYYY-MM-dd')}"></div>
     </div>
-    <button sec:authorize="hasRole('ROLE_STUDENT')" type="button">제출하기</button>
+    <a th:href="@{'/post/submit?id='+${assignmentShowDto.abId}}" sec:authorize="hasRole('ROLE_STUDENT')">제출하기</a>
     <div sec:authorize="hasRole('ROLE_TEACHER')" id="submit-list" class="w-[200px] flex flex-col">
         <h2>제출자 목록</h2>
-        <div  th:each="submit:${submitStudentListDtos}" th:object="${submit}">
-            <a id="detail" th:href="@{'/post/submit/detail?sbId='*{sbId}}">
+        <div  th:each="submit:${submitStudentListDtos}" th:object="${submit}"
+        >
+            <a id="detail" th:href="@{'/post/submit/detail?sbId='+*{sbId}}"
+               th:classappend="*{isSubmit?'':'pointer-events-none'}">
                 <p th:text="*{email}"></p>
                 <p th:text="*{name}"></p>
                 <p th:text="*{isSubmit?'제출완료':'제출안함'}"></p>
