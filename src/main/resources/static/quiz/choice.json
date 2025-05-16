@@ -132,7 +132,101 @@
         "optionContext": "a>b이면 a의 절댓값은 b의 절댓값보다 크다."
       }
     ]
+  },
+
+  {
+    "quiz_id": 16,
+    "question": "Which question asks about someone’s age?",
+    "options": [
+      { "optionNum": 1, "optionContext": "What is your birthday?" },
+      { "optionNum": 2, "optionContext": "How old are you?" },
+      { "optionNum": 3, "optionContext": "Where do you live?" }
+    ],
+    "answer": 2,
+    "difficulty": 1,
+    "solution": "“How old are you?”는 ‘당신은 몇 살입니까?’ 즉 나이를 묻는 질문입니다."
+  },
+
+  {
+    "quiz_id": 18,
+    "question": "Choose the correct sentence to say your favorite subject:",
+    "options": [
+      { "optionNum": 1, "optionContext": "My favorite subject is math." },
+      { "optionNum": 2, "optionContext": "I favourite subject is math." },
+      { "optionNum": 3, "optionContext": "Math is my favorite subjects." }
+    ],
+    "answer": 1,
+    "difficulty": 1,
+    "solution": "‘주어 + is + 보어’ 구조로 My favorite subject is math.가 문법에 맞습니다."
+  },
+
+  {
+    "quiz_id": 19,
+    "question": "Which sentence is grammatically correct?",
+    "options": [
+      { "optionNum": 1, "optionContext": "I has two brothers." },
+      { "optionNum": 2, "optionContext": "I have two brothers." },
+      { "optionNum": 3, "optionContext": "I haves two brother." }
+    ]
+  },
+
+  {
+    "quiz_id": 21,
+    "question": "Fill in the blank: “Nice to ____ you.”",
+    "options": [
+      { "optionNum": 1, "optionContext": "meet" },
+      { "optionNum": 2, "optionContext": "met" },
+      { "optionNum": 3, "optionContext": "meeting" }
+    ]
+  },
+
+  {
+    "quiz_id": 23,
+    "question": "Choose the correct way to introduce your family name:",
+    "options": [
+      { "optionNum": 1, "optionContext": "I call Min-ju." },
+      { "optionNum": 2, "optionContext": "I am called Min-ju." },
+      { "optionNum": 3, "optionContext": "My name call Min-ju." }
+    ]
+  },
+
+  {
+    "quiz_id": 25,
+    "question": "Choose the correct sentence to introduce your friend:",
+    "options": [
+      { "optionNum": 1, "optionContext": "This is my friend, Sarah." },
+      { "optionNum": 2, "optionContext": "This my friend is Sarah." },
+      { "optionNum": 3, "optionContext": "This is friend my, Sarah." }
+    ]
+  },
+
+  {
+    "quiz_id": 27,
+    "question": "Which question asks where your friend lives?",
+    "options": [
+      { "optionNum": 1, "optionContext": "Where does your friend live?" },
+      { "optionNum": 2, "optionContext": "Where your friend lives?" },
+      { "optionNum": 3, "optionContext": "Where do your friend live?" }
+    ]
+  },
+
+  {
+    "quiz_id": 29,
+    "question": "Fill in the blank: “He ______ playing basketball.”",
+    "options": [
+      { "optionNum": 1, "optionContext": "like" },
+      { "optionNum": 2, "optionContext": "likes" },
+      { "optionNum": 3, "optionContext": "liking" }
+    ]
+  },
+
+  {
+    "quiz_id": 31,
+    "question": "Choose the correct way to say your friend’s nationality:",
+    "options": [
+      { "optionNum": 1, "optionContext": "My friend is Japanese." },
+      { "optionNum": 2, "optionContext": "My friend is a Japan." },
+      { "optionNum": 3, "optionContext": "My friend is Japanese person." }
+    ]
   }
-
-
 ]

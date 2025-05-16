@@ -10,6 +10,49 @@
   {
     "quiz_id": 8,
     "question": "4<sup>x</sup>=64, 5<sup>y</sup>=625를 만족시키는 자연수 x,y에 대하여 x * y의 값을 구하시오."
-  }
+  },
+  {
+    "quiz_id": 15,
+    "question": "Translate into English: “안녕하세요, 제 이름은 김민준입니다.”"
+  },
 
+  {
+    "quiz_id": 17,
+    "question": "Fill in the blank: “I live in ____.”"
+  },
+
+  {
+    "quiz_id": 20,
+    "question": "What’s a polite way to greet your teacher for the first time?"
+  },
+
+  {
+    "quiz_id": 22,
+    "question": "Translate into English: “저는 주말에 자전거 타는 것을 좋아합니다.”"
+  },
+
+  {
+    "quiz_id": 24,
+    "question": "Translate into English: “제 친구는 축구를 좋아해요.”"
+  },
+
+  {
+    "quiz_id": 26,
+    "question": "Fill in the blank: “________ her name is Emily.”"
+  },
+
+  {
+    "quiz_id": 28,
+    "question": "How do you ask your friend’s age?"
+  },
+
+  {
+    "quiz_id": 30,
+    "question": "Translate into English: “내 친구는 같은 학교에 다녀요.”"
+  },
+
+  {
+    "quiz_id": 32,
+    "question": "Describe your friend’s personality: “친구는 친절하고 웃음이 많아요.”"
+  }
 ]
