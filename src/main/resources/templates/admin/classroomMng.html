@@ -28,7 +28,7 @@
                 <button type="button" class="rectangle-button bg-red-400" onclick="openModal($('#modal-reset-classroom'))">반 초기화</button>
             </div>
         </div>
-        <div class="flex-1 flex flex-row gap-2 pt-2 overflow-auto">
+        <div class="flex-1 flex flex-row gap-2 pt-2">
             <div id="classroom-list-container" class="h-full flex-1 flex flex-col max-w-[200px] p-2 border-1 bg-(--primary-color) text-white rounded-xl">
                 <div class="text-xl w-full text-center py-2">반 목록</div>
                 <div class="w-full h-[1px] mb-2 bg-gray-300"></div>
@@ -38,9 +38,8 @@
                         <a th:text="*{grade+'학년 '+classroomNum+'반'}" th:href="@{'/admin/classroom?id='+*{id}}"></a>
                     </li>
                 </ul>
-
             </div>
-            <div id="classroom-account-list" class="h-full flex-1 p-2 flex flex-col gap-2">
+            <div id="classroom-account-list" class="h-full flex-1 p-2 flex flex-col gap-2 overflow-hidden">
                 <span class="text-xl py-2">소속 계정 목록</span>
                 <th:block th:if="${accountListDtos != null && accountListDtos.size() > 0}">
                 <div id="table-header" class="flex justify-end">
@@ -54,7 +53,7 @@
                     </button>
                 </div>
                     <div th:replace="~{fragment/account-table :: accountTable(${accountListDtos},
-                    ~{fragment/account-table::classroommng-action})}"></div>
+                    ~{fragment/account-table::classroommng-action})}" class="flex-1 overflow-auto"></div>
                 </th:block>
                 <th:block th:unless="${accountListDtos != null}">
                     <div class="bg-gray-100 flex-1 flex items-center justify-center rounded-2xl">

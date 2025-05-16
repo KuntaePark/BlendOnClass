@@ -34,7 +34,7 @@
 }
 
 .admin-table thead th{
-    @apply text-black font-bold p-2;
+    @apply text-black font-bold p-2 sticky top-0;
 }
 
 .admin-table tbody tr {
