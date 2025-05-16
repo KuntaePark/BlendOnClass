@@ -1,40 +1,83 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-    <link rel="stylesheet" href="/css/task.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>과제 작성</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div id="main">
-        <form th:action="@{'/post/task?id='+${classroomId}}" method="post" enctype="multipart/form-data">
-            <div id="title">
-                <h2 class="title">제목</h2>
-            </div>
-            <input type="text" name="title" style="width:230px;">
-            <div id="context">
-                <h2 class="context">내용</h2>
-            </div>
-            <textarea name="context" cols="30" rows="20"></textarea>
-            <div id="dueDate">
-                <h2 class="dueDate">제출기한</h2>
-            </div>
-            <input type="date" name="dueDate">
-            <div id="file">
-                <h2 class="file">파일첨부</h2>
-            </div>
-            <input type="file" name="fileUrl"><br>
-            <div id="button">
-                <button id="btn">과제 게시</button>
-            </div>
-        </form>
-    </div>
-</body>
-</html>
+<body class="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 min-h-screen flex items-center justify-center p-8">
+<div id="main" class="bg-white max-w-3xl w-full p-10 rounded-3xl shadow-2xl">
+    <form th:action="@{'/post/task?id='+${classroomId}}" method="post" enctype="multipart/form-data" class="space-y-8">
+
+        <!-- 제목 -->
+        <div>
+            <label for="title" class="block text-2xl font-extrabold text-indigo-900 mb-3">제목</label>
+            <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="과제 제목을 입력하세요"
+                    class="w-full max-w-md rounded-2xl border-4 border-indigo-700 px-6 py-4 text-xl font-semibold text-indigo-900 focus:border-purple-500 focus:ring-4 focus:ring-purple-300 outline-none shadow-lg transition"
+                    required
+            />
+        </div>
+
+        <!-- 내용 -->
+        <div>
+            <label for="context" class="block text-2xl font-extrabold text-indigo-900 mb-3">내용</label>
+            <textarea
+                    id="context"
+                    name="context"
+                    cols="30"
+                    rows="10"
+                    placeholder="과제 내용을 입력하세요"
+                    class="w-full rounded-2xl border-4 border-indigo-700 px-6 py-5 text-lg text-indigo-800 resize-none focus:border-purple-500 focus:ring-4 focus:ring-purple-300 outline-none shadow-lg transition"
+                    required
+            ></textarea>
+        </div>
+
+        <!-- 제출기한 -->
+        <div>
+            <label for="dueDate" class="block text-2xl font-extrabold text-indigo-900 mb-3">제출기한</label>
+            <input
+                    type="date"
+                    id="dueDate"
+                    name="dueDate"
+                    class="w-full max-w-xs rounded-2xl border-4 border-indigo-700 px-6 py-3 text-indigo-900 font-semibold focus:border-purple-500 focus:ring-4 focus:ring-purple-300 outline-none shadow-lg transition"
+                    required
+            />
+        </div>
+
+        <!-- 파일첨부 -->
+        <div>
+            <label for="fileUrl" class="block text-2xl font-extrabold text-indigo-900 mb-3">파일첨부</label>
+            <input
+                    type="file"
+                    id="fileUrl"
+                    name="fileUrl"
+                    class="text-indigo-900 font-semibold"
+            />
+        </div>
+
+        <!-- 제출 버튼 -->
+        <div>
+            <button
+                    id="btn"
+                    type="submit"
+                    class="w-full max-w-md bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-2xl px-12 py-5 rounded-full shadow-2xl transition transform hover:-translate-y-1 active:scale-95 cursor-pointer"
+            >
+                과제 게시
+            </button>
+        </div>
+    </form>
+</div>
+
 <script>
-    document.getElementById("btn").addEventListener("click", function(){
+    document.getElementById("btn").addEventListener("click", function(event){
         alert("과제가 게시되었습니다.");
+        // 폼 제출은 그대로 진행됩니다.
     });
 </script>
+</body>
+</html>

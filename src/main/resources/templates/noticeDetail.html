@@ -1,23 +1,68 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-    <link rel="stylesheet" href="/css/noticeDetail.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>공지사항 상세</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div th:each="notice:${noticeShowDto}">
-    <form th:action="@{'/post/notice/detail?id='+${noticeShowDto.nbId}}" method="post" enctype="multipart/form-data">
-      <h2>제목</h2>
-      <div th:text="${noticeShowDto.title}"></div>
-      <h2>내용</h2>
-      <div th:text="${noticeShowDto.context}"></div>
-      <h2>파일첨부</h2>
-      <a id="file" th:href="@{${noticeShowDto.fileUrl}}" target="_blank">파일</a><br>
-      <button>글삭제</button>
+<body class="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 min-h-screen p-8 flex justify-center items-start">
+<div
+        class="max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-10 space-y-8"
+        th:each="notice : ${noticeShowDto}"
+>
+    <!-- 제목 -->
+    <div>
+        <h2 class="text-3xl font-extrabold text-indigo-900 mb-2 border-b-4 border-pink-500 inline-block pb-1">
+            제목
+        </h2>
+        <p
+                class="text-xl text-indigo-800 leading-relaxed select-text"
+                th:text="${notice.title}"
+        >
+            공지 제목
+        </p>
+    </div>
+
+    <!-- 내용 -->
+    <div>
+        <h2 class="text-3xl font-extrabold text-indigo-900 mb-2 border-b-4 border-pink-500 inline-block pb-1">
+            내용
+        </h2>
+        <p
+                class="text-lg text-indigo-700 whitespace-pre-line leading-relaxed select-text"
+                th:text="${notice.context}"
+        >
+            공지 내용이 여기에 들어갑니다.
+        </p>
+    </div>
+
+    <!-- 파일첨부 -->
+    <div>
+        <h2 class="text-2xl font-semibold text-indigo-900 mb-2">파일첨부</h2>
+        <a
+                th:href="@{${notice.fileUrl}}"
+                target="_blank"
+                class="inline-block bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-700 hover:from-pink-600 hover:via-purple-700 hover:to-indigo-800 text-white font-bold px-6 py-3 rounded-full shadow-lg transition-transform hover:scale-105"
+        >
+            파일 다운로드
+        </a>
+    </div>
+
+    <!-- 글삭제 버튼 -->
+    <form
+            th:action="@{'/post/notice/detail?id=' + ${notice.nbId}}"
+            method="post"
+            enctype="multipart/form-data"
+            class="pt-4"
+    >
+        <button
+                type="submit"
+                class="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold py-3 rounded-3xl shadow-lg transition duration-300 transform hover:-translate-y-1 active:scale-95"
+        >
+            글 삭제
+        </button>
     </form>
-  </div>
+</div>
 </body>
 </html>
