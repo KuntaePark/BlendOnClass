@@ -12,5 +12,4 @@ public class NoticeWriteDto {
     private Long classroomId;
     private String title;
     private String context;
-    private LocalDateTime writeTime;
 }

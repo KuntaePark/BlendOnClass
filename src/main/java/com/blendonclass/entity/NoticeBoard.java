@@ -37,7 +37,6 @@ public class NoticeBoard {
         NoticeBoard noticeBoard = new NoticeBoard();
         noticeBoard.setTitle(noticeWriteDto.getTitle());
         noticeBoard.setContext(noticeWriteDto.getContext());
-        noticeBoard.setWriteTime(noticeWriteDto.getWriteTime());
         noticeBoard.setAuthority(authority);
         return noticeBoard;
     }

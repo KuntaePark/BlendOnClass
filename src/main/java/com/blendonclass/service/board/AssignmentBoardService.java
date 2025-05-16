@@ -67,9 +67,15 @@ public class AssignmentBoardService {
 
     }
 
-    public AssignmentShowDto showAssignment(Long id){
-        AssignmentBoard assignmentBoard = assignmentBoardRepository.findById(id).orElse(null);
+    public AssignmentShowDto getAssignmentDetail(Long id, Long accountId){
+        AssignmentBoard assignmentBoard = assignmentBoardRepository.findById(id).get();
         AssignmentShowDto assignmentShowDto = AssignmentShowDto.from(assignmentBoard);
+        //writer check
+        if(assignmentBoard.getAuthority().getAccount().getId().equals(accountId)){
+            assignmentShowDto.setIsWriter(true);
+        } else {
+            assignmentShowDto.setIsWriter(false);
+        }
 
         return assignmentShowDto;
     }

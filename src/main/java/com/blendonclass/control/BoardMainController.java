@@ -1,11 +1,9 @@
 package com.blendonclass.control;
 
-import com.blendonclass.constant.ROLE;
 import com.blendonclass.dto.AssignmentShowDto;
 import com.blendonclass.dto.NoticeShowDto;
 import com.blendonclass.dto.QuestionShowDto;
 import com.blendonclass.service.AuthorityService;
-import com.blendonclass.service.CustomUserDetails;
 import com.blendonclass.service.board.AssignmentBoardService;
 import com.blendonclass.service.board.NoticeBoardService;
 import com.blendonclass.service.board.QuestionBoardService;
@@ -42,7 +40,7 @@ public class BoardMainController {
             classroomId = authorityService.getClassroomIdOfStudent(id);
         }
         //불러올 페이지 표시 0 -> 첫 페이지, pageSize -> 10개 불러오겠다
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(0, 20);
         
         //페이지를 가져오는 거
         Page<NoticeShowDto> noticeShowDtos = noticeBoardService.getNoticeList(pageable, classroomId);
@@ -55,7 +53,7 @@ public class BoardMainController {
         Page<QuestionShowDto> questionShowDtos = questionBoardService.getQuestionList(pageable, classroomId);
         model.addAttribute("questionShowDtos", questionShowDtos);
         model.addAttribute("classroomId", classroomId);
-        return "post";
+        return "board/board";
     }
 
 }

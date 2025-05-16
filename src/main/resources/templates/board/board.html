@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
+
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        function redirectTo(url) {
+            location.href = url;
+        }
+    </script>
+</th:block>
+
+
+<th:block layout:fragment="main">
+    <div id="main" class="main-container">
+        <div class="title-box">
+            <p>우리반 게시판</p>
+            <span class="title-sub">우리 반 만의 소통 공간</span>
+        </div>
+        <div class="flex flex-row gap-8">
+            <!-- 공지사항 게시판 -->
+            <div class="board-container">
+                <div class="board-title">
+                    <img class="w-8 h-8 mt-1" src="/images/icons/icon_notice.png" alt="공지 아이콘">
+                    <p>공지사항</p>
+                </div>
+                <a class="board-add-button" th:href="@{'/board/notice/write?id='+${classroomId}}">
+                    <p class="">+</p>
+                </a>
+                <div class="flex flex-col gap-4">
+                    <div class="board-list-box" th:each="notice : ${noticeShowDtos.getContent()}"
+                    th:onclick="redirectTo([[${'/board/notice/detail?id='+notice.nbId}]])">
+                        <div class="white-dot"></div>
+                        <div>
+                            <div class="title" th:text="${notice.title}"></div>
+                            <p class="writer" th:text="${notice.writerName}"></p>
+                            <p class="context" th:text="${notice.context}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 질문 게시판 -->
+            <div class="board-container">
+                <div class="board-title">
+                    <img class="w-8 h-8 mt-1" src="/images/icons/icon_question.png" alt="질문 아이콘">
+                    질문 게시판
+                </div>
+                <a class="board-add-button" th:href="@{'/board/question/write?id='+${classroomId}}">
+                    <p class="">+</p>
+                </a>
+                <div class="board-list-box" th:each="question : ${questionShowDtos.getContent()}"
+                    th:onclick="redirectTo([[${'/board/question/detail?id='+question.id}]])">
+                    <div class="white-dot"></div>
+                    <div>
+                        <div class="title" th:text="${question.title}">
+                            학급 공지사항
+                        </div>
+                        <p class="writer" th:text="${question.writerName}">김땡땡</p>
+                        <p class="context" th:text="${question.qContext}">이거 어떻게 푸는 거에요????</p>
+                    </div>
+                </div>
+            </div>
+            <!-- 과제 게시판 -->
+            <div class="board-container">
+                <div class="board-title">
+                    <img class="w-8 h-8 mt-1" src="/images/icons/icon_homework.png" alt="과제 아이콘">
+                    과제
+                </div>
+                <a class="board-add-button" th:href="@{'/board/assignment/write?id='+${classroomId}}">
+                    <p class="">+</p>
+                </a>
+                <div class="board-list-box" th:each="assignment : ${assignmentShowDtos.getContent()}"
+                th:onclick="redirectTo([[${'board/assignment/detail?abId='+assignment.abId+'&classroomId='+classroomId}]])">
+                    <div class="white-dot"></div>
+                    <div>
+                        <div class="title" th:text="${assignment.title}">
+                            학급 공지사항
+                        </div>
+                        <p class="writer" th:text="${assignment.writerName}">김아무개</p>
+                        <p class="context" th:text="${assignment.context}">이거 어떻게 푸는 거에요????</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</th:block>
+</html>

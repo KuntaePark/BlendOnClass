@@ -51,12 +51,12 @@
 
     <!-- 글삭제 버튼 -->
     <form
-            th:action="@{'/post/notice/detail?id=' + ${notice.nbId}}"
+            th:action="@{'/board/notice/delete?id=' + ${notice.nbId}}"
             method="post"
             enctype="multipart/form-data"
             class="pt-4"
     >
-        <button
+        <button th:if="*{isWriter}"
                 type="submit"
                 class="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold py-3 rounded-3xl shadow-lg transition duration-300 transform hover:-translate-y-1 active:scale-95"
         >

@@ -15,6 +15,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/board")
 public class AssignmentBoardController {
     private final AssignmentBoardService assignmentBoardService;
 
@@ -26,14 +27,17 @@ public class AssignmentBoardController {
         return null;
     }
 
-    @GetMapping("/post/task")
+    //과제 작성 페이지 요청
+    @GetMapping("/assignment/write")
     public String task(@RequestParam("id") Long classroomId, Model model) {
         AssignmentWriteDto assignmentWriteDto = new AssignmentWriteDto();
         model.addAttribute("assignmentWriteDto", assignmentWriteDto);
         model.addAttribute("classroomId", classroomId);
-        return "task";
+        return "board/assignmentWrite";
     }
-    @PostMapping("/post/task")
+
+    //작성 과제 저장
+    @PostMapping("/assignment/write")
     public String submitAssignment(@RequestParam("id") Long classroomId,
                                    Principal principal,
                                    @ModelAttribute AssignmentWriteDto assignmentWriteDto,
@@ -44,9 +48,12 @@ public class AssignmentBoardController {
         assignmentBoardService.saveAssignmentBoard(assignmentWriteDto, multipartFile);
         return "redirect:/board?id=" + classroomId;
     }
-    @GetMapping("post/task/detail")
-    public String showAssignment(@RequestParam("abId") Long abId, @RequestParam("classroomId") Long classroomId, Model model) {
-        AssignmentShowDto assignmentShowDto = assignmentBoardService.showAssignment(abId);
+
+    //과제 상세 페이지 요청
+    @GetMapping("/assignment/detail")
+    public String getAssignmentDetail(@RequestParam("abId") Long abId, @RequestParam("classroomId") Long classroomId, Principal principal, Model model) {
+        Long accountId = Long.parseLong(principal.getName());
+        AssignmentShowDto assignmentShowDto = assignmentBoardService.getAssignmentDetail(abId, accountId);
         model.addAttribute("assignmentShowDto", assignmentShowDto);
 
         //과제 제출자 목록
@@ -54,7 +61,7 @@ public class AssignmentBoardController {
         model.addAttribute("submitStudentListDtos", submitStudentListDtos);
         model.addAttribute("classroomId", classroomId);
         //반 학생 목록
-        return "assignment";
+        return "board/assignmentDetail";
     }
 
     //과제 제출 페이지 요청
@@ -79,7 +86,7 @@ public class AssignmentBoardController {
         System.out.println(file.getOriginalFilename());
         assignmentBoardService.saveSubmit(submitWriteDto, file);
 
-        return "redirect:/post/task/detail?abId="+abId+"&classroomId="+classroomId;
+        return "redirect:/board/assignment/detail?abId="+abId+"&classroomId="+classroomId;
     }
 
     public String deleteSubmit(@RequestParam("id") Long sbId, Model model) {

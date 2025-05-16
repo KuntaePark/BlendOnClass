@@ -57,10 +57,6 @@ public class NoticeBoardService {
         noticeBoardRepository.deleteById(nbId);
     }
 
-    public NoticeShowDto getNoticeDetail(Long nbId){
-        return null;
-    }
-
     public Page<NoticeShowDto> getNoticeList(Pageable pageable, Long classroomId){
         List<NoticeShowDto> noticeList = noticeBoardRepository.findNoticeBoardByClassroomId(classroomId,pageable)
                 .stream().map(NoticeShowDto::from).collect(Collectors.toList());
@@ -68,9 +64,25 @@ public class NoticeBoardService {
         return new PageImpl<>(noticeList, pageable, noticeList.size());
     }
 
-    public NoticeShowDto findById(Long id) {
-        NoticeBoard noticeBoard = noticeBoardRepository.findById(id).orElse(null);
+    public NoticeShowDto getNoticeDetail(Long nbId, Long accountId) {
+        NoticeBoard noticeBoard = noticeBoardRepository.findById(nbId).get();
         NoticeShowDto noticeShowDto = NoticeShowDto.from(noticeBoard);
+        if(noticeBoard.getAuthority().getAccount().getId().equals(accountId)){
+            noticeShowDto.setIsWriter(true);
+        } else {
+            noticeShowDto.setIsWriter(false);
+        }
         return noticeShowDto;
+    }
+
+    public boolean checkWriter(Long nbId, Long accountId) {
+        //해당 글의 작성자인지 체크
+        NoticeBoard noticeBoard = noticeBoardRepository.findById(nbId).get();
+        if(noticeBoard.getAuthority().getAccount().getId().equals(accountId)){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

@@ -14,6 +14,7 @@ public class NoticeShowDto {
     private String context;
     private LocalDateTime writeTime;
     private String fileUrl;
+    private Boolean isWriter;
 
     public static NoticeShowDto from(NoticeBoard noticeBoard) {
         NoticeShowDto noticeShowDto = new NoticeShowDto();

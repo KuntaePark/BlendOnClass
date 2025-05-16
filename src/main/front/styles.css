@@ -52,11 +52,11 @@
 
 /*-- admin --*/
 .main-container {
-    @apply flex-1 flex flex-col w-full px-8 py-10 gap-10 border-1 rounded-xl border-gray-200
+    @apply flex-1 flex flex-col w-full px-8 py-10 gap-10 border-1 rounded-xl bg-white shadow-xl border-gray-200
 }
 
 .main-container .title-box {
-   @apply text-2xl font-bold flex flex-col gap-1
+    @apply text-2xl font-bold flex flex-col gap-2
 }
 
 .main-container .title-box .title-sub {
@@ -86,4 +86,39 @@
 
 .input-area {
     @apply h-10 p-2 border-1 border-gray-300 focus:outline-gray-500 rounded-md;
+}
+
+
+/*-- board --*/
+.board-container {
+    @apply flex-1 p-4 rounded-lg flex flex-col gap-4;
+}
+
+.board-title {
+    @apply text-black text-2xl mb-2 font-bold flex flex-row gap-2 items-center;
+}
+
+.board-add-button {
+    @apply bg-white border-gray-400 border-4 h-12 rounded-xl flex items-center justify-center
+    text-gray-400 text-2xl font-bold shadow-sm hover:border-gray-900 hover:text-gray-900
+}
+
+.board-list-box {
+    @apply bg-blue-600 text-white rounded-xl p-4 w-full flex flex-row shadow-md hover:cursor-pointer;
+}
+
+.board-list-box .title {
+    @apply text-xl font-bold mb-1 flex flex-row items-center gap-2;
+}
+
+.board-list-box .writer {
+    @apply text-sm text-gray-200 mb-4;
+}
+
+.board-list-box .context {
+    @apply text-sm
+}
+
+.white-dot {
+    @apply min-w-2 h-2 my-2 mr-2 bg-white rounded-full;
 }

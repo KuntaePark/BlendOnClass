@@ -8,6 +8,7 @@ import com.blendonclass.entity.QuestionBoard;
 import com.blendonclass.repository.AccountRepository;
 import com.blendonclass.repository.AuthorityRepository;
 import com.blendonclass.repository.board.QuestionBoardRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,15 +20,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class QuestionBoardService {
-    @Autowired
-    private QuestionBoardRepository questionBoardRepository;
-
-    @Autowired
-    private AuthorityRepository authorityRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
+    private final QuestionBoardRepository questionBoardRepository;
+    private final AuthorityRepository authorityRepository;
+    private final AccountRepository accountRepository;
 
     public void saveQuestion(QuestionWriteDto questionWriteDto){
          Authority authority = authorityRepository.findByAccountIdAndClassroomId(questionWriteDto.getWriterId(),questionWriteDto.getClassroomId())
@@ -63,9 +60,27 @@ public class QuestionBoardService {
     }
 
 
+    public QuestionShowDto getQuestionDetail(Long qbId, Long accountId){
+        QuestionBoard questionBoard = questionBoardRepository.findById(qbId).get();
+        QuestionShowDto questionShowDto = QuestionShowDto.from(questionBoard);
+        //writer check
+        if(questionBoard.getAuthority().getAccount().getId().equals(accountId)){
+            questionShowDto.setIsWriter(true);
+        } else {
+            questionShowDto.setIsWriter(false);
+        }
 
-    public QuestionShowDto getQuestionDetail(Long qbId){
-        return QuestionShowDto.from(questionBoardRepository.findById(qbId).get());
+        //answerer check
+        if(questionBoard.getAccount() != null) {
+            if(questionBoard.getAccount().getId().equals(accountId)){
+                questionShowDto.setIsAnswerer(true);
+            } else {
+                questionShowDto.setIsAnswerer(false);
+            }
+        } else {
+            questionShowDto.setIsAnswerer(false);
+        }
+        return questionShowDto;
     }
 
     public Page<QuestionShowDto> getQuestionList(Pageable pageable, Long classroomId){

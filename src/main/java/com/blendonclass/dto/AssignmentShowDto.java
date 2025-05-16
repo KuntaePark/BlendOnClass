@@ -19,6 +19,7 @@ public class AssignmentShowDto {
     private String context;
     private LocalDateTime writeTime;
     private LocalDate dueDate;
+    private Boolean isWriter;
   //  private String fileUrl;
 
     public static AssignmentShowDto from(AssignmentBoard assignmentBoard) {

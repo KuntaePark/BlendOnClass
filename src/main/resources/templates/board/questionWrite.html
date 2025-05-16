@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 min-h-screen flex justify-center items-start p-10">
 <div id="main" class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-10">
-    <form th:action="@{'/post/question?id='+${classroomId}}" th:object="${questionWriteDto}" method="post" class="space-y-8">
+    <form th:action="@{'/board/question/write?id='+${classroomId}}" th:object="${questionWriteDto}" method="post" class="space-y-8">
         <div>
             <label for="title" class="block text-2xl font-extrabold text-indigo-900 mb-3">제목</label>
             <input
