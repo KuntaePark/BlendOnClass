@@ -82,9 +82,9 @@
                              class="lesson-box w-15 h-15 relative border-4 border-(--primary-color) rounded-lg cursor-pointer overflow-hidden"
                              th:with="
                                  learnUrl=@{/student/lesson/continue/{id}(id=${lesson.lessonId}, grade=${selectedGrade}, subject=${selectedSubject})},
-                                 quizUrl = ${lesson.lessonType == T(com.blendonclass.constant.LTYPE).NORMAL}
-                                        ? @{/student/quiz/start(lessonId=${lesson.lessonId}, grade=${selectedGrade}, subject=${selectedSubject})}
-                                        : @{/student/quiz/chapter(chapterId=${lesson.chapterId}, grade=${selectedGrade}, subject=${selectedSubject})}
+                                  quizUrl=${lesson.lessonType eq 'NORMAL'}
+                                         ? @{/student/quiz/start(lessonId=${lesson.lessonId},grade=${selectedGrade},subject=${selectedSubject})}
+                                         : @{/student/quiz/chapter(chapterId=${chapter.chapId},grade=${selectedGrade},subject=${selectedSubject})}
                                 "
                              th:attr="data-title=${lesson.lessonTitle},
                                 data-brief=${lesson.lessonBrief},
@@ -184,25 +184,27 @@
 
             // 패널 내용 채우기
             panel.innerHTML = `
-            <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center justify-between mb-2">
                 <h3 class="font-semibold text-lg mb-2">${title}</h3>
-              <p class="text-sm text-gray-600 mb-2">진도율: ${progress}%</p>
-            </div>
-
-            <p class="text-gray-700 whitespace-pre-line mb-4">${brief}</p>
-
-            <div class="flex gap-2 justify-end">
-              <a href="${learnUrl}"
-                 class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                학습하기
-              </a>
-              <a href="${quizUrl}"
-                 class="px-4 py-2 ${
-                type === 'TEST' ? 'bg-yellow-500' : 'bg-green-500'
-            } text-white rounded hover:opacity-80">
-                ${type === 'TEST' ? '대단원 시험' : '퀴즈풀기'}
-              </a>
-            </div>
+                <p class="text-sm text-gray-600 mb-2">진도율: ${progress}%</p>
+              </div>
+              <p class="text-gray-700 whitespace-pre-line mb-4">${brief}</p>
+              <div class="flex gap-2 justify-end">
+                <a href="${learnUrl}"
+                   class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                  학습하기
+                </a>
+                ${ type === 'NORMAL'
+                        ? `<a href="${quizUrl}"
+                       class="px-4 py-2 bg-green-500 text-white rounded hover:opacity-80">
+                       퀴즈풀기
+                     </a>`
+                        : `<a href="${quizUrl}"
+                       class="px-4 py-2 bg-yellow-500 text-white rounded hover:opacity-80">
+                       대단원 시험
+                     </a>`
+                    }
+      </div>
 
           `;
 
