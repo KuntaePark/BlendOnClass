@@ -90,11 +90,12 @@ public class AdminAccountController {
                                       BindingResult bindingResult,
                                       Model model) {
         if(bindingResult.hasErrors()) {
+            model.addAttribute("genType","single");
             return "admin/accountGen";
         }
 
         accountService.saveAccount(accountDto);
-        return "redirect:/admin/accountGen";
+        return "redirect:/admin/accountGen?genType=single";
     }
 
     //파일 통한 계정 일괄 생성 요청
@@ -104,6 +105,7 @@ public class AdminAccountController {
         if(file.isEmpty()) {
             model.addAttribute("fileLoadError","파일을 등록하세요.");
             model.addAttribute("accountDto", new AccountDto());
+            model.addAttribute("genType","multi");
             return "admin/accountGen";
         }
         //file 서비스에 전달
@@ -112,8 +114,9 @@ public class AdminAccountController {
         } catch(IllegalArgumentException e) {
             model.addAttribute("fileLoadError",e.getMessage());
             model.addAttribute("accountDto", new AccountDto());
+            model.addAttribute("genType","multi");
             return "admin/accountGen";
         }
-        return "redirect:/admin/accountGen";
+        return "redirect:/admin/accountGen?genType=multi";
     }
 }
