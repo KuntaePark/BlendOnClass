@@ -43,17 +43,28 @@
                 </div>
 
                 <!-- 버튼은 고정 위치 -->
-                <div class="fixed bottom-[240px] right-[calc((100%-1280px)/2)] z-50">
-                    <div class="flex gap-2">
-                        <button id="submitBtn" class="bg-(--primary-color) text-white px-4 py-2 rounded-lg cursor-pointer">제출</button>
-                        <button id="skipBtn" class="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-pointer">건너뛰기</button>
-                        <button id="nextBtn" class="hidden bg-(--primary-color) text-white px-4 py-2 rounded ml-2">다음</button>
+            <!-- 버튼은 고정 위치 -->
+            <div class="fixed bottom-[120px] right-[calc((100%-1280px)/2)] z-50">
+                <div class="flex gap-2">
+
+                    <!-- 1) 제출/다음 영역: 같은 크기 박스 -->
+                    <div class="relative w-24">
+                        <!-- 제출 버튼 -->
+                        <button id="submitBtn" class="absolute inset-0 bg-(--primary-color) text-white px-4 py-2 rounded-full shadow-md cursor-pointer">제출</button>
+                        <!-- 다음 버튼 -->
+                        <button id="nextBtn" class="absolute inset-0 hidden bg-(--primary-color) text-white px-4 py-2 rounded-full shadow-md">다음</button>
                     </div>
+
+                    <!-- 건너뛰기 버튼-->
+                    <button id="skipBtn" class="bg-white text-(--primary-color) px-4 py-2 rounded-full shadow-md cursor-pointer">건너뛰기</button>
                 </div>
+            </div>
 
 
             <!-- 해설 모달 -->
-            <div id="solutionModal" class="hidden bg-white border rounded p-4 mt-6 shadow">
+            <div id="solutionModal" class="hidden fixed bottom-[260px]
+            left-[calc((100%-1280px)/2+24px)] w-[1280px]
+            bg-white border rounded p-4 shadow">
                 <p id="resultText" class="font-bold text-lg mb-2"></p>
                 <p id="solutionText" class="text-sm text-gray-700"></p>
             </div>
@@ -93,19 +104,14 @@
             function renderQuiz(index) {
                 const currentQuiz = quizList[index];
                 currentIndex = index;
-                submitBtn.classList.remove('hidden');
-                nextBtn.classList.add('hidden');
-                solutionModal.classList.add('hidden');
+                submitBtn.classList.toggle('hidden',false);
+                nextBtn.classList.toggle('hidden',true);
+                solutionModal.classList.toggle('hidden',true);
 
                 document.querySelectorAll('.nav-button').forEach((btn, idx) => {
-                    btn.classList.remove('bg-gray-300', 'bg-blue-800', 'bg-blue-300');
-                    if (idx === currentIndex) {
-                        btn.classList.add('bg-gray-300');
-                    } else if (answeredStatus[idx]) {
-                        btn.classList.add('bg-blue-800');
-                    } else {
-                        btn.classList.add('bg-blue-300');
-                    }
+                    btn.classList.toggle('bg-gray-300', idx === currentIndex);
+                    btn.classList.toggle('bg-blue-800', answeredStatus[idx] && idx !== currentIndex);
+                    btn.classList.toggle('bg-blue-300', !answeredStatus[idx] && idx !== currentIndex);
                 });
 
                 fetch(currentQuiz.contextJson)
@@ -163,9 +169,11 @@
                     .then(data => {
                         resultText.textContent = data.correct ? '정답입니다!' : '오답입니다.';
                         solutionText.innerHTML = (data.solution || '해설이 없습니다.').replace(/\\n/g, '<br>');
-                        solutionModal.classList.remove('hidden');
-                        submitBtn.classList.add('hidden');
-                        nextBtn.classList.remove('hidden');
+
+                        //버튼 위치 고정
+                        solutionModal.classList.toggle('hidden',false);
+                        submitBtn.classList.toggle('hidden',true);
+                        nextBtn.classList.toggle('hidden',false);
 
                         if (data.correct) correctCount++;
                         answeredStatus[currentIndex] = true;
@@ -173,6 +181,11 @@
             });
 
             nextBtn.addEventListener('click', () => {
+
+                solutionModal.classList.toggle('hidden',true);
+                submitBtn.classList.toggle('hidden',false);
+                nextBtn.classList.toggle('hidden',true);
+
                 if (currentIndex < quizList.length - 1) {
                     renderQuiz(currentIndex + 1);
                 } else {
