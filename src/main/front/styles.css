@@ -52,7 +52,7 @@
 
 /*-- admin --*/
 .main-container {
-    @apply flex-1 flex flex-col w-full px-8 py-10 gap-10 border-1 rounded-xl bg-white shadow-xl border-gray-200
+    @apply flex-1 flex flex-col max-h-full px-8 py-10 gap-10 border-1 rounded-xl bg-white shadow-xl border-gray-200
 }
 
 .main-container .title-box {
@@ -91,7 +91,7 @@
 
 /*-- board --*/
 .board-container {
-    @apply flex-1 p-4 rounded-lg flex flex-col gap-4;
+    @apply flex-1 rounded-lg flex flex-col overflow-hidden gap-4;
 }
 
 .board-title {
@@ -101,10 +101,16 @@
 .board-add-button {
     @apply bg-white border-gray-400 border-4 h-12 rounded-xl flex items-center justify-center
     text-gray-400 text-2xl font-bold shadow-sm hover:border-gray-900 hover:text-gray-900
+    transition-all duration-200 ease-in-out
+}
+
+.board-list {
+    @apply flex-1 flex flex-col gap-6 overflow-y-auto scroll-smooth;
 }
 
 .board-list-box {
-    @apply bg-blue-600 text-white rounded-xl p-4 w-full flex flex-row shadow-md hover:cursor-pointer;
+    @apply bg-blue-600 text-white rounded-xl p-8 w-full flex flex-row shadow-md hover:cursor-pointer
+    hover:bg-blue-700 transition-all duration-200 ease-in-out;
 }
 
 .board-list-box .title {

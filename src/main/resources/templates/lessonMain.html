@@ -14,9 +14,13 @@
 <body class="bg-white text-gray-900">
 
 <!-- 메인 컨텐츠 삽입 -->
-<div layout:fragment="main" id="main">
-
-    <div class="container mx-auto p-6 mt-4">
+<th:block layout:fragment="main">
+    <div class="main-container">
+        <div class="title-box">
+            <p>강의 듣기</p>
+            <p class="title-sub">원하는 과목의 강의를 골라 듣고, 퀴즈로 나를 테스트해보세요!</p>
+        </div>
+        <div class="container mx-auto mt-4">
         <!-- 학년/과목 선택 테이블 -->
         <table class="table-auto border border-gray-300 w-full text-center mb-6">
             <tbody>
@@ -106,7 +110,8 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
+</th:block>
 
 
 

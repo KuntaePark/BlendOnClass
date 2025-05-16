@@ -9,24 +9,30 @@
 <th:block layout:fragment="script"></th:block>
 
 
-<div layout:fragment="main" id="main" class="flex flex-row">
-    <div th:object="${assignmentShowDto}" class="flex-1">
-        <div th:text="*{title}"></div>
-        <div th:text="*{context}"></div>
-        <div th:text="*{#temporals.format(dueDate,'YYYY-MM-dd')}"></div>
-    </div>
-    <a th:href="@{'/post/submit?id='+${assignmentShowDto.abId}}" sec:authorize="hasRole('ROLE_STUDENT')">제출하기</a>
-    <div sec:authorize="hasRole('ROLE_TEACHER')" id="submit-list" class="w-[200px] flex flex-col">
-        <h2>제출자 목록</h2>
-        <div  th:each="submit:${submitStudentListDtos}" th:object="${submit}"
-        >
-            <a id="detail" th:href="@{'/post/submit/detail?sbId='+*{sbId}}"
-               th:classappend="*{isSubmit?'':'pointer-events-none'}">
-                <p th:text="*{email}"></p>
-                <p th:text="*{name}"></p>
-                <p th:text="*{isSubmit?'제출완료':'제출안함'}"></p>
-            </a>
+<th:block layout:fragment="main">
+    <div class="main-container">
+        <div class="title-box">
+            <p>과제</p>
+            <p class="title-sub">과제를 확인하고, 제출합니다.</p>
+        </div>
+        <div th:object="${assignmentShowDto}" class="flex-1">
+            <div th:text="*{title}"></div>
+            <div th:text="*{context}"></div>
+            <div th:text="*{#temporals.format(dueDate,'YYYY-MM-dd')}"></div>
+        </div>
+        <a th:href="@{'/post/submit?id='+${assignmentShowDto.abId}}" sec:authorize="hasRole('ROLE_STUDENT')">제출하기</a>
+        <div sec:authorize="hasRole('ROLE_TEACHER')" id="submit-list" class="w-[200px] flex flex-col">
+            <h2>제출자 목록</h2>
+            <div  th:each="submit:${submitStudentListDtos}" th:object="${submit}"
+            >
+                <a id="detail" th:href="@{'/post/submit/detail?sbId='+*{sbId}}"
+                   th:classappend="*{isSubmit?'':'pointer-events-none'}">
+                    <p th:text="*{email}"></p>
+                    <p th:text="*{name}"></p>
+                    <p th:text="*{isSubmit?'제출완료':'제출안함'}"></p>
+                </a>
+            </div>
         </div>
     </div>
-</div>
+</th:block>
 </html>
