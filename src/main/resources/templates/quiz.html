@@ -167,8 +167,34 @@
                 })
                     .then(res => res.json())
                     .then(data => {
+                        // 결과
                         resultText.textContent = data.correct ? '정답입니다!' : '오답입니다.';
-                        solutionText.innerHTML = (data.solution || '해설이 없습니다.').replace(/\\n/g, '<br>');
+                        resultText.classList.remove('text-(--primary-color)','text-red-500');
+                        resultText.classList.add(data.correct ? 'text-(--primary-color)' : 'text-red-500');
+                        // 모든 옵션 버튼 테두리 초기화
+                        document.querySelectorAll('.option-btn').forEach(btn => {
+                            btn.classList.remove('border-green-500','border-red-500','border-2');
+                        });
+                        // 정답 버튼에 녹색 테두리
+                        const correctBtn = document.querySelector(`.option-btn[data-answer="${data.answer}"]`);
+                        if(correctBtn){
+                            correctBtn.classList.add('border-green-500','border-2');
+                        }
+                        // 오답인 경우 선택한 버튼에 빨간 테두리
+                        if(!data.correct){
+                            const selectedBtn = document.querySelector(`.option-btn[data-answer="${studentAnswer}"]`);
+                            if(selectedBtn){
+                                selectedBtn.classList.add('border-red-500','border-2');
+                            }
+                        }
+                        // 해설 모달(정답+해설)
+                        const isChoice = currentQuiz.quizType === "CHOICE";
+                        const answerText = isChoice ? `${data.answer}번` : data.answer;
+
+                        solutionText.innerHTML = `
+                            <p class="mb-2 text-green-500"><strong>정답:</strong>${answerText}</p>
+                            <p>${(data.solution || '해설이 없습니다.').replace(/\\n/g, '<br>')}</p>
+                        `;
 
                         //버튼 위치 고정
                         solutionModal.classList.toggle('hidden',false);
