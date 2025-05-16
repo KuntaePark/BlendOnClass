@@ -11,9 +11,25 @@
     "quiz_id": 8,
     "question": "4<sup>x</sup>=64, 5<sup>y</sup>=625를 만족시키는 자연수 x,y에 대하여 x * y의 값을 구하시오."
   },
+
   {
     "quiz_id": 15,
     "question": "Translate into English: “안녕하세요, 제 이름은 김민준입니다.”"
+  },
+
+  {
+    "quiz_id": 12,
+    "question": "두 점 A, B에 대응하는 수가 각각 1과 2일 때 선분 AB의 길이는 얼마입니까?"
+  },
+
+  {
+    "quiz_id": 13,
+    "question": "어떤 정수 X에 대하여 X + 3 = 12일 때, X − 3의 값은 얼마입니까?"
+  },
+
+  {
+    "quiz_id": 14,
+    "question": "어떤 정수 X에 대하여 X − 6 = 8일 때, X + 6의 값은 얼마입니까?"
   },
 
   {
