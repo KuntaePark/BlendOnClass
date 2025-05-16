@@ -11,189 +11,273 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
-<div layout:fragment="main">
-    <div class="container mx-auto px-4 py-6">
+<body class="bg-white text-gray-900">
+    <div layout:fragment="main">
+        <div class="container items-center mb-6">
 
-        <h2 class="text-2xl font-bold mb-4" th:text="${lessonTitle}">소단원 제목</h2>
-        <!-- 문제 번호 네비게이션 -->
-        <div class="flex gap-2 mb-4" id="navButtons">
-            <button th:each="i : ${#numbers.sequence(1, quizList.size())}"
-                    class="nav-button w-8 h-8 text-center leading-8 rounded-full text-white bg-blue-300"
-                    type="button"
-                    th:text="${i}"></button>
+            <!-- 선택한 학년 과목 표시 -->
+            <div class="text-sm text-gray-500 mb-1 mt-3">
+                <span th:if="${grade != null}" th:text="|${grade}학년|"></span>
+                <span th:if="${subject != null}" th:text="${subject}"></span>
+            </div>
+
+            <div class="flex justify-between">
+                <h2 class="text-xl font-bold text-gray-800 mb-4" th:text="${lessonTitle}">소단원 제목</h2>
+
+                    <!-- 문제 번호 네비게이션 -->
+                    <div class="flex gap-2 mb-4 justify-end" id="navButtons">
+                        <button th:each="i : ${#numbers.sequence(1, quizList.size())}"
+                                class="nav-button w-10 h-10 text-center leading-8 rounded-full text-white bg-blue-300"
+                                type="button"
+                                th:text="${i}"></button>
+                    </div>
+            </div>
+                <div class="container relative pb-28">
+                    <!-- 문제 및 선택지 영역 -->
+                    <div class="mb-4">
+                        <div id="quizQuestion" class="text-lg font-semibold mb-4 text-left">문제 로딩 중...</div>
+                        <div id="optionsBox" class="mb-4 w-full max-w-md space-y-2 text-left"></div>
+                        <input type="hidden" id="studentAnswer" />
+                    </div>
+
+                </div>
+
+                <!-- 버튼은 고정 위치 -->
+            <!-- 버튼은 고정 위치 -->
+            <div class="fixed bottom-[120px] right-[calc((100%-1280px)/2)] z-50">
+                <div class="flex gap-2">
+
+                    <!-- 1) 제출/다음 영역: 같은 크기 박스 -->
+                    <div class="relative w-24">
+                        <!-- 제출 버튼 -->
+                        <button id="submitBtn" class="absolute inset-0 bg-(--primary-color) text-white px-4 py-2 rounded-full shadow-md cursor-pointer">제출</button>
+                        <!-- 다음 버튼 -->
+                        <button id="nextBtn" class="absolute inset-0 hidden bg-(--primary-color) text-white px-4 py-2 rounded-full shadow-md">다음</button>
+                    </div>
+
+                    <!-- 건너뛰기 버튼-->
+                    <button id="skipBtn" class="bg-white text-(--primary-color) px-4 py-2 rounded-full shadow-md cursor-pointer">건너뛰기</button>
+                </div>
+            </div>
+
+
+            <!-- 해설 모달 -->
+            <div id="solutionModal" class="hidden fixed bottom-[260px]
+            left-[calc((100%-1280px)/2+24px)] w-[1280px]
+            bg-white border rounded p-4 shadow">
+                <p id="resultText" class="font-bold text-lg mb-2"></p>
+                <p id="solutionText" class="text-sm text-gray-700"></p>
+            </div>
+
+            <!-- 결과 모달 -->
+            <div id="finalModal"
+                 class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+            bg-white border border-gray-300 rounded-lg shadow-lg z-50
+            w-[400px] max-w-[90%] p-6 text-center">
+                <p id="finalResultText" class="text-xl font-bold mb-4"></p>
+                <button id="goToLessonBtn" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">
+                    강의 메인으로
+                </button>
+            </div>
+
         </div>
 
-        <!-- 문제 및 선택지 영역 -->
-        <div>
-            <div id="quizQuestion" class="text-lg font-semibold mb-4">문제 로딩 중...</div>
-        </div>
-        <div id="optionsBox" class="mb-4 w-1/4 mx-auto space-y-2"></div>
-        <input type="hidden" id="studentAnswer" />
+        <!-- 스크립트 -->
+        <script th:inline="javascript">
+            const quizList = /*[[${quizList}]]*/ [];
+            const lessonId = /*[[${lessonId}]]*/ 0;
+            let currentIndex = 0;
+            let correctCount = 0;
+            const answeredStatus = Array(quizList.length).fill(false);
 
-        <button id="submitBtn" class="bg-green-500 text-white px-4 py-2 rounded">제출</button>
-        <button id="nextBtn" class="hidden bg-blue-500 text-white px-4 py-2 rounded ml-2">다음</button>
+            const quizQuestion = document.getElementById('quizQuestion');
+            const optionsBox = document.getElementById('optionsBox');
+            const studentAnswerInput = document.getElementById('studentAnswer');
+            const resultText = document.getElementById('resultText');
+            const solutionText = document.getElementById('solutionText');
+            const solutionModal = document.getElementById('solutionModal');
+            const finalModal = document.getElementById('finalModal');
+            const finalResultText = document.getElementById('finalResultText');
+            const submitBtn = document.getElementById('submitBtn');
+            const nextBtn = document.getElementById('nextBtn');
 
-        <!-- 해설 모달 -->
-        <div id="solutionModal" class="hidden bg-white border rounded p-4 mt-6 shadow">
-            <p id="resultText" class="font-bold text-lg mb-2"></p>
-            <p id="solutionText" class="text-sm text-gray-700"></p>
-        </div>
+            function renderQuiz(index) {
+                const currentQuiz = quizList[index];
+                currentIndex = index;
+                submitBtn.classList.toggle('hidden',false);
+                nextBtn.classList.toggle('hidden',true);
+                solutionModal.classList.toggle('hidden',true);
 
-        <!-- 결과 모달 -->
-        <div id="finalModal" class="hidden bg-white border rounded p-6 mt-6 shadow text-center">
-            <p id="finalResultText" class="text-xl font-bold mb-4"></p>
-            <button id="goToLessonBtn" class="bg-indigo-500 text-white px-4 py-2 rounded">강의 메인으로</button>
-        </div>
-    </div>
+                document.querySelectorAll('.nav-button').forEach((btn, idx) => {
+                    btn.classList.toggle('bg-gray-300', idx === currentIndex);
+                    btn.classList.toggle('bg-blue-800', answeredStatus[idx] && idx !== currentIndex);
+                    btn.classList.toggle('bg-blue-300', !answeredStatus[idx] && idx !== currentIndex);
+                });
 
-    <!-- 스크립트 -->
-    <script th:inline="javascript">
-        const quizList = /*[[${quizList}]]*/ [];
-        const lessonId = /*[[${lessonId}]]*/ 0;
-        let currentIndex = 0;
-        let correctCount = 0;
-        const answeredStatus = Array(quizList.length).fill(false);
+                fetch(currentQuiz.contextJson)
+                    .then(res => res.json())
+                    .then(data => {
+                        const quizData = data.find(q => q.quiz_id === currentQuiz.quizId);
+                        quizQuestion.innerHTML = quizData?.question || '문제를 찾을 수 없습니다.';
 
-        const quizQuestion = document.getElementById('quizQuestion');
-        const optionsBox = document.getElementById('optionsBox');
-        const studentAnswerInput = document.getElementById('studentAnswer');
-        const resultText = document.getElementById('resultText');
-        const solutionText = document.getElementById('solutionText');
-        const solutionModal = document.getElementById('solutionModal');
-        const finalModal = document.getElementById('finalModal');
-        const finalResultText = document.getElementById('finalResultText');
-        const submitBtn = document.getElementById('submitBtn');
-        const nextBtn = document.getElementById('nextBtn');
-
-        function renderQuiz(index) {
-            const currentQuiz = quizList[index];
-            currentIndex = index;
-            submitBtn.classList.remove('hidden');
-            nextBtn.classList.add('hidden');
-            solutionModal.classList.add('hidden');
+                        if (currentQuiz.quizType === 'CHOICE') {
+                            optionsBox.innerHTML = '';
+                            quizData.options.forEach(opt => {
+                                const btn = document.createElement('button');
+                                btn.type = 'button';
+                                btn.innerHTML = `${opt.optionNum}. ${opt.optionContext}`;
+                                btn.classList.add('option-btn', 'border', 'p-2', 'rounded', 'mb-2', 'block', 'w-full', 'text-left');
+                                btn.setAttribute('data-answer', opt.optionNum);
+                                btn.addEventListener('click', () => {
+                                    studentAnswerInput.value = opt.optionNum;
+                                    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('bg-blue-100'));
+                                    btn.classList.add('bg-blue-100');
+                                });
+                                optionsBox.appendChild(btn);
+                            });
+                        } else {
+                            optionsBox.innerHTML = `<input type="text" id="studentAnswer" class="border p-2 w-full" placeholder="답을 입력하세요" />`;
+                        }
+                    });
+            }
 
             document.querySelectorAll('.nav-button').forEach((btn, idx) => {
-                btn.classList.remove('bg-gray-300', 'bg-blue-800', 'bg-blue-300');
-                if (idx === currentIndex) {
-                    btn.classList.add('bg-gray-300');
-                } else if (answeredStatus[idx]) {
-                    btn.classList.add('bg-blue-800');
+                btn.addEventListener('click', () => renderQuiz(idx));
+            });
+
+            submitBtn.addEventListener('click', () => {
+                const currentQuiz = quizList[currentIndex];
+                const studentAnswer = document.getElementById('studentAnswer').value;
+
+                if (!studentAnswer) {
+                    alert('답을 입력하세요.');
+                    return;
+                }
+
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                fetch('/student/quiz/grade?lessonId=' + lessonId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken
+                    },
+                    body: JSON.stringify({ quizId: currentQuiz.quizId, studentAnswer })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        // 결과
+                        resultText.textContent = data.correct ? '정답입니다!' : '오답입니다.';
+                        resultText.classList.remove('text-(--primary-color)','text-red-500');
+                        resultText.classList.add(data.correct ? 'text-(--primary-color)' : 'text-red-500');
+                        // 모든 옵션 버튼 테두리 초기화
+                        document.querySelectorAll('.option-btn').forEach(btn => {
+                            btn.classList.remove('border-green-500','border-red-500','border-2');
+                        });
+                        // 정답 버튼에 녹색 테두리
+                        const correctBtn = document.querySelector(`.option-btn[data-answer="${data.answer}"]`);
+                        if(correctBtn){
+                            correctBtn.classList.add('border-green-500','border-2');
+                        }
+                        // 오답인 경우 선택한 버튼에 빨간 테두리
+                        if(!data.correct){
+                            const selectedBtn = document.querySelector(`.option-btn[data-answer="${studentAnswer}"]`);
+                            if(selectedBtn){
+                                selectedBtn.classList.add('border-red-500','border-2');
+                            }
+                        }
+                        // 해설 모달(정답+해설)
+                        const isChoice = currentQuiz.quizType === "CHOICE";
+                        const answerText = isChoice ? `${data.answer}번` : data.answer;
+
+                        solutionText.innerHTML = `
+                            <p class="mb-2 text-green-500"><strong>정답:</strong>${answerText}</p>
+                            <p>${(data.solution || '해설이 없습니다.').replace(/\\n/g, '<br>')}</p>
+                        `;
+
+                        //버튼 위치 고정
+                        solutionModal.classList.toggle('hidden',false);
+                        submitBtn.classList.toggle('hidden',true);
+                        nextBtn.classList.toggle('hidden',false);
+
+                        if (data.correct) correctCount++;
+                        answeredStatus[currentIndex] = true;
+                    });
+            });
+
+            nextBtn.addEventListener('click', () => {
+
+                solutionModal.classList.toggle('hidden',true);
+                submitBtn.classList.toggle('hidden',false);
+                nextBtn.classList.toggle('hidden',true);
+
+                if (currentIndex < quizList.length - 1) {
+                    renderQuiz(currentIndex + 1);
                 } else {
-                    btn.classList.add('bg-blue-300');
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                    fetch('/student/quiz/end?lessonId=' + lessonId, {
+                        method: 'POST',
+                        headers: { [csrfHeader]: csrfToken }
+                    }).then(() => {
+                        finalResultText.textContent = `총 ${quizList.length}문제 중 ${correctCount}문제 정답!`;
+                        finalModal.classList.remove('hidden');
+                    });
                 }
             });
 
-            fetch(currentQuiz.contextJson)
-                .then(res => res.json())
-                .then(data => {
-                    const quizData = data.find(q => q.quiz_id === currentQuiz.quizId);
-                    quizQuestion.innerHTML = quizData?.question || '문제를 찾을 수 없습니다.';
+            document.getElementById('goToLessonBtn').addEventListener('click', () => {
+                window.location.href = '/student/quiz/lessonMain';
+            });
 
-                    if (currentQuiz.quizType === 'CHOICE') {
-                        optionsBox.innerHTML = '';
-                        quizData.options.forEach(opt => {
-                            const btn = document.createElement('button');
-                            btn.type = 'button';
-                            btn.innerHTML = `${opt.optionNum}. ${opt.optionContext}`;
-                            btn.classList.add('option-btn', 'border', 'p-2', 'rounded', 'mb-2', 'block', 'w-full', 'text-left');
-                            btn.setAttribute('data-answer', opt.optionNum);
-                            btn.addEventListener('click', () => {
-                                studentAnswerInput.value = opt.optionNum;
-                                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('bg-blue-100'));
-                                btn.classList.add('bg-blue-100');
-                            });
-                            optionsBox.appendChild(btn);
-                        });
-                    } else {
-                        optionsBox.innerHTML = `<input type="text" id="studentAnswer" class="border p-2 w-full" placeholder="답을 입력하세요" />`;
-                    }
-                });
-        }
+            renderQuiz(0);
 
-        document.querySelectorAll('.nav-button').forEach((btn, idx) => {
-            btn.addEventListener('click', () => renderQuiz(idx));
-        });
+            document.addEventListener('visibilitychange', function (){
+                if(document.visibilityState === "hidden"){
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-        submitBtn.addEventListener('click', () => {
-            const currentQuiz = quizList[currentIndex];
-            const studentAnswer = document.getElementById('studentAnswer').value;
+                    fetch("/student/quiz/exit",{
+                        method: 'POST' ,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            [csrfHeader]: csrfToken
+                        },
+                        body: new URLSearchParams({lessonId:lessonId})
+                    }).then(() => {
+                        console.log("퀴즈 종료 요청 전송");
+                    }).catch(e => {
+                        console.error("퀴즈 종료 전송 실패:",e);
+                    });
+                }
+            });
 
-            if (!studentAnswer) {
-                alert('답을 입력하세요.');
-                return;
-            }
+            const skipBtn = document.getElementById('skipBtn');
 
-            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+            skipBtn.addEventListener('click', () => {
+                if (currentIndex < quizList.length - 1) {
+                    answeredStatus[currentIndex] = true; // 선택 없이도 건너뛴 것으로 처리
+                    renderQuiz(currentIndex + 1);
+                } else {
+                    // 마지막 문제에서 건너뛰었으면 자동 종료 처리
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-            fetch('/student/quiz/grade?lessonId=' + lessonId, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    [csrfHeader]: csrfToken
-                },
-                body: JSON.stringify({ quizId: currentQuiz.quizId, studentAnswer })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    resultText.textContent = data.correct ? '정답입니다!' : '오답입니다.';
-                    solutionText.innerHTML = (data.solution || '해설이 없습니다.').replace(/\\n/g, '<br>');
-                    solutionModal.classList.remove('hidden');
-                    submitBtn.classList.add('hidden');
-                    nextBtn.classList.remove('hidden');
-
-                    if (data.correct) correctCount++;
-                    answeredStatus[currentIndex] = true;
-                });
-        });
-
-        nextBtn.addEventListener('click', () => {
-            if (currentIndex < quizList.length - 1) {
-                renderQuiz(currentIndex + 1);
-            } else {
-                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-                fetch('/student/quiz/end?lessonId=' + lessonId, {
-                    method: 'POST',
-                    headers: { [csrfHeader]: csrfToken }
-                }).then(() => {
-                    finalResultText.textContent = `총 ${quizList.length}문제 중 ${correctCount}문제 정답!`;
-                    finalModal.classList.remove('hidden');
-                });
-            }
-        });
-
-        document.getElementById('goToLessonBtn').addEventListener('click', () => {
-            window.location.href = '/student/quiz/lessonMain';
-        });
-
-        renderQuiz(0);
-
-        document.addEventListener('visibilitychange', function (){
-            if(document.visibilityState === "hidden"){
-                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-                fetch("/student/quiz/exit",{
-                    method: 'POST' ,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        [csrfHeader]: csrfToken
-                    },
-                    body: new URLSearchParams({lessonId:lessonId})
-                }).then(() => {
-                    console.log("퀴즈 종료 요청 전송");
-                }).catch(e => {
-                    console.error("퀴즈 종료 전송 실패:",e);
-                });
-            }
-        });
+                    fetch('/student/quiz/end?lessonId=' + lessonId, {
+                        method: 'POST',
+                        headers: { [csrfHeader]: csrfToken }
+                    }).then(() => {
+                        finalResultText.textContent = `총 ${quizList.length}문제 중 ${correctCount}문제 정답!`;
+                        finalModal.classList.remove('hidden');
+                    });
+                }
+            });
 
 
 
-
-    </script>
-</div>
-
+        </script>
+    </div>
+</body>
 </html>

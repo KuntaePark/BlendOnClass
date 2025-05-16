@@ -1,9 +1,10 @@
 package com.blendonclass.control;
 
-import com.blendonclass.dto.QuizAnsweredDto;
-import com.blendonclass.dto.QuizDetailDto;
-import com.blendonclass.dto.QuizGradedDto;
+import com.blendonclass.dto.*;
+import com.blendonclass.entity.Lesson;
+import com.blendonclass.entity.LessonDetail;
 import com.blendonclass.service.CustomUserDetails;
+import com.blendonclass.service.LessonService;
 import com.blendonclass.service.QuizService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuizController {
     private final QuizService quizService;
+    private final LessonService lessonService;
 
 
     // 강의메인으로 이동
@@ -32,6 +34,8 @@ public class QuizController {
     // 소단원 퀴즈 시작
     @GetMapping("/start")
     public String startLessonQuiz(@RequestParam Long lessonId,
+                                  @RequestParam(required = false) Integer grade,
+                                  @RequestParam(required = false) String subject,
                                   @AuthenticationPrincipal CustomUserDetails userDetails,
                                   HttpSession session, Model model) {
         Long accountId = Long.parseLong(userDetails.getUsername());
@@ -44,16 +48,24 @@ public class QuizController {
 
         QuizDetailDto currentQuiz = quizList.get(0);
 
+        LessonDetailDto lessonDetail = lessonService.getLessonDetailSafe(lessonId);
+        model.addAttribute("lessonTitle", lessonDetail.getTitle());
+
+
         model.addAttribute("quizList", quizList);
         model.addAttribute("currentQuiz", currentQuiz);
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("currentIndex", 0);
+        model.addAttribute("grade", grade);
+        model.addAttribute("subject", subject);
         return"quiz";
     }
 
     // 대단원 시험 시작
     @GetMapping("/chapter")
     public String startChapterQuiz(@RequestParam Long chapterId,
+                                   @RequestParam(required = false) Integer grade,
+                                   @RequestParam(required = false) String subject,
                                    @AuthenticationPrincipal CustomUserDetails userDetails,
                                    HttpSession session, Model model) {
         Long accountId = Long.parseLong(userDetails.getUsername());
@@ -61,14 +73,20 @@ public class QuizController {
 
         QuizDetailDto currentQuiz = quizList.get(0);
 
-
         model.addAttribute("quizList", quizList);
         model.addAttribute("currentQuiz", currentQuiz);
         model.addAttribute("chapterId", chapterId);
         model.addAttribute("currentIndex", 0);
+        model.addAttribute("grade", grade);
+        model.addAttribute("subject", subject);
 
         Long lessonId = quizService.getFirstLessonIdOfChapter(chapterId);
         model.addAttribute("lessonId", lessonId);
+
+        LessonDetailDto lessonDetail = lessonService.getLessonDetailSafe(lessonId);
+        model.addAttribute("lessonTitle", lessonDetail.getTitle());
+
+
 
         return "quiz";
     }

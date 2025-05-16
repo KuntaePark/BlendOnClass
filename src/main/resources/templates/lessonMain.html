@@ -59,26 +59,28 @@
 
         <!-- 대단원 + 소단원 목록 -->
         <div th:if="${selectedGrade != null and selectedSubject != null}">
-            <div th:each="chapter : ${chapters}" class="chapter-container mb-10 rounded-lg bg-blue-50 px-4 py-2">
+            <div th:each="chapter : ${chapters}" class="chapter-container flex flex-col mb-10 rounded-lg bg-blue-50 px-4 py-2">
 
-                <div class="flex items-center gap-6">
-                    <!-- 대단원 대표 이미지 (필요시) -->
-                    <img src="/images/lecture.png"
-                         alt="대단원 이미지"
-                         class="w-30 h-20 object-contain"/>
+                <div class="flex justify-between items-center gap-6 mt-3 w-full">
+                    <div class="flex items-center gap-4">
+                        <!-- 대단원 대표 이미지  -->
+                        <img src="/images/lecture.png"
+                             alt="대단원 이미지"
+                             class="w-30 h-20 object-contain"/>
 
-                    <!-- 대단원 제목 -->
-                    <h2 class="text-xl font-bold mb-2" th:text="${chapter.title}">대단원 제목</h2>
+                        <!-- 대단원 제목 -->
+                        <h2 class="text-xl font-bold " th:text="${chapter.title}">대단원 제목</h2>
+                    </div>
 
                     <!-- 소단원 박스들 -->
-                    <div class="flex flex-1 gap-4 justify-end">
+                    <div class="flex gap-4 ml-auto">
                         <div th:each="lesson : ${chapter.lessonDtoList}"
                              class="lesson-box w-15 h-15 relative border-4 border-(--primary-color) rounded-lg cursor-pointer overflow-hidden"
                              th:with="
-                                 learnUrl=@{/student/lesson/continue/{id}(id=${lesson.lessonId})},
-                                 quizUrl=${lesson.lessonType == T(com.blendonclass.constant.LTYPE).NORMAL}
-                                         ? @{/student/quiz/start(lessonId=${lesson.lessonId})}
-                                         : @{/student/quiz/chapter(chapterId=${lesson.chapterId})}
+                                 learnUrl=@{/student/lesson/continue/{id}(id=${lesson.lessonId}, grade=${selectedGrade}, subject=${selectedSubject})},
+                                 quizUrl = ${lesson.lessonType == T(com.blendonclass.constant.LTYPE).NORMAL}
+                                        ? @{/student/quiz/start(lessonId=${lesson.lessonId}, grade=${selectedGrade}, subject=${selectedSubject})}
+                                        : @{/student/quiz/chapter(chapterId=${lesson.chapterId}, grade=${selectedGrade}, subject=${selectedSubject})}
                                 "
                              th:attr="data-title=${lesson.lessonTitle},
                                 data-brief=${lesson.lessonBrief},
@@ -93,13 +95,14 @@
                         </div>
                     </div>
                 </div>
-                    <!-- 인라인 모달 패널 (초기에는 숨김) -->
-                    <div class="lesson-detail-panel
+                <!-- 인라인 모달 패널 (초기에는 숨김) -->
+                <div class="lesson-detail-panel
+                                z-20
                                 max-h-0 opacity-0 overflow-hidden
                                 transition-all duration-300 ease-in-out
                                 bg-white border-2 border-gray-300
                                 rounded-lg mt-2">
-                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -190,8 +193,8 @@
               </a>
               <a href="${quizUrl}"
                  class="px-4 py-2 ${
-                    type === 'TEST' ? 'bg-yellow-500' : 'bg-green-500'
-                } text-white rounded hover:opacity-80">
+                type === 'TEST' ? 'bg-yellow-500' : 'bg-green-500'
+            } text-white rounded hover:opacity-80">
                 ${type === 'TEST' ? '대단원 시험' : '퀴즈풀기'}
               </a>
             </div>

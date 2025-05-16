@@ -69,5 +69,70 @@
       },
       { "optionNum": 5, "optionContext": "7,49" }
     ]
+  },
+
+  {
+    "quiz_id": 9,
+    "question": "다음 중 옳지 않은 것은?",
+    "options": [
+      {
+        "optionNum": 1,
+        "optionContext": "양수는 0보다 크고, 음수는 0보다 작다."
+      },
+      {
+        "optionNum": 2,
+        "optionContext": "두 양수에서는 절댓값이 큰 수가 크다."
+      },
+      { "optionNum": 3, "optionContext": "양수는 음수보다 크다." },
+      {
+        "optionNum": 4,
+        "optionContext": "두 음수에서는 절댓값이 큰 수가 작다."
+      },
+      {
+        "optionNum": 5,
+        "optionContext": "정수는 원점에서부터의 거리가 큰 수가 크다."
+      }
+    ]
+  },
+
+  {
+    "quiz_id": 10,
+    "question": "다음 설명 중에서 옳은 것은?",
+    "options": [
+      { "optionNum": 1, "optionContext": "0은 양의 유리수이다." },
+      { "optionNum": 2, "optionContext": "모든 정수는 자연수이다." },
+      { "optionNum": 3, "optionContext": "0과 1사이에는 유리수가 없다." },
+      {
+        "optionNum": 4,
+        "optionContext": "유리수 중에는 정수가 아닌 것도 있다."
+      },
+      {
+        "optionNum": 5,
+        "optionContext": "유리수는 양의 유리수와 음의 유리수로 이루어져 있다."
+      }
+    ]
+  },
+
+  {
+    "quiz_id": 11,
+    "question": "다음 중 옳지 않은 것은?",
+    "options": [
+      {
+        "optionNum": 1,
+        "optionContext": "수직선 위에서 어떤 수를 나타내는 점과 원점 사이의 거리가 그 수의 절댓값이다."
+      },
+      { "optionNum": 2, "optionContext": "+5와 -5의 절댓값은 모두 5이다." },
+      { "optionNum": 3, "optionContext": "절댓값이 가장 작은 수는 0이다." },
+      {
+        "optionNum": 4,
+        "optionContext": "절댓값이 클수록 그 수가 나타내는 점은 원점에서 멀리 떨어져 있다."
+      },
+      {
+        "optionNum": 5,
+        "optionContext": "a>b이면 a의 절댓값은 b의 절댓값보다 크다."
+      }
+    ]
   }
+
+
 ]
