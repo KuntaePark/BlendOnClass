@@ -1,22 +1,49 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-    <link rel="stylesheet" href="/css/question.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>질문 작성</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div id="main">
-        <form th:action="@{'/post/question?id='+${classroomId}}" th:object="${questionWriteDto}" method="post">
-            <h2>제목</h2>
-            <input type="text" name="title" th:value="${title}">
-            <input type="hidden" name="questionId" th:value="*{id}">
-            <h2>질문</h2>
-            <textarea name="qContext" cols="30" rows="20" th:text="${qContext}"></textarea><br>
-            <input type="submit" id="submit" value="글작성">
-        </form>
-    </div>
+<body class="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 min-h-screen flex justify-center items-start p-10">
+<div id="main" class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-10">
+    <form th:action="@{'/post/question?id='+${classroomId}}" th:object="${questionWriteDto}" method="post" class="space-y-8">
+        <div>
+            <label for="title" class="block text-2xl font-extrabold text-indigo-900 mb-3">제목</label>
+            <input
+                    id="title"
+                    type="text"
+                    name="title"
+                    th:value="${title}"
+                    class="w-full rounded-2xl border-4 border-indigo-700 px-6 py-4 text-xl font-semibold text-indigo-900 focus:border-pink-500 focus:ring-4 focus:ring-pink-300 outline-none shadow-lg transition"
+                    required
+            />
+            <input type="hidden" name="questionId" th:value="*{id}" />
+        </div>
+
+        <div>
+            <label for="qContext" class="block text-2xl font-extrabold text-indigo-900 mb-3">질문</label>
+            <textarea
+                    id="qContext"
+                    name="qContext"
+                    cols="30"
+                    rows="12"
+                    th:text="${qContext}"
+                    class="w-full rounded-2xl border-4 border-indigo-700 px-6 py-5 text-lg text-indigo-800 resize-none focus:border-pink-500 focus:ring-4 focus:ring-pink-300 outline-none shadow-lg transition"
+                    required
+            ></textarea>
+        </div>
+
+        <div>
+            <input
+                    type="submit"
+                    id="submit"
+                    value="글작성"
+                    class="w-full bg-pink-600 hover:bg-pink-700 text-white font-extrabold text-2xl px-12 py-5 rounded-full shadow-2xl transition transform hover:-translate-y-1 active:scale-95 cursor-pointer"
+            />
+        </div>
+    </form>
+</div>
 </body>
 </html>

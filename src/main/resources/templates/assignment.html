@@ -1,50 +1,108 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-    <link rel="stylesheet" href="/css/assignment.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>과제 제출</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <form th:action="@{/post/submit}" th:object="${assignmentShowDto}" method="post" enctype="multipart/form-data">
-        <div id="main">
-            <div id="assignment">
-                    <div id="title">
-                        <h2 class="title">제목</h2>
-                    </div>
-                    <input type="text"  style="width:230px;" th:field="*{title}">
-                    <div id="context">
-                        <h2 class="context">내용</h2>
-                    </div>
-                    <input type="hidden" name="isSubmit" value="false" />
-                    <textarea  cols="30" rows="20" th:field="*{context}"></textarea>
-                    <div id="dueDate">
-                        <h2 class="dueDate">제출기한</h2>
-                    </div>
-                    <input type="date" th:field="*{dueDate}" readonly>
-                    <div id="file">
-                        <h2 class="file">파일첨부</h2>
-                    </div>
-                    <input type="file" name="afileUrl"><br>
-                    <input type="hidden" name="abId" th:field="*{abId}"/>
-            </div>
-            <div id="list">
-                <button type="submit">제출하기</button>
-                <h2>제출자 목록</h2>
-                <div th:each="submit:${submitStudentListDtos}" th:object="${submit}">
-                    <a id="detail" th:href="@{/post/submit/detail}">
-                        <p th:text="*{email}"></p>
-                        <p th:text="*{name}"></p>
-                        <p th:text="*{isSubmit ? '제출완료':'제출안함'}"></p>
-                    </a>
-                </div>
-            </div>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 min-h-screen p-8 flex justify-center items-start">
+<form
+        th:action="@{/post/submit}"
+        th:object="${assignmentShowDto}"
+        method="post"
+        enctype="multipart/form-data"
+        class="bg-white rounded-3xl shadow-2xl max-w-6xl w-full flex gap-10 p-10"
+>
+    <!-- 왼쪽: 과제 정보 + 제출 폼 -->
+    <div id="assignment" class="flex-1 space-y-8">
+        <!-- 제목 -->
+        <div>
+            <h2 class="text-3xl font-extrabold text-indigo-900 mb-3">제목</h2>
+            <input
+                    type="text"
+                    th:field="*{title}"
+                    placeholder="과제 제목을 입력하세요"
+                    class="w-full rounded-2xl border-4 border-indigo-700 px-6 py-4 text-xl font-semibold text-indigo-900 focus:border-pink-500 focus:ring-4 focus:ring-pink-300 outline-none shadow-lg transition"
+            />
         </div>
-    </form>
+
+        <!-- 내용 -->
+        <div>
+            <h2 class="text-3xl font-extrabold text-indigo-900 mb-3">내용</h2>
+            <textarea
+                    th:field="*{context}"
+                    cols="30"
+                    rows="10"
+                    placeholder="과제 내용을 입력하세요"
+                    class="w-full rounded-2xl border-4 border-indigo-700 px-6 py-5 text-lg text-indigo-800 resize-none focus:border-pink-500 focus:ring-4 focus:ring-pink-300 outline-none shadow-lg transition"
+            ></textarea>
+        </div>
+
+        <!-- 제출기한 -->
+        <div>
+            <h2 class="text-3xl font-extrabold text-indigo-900 mb-3">제출기한</h2>
+            <input
+                    type="date"
+                    th:field="*{dueDate}"
+                    readonly
+                    class="w-48 rounded-2xl border-4 border-indigo-700 px-4 py-3 text-indigo-900 font-semibold cursor-not-allowed bg-indigo-100"
+            />
+        </div>
+
+        <!-- 파일첨부 -->
+        <div>
+            <h2 class="text-3xl font-extrabold text-indigo-900 mb-3">파일첨부</h2>
+            <input
+                    type="file"
+                    name="afileUrl"
+                    class="w-full text-indigo-900 font-semibold"
+            />
+        </div>
+
+        <input type="hidden" name="isSubmit" value="false" />
+        <input type="hidden" name="abId" th:field="*{abId}" />
+
+        <!-- 제출하기 버튼 -->
+        <div>
+            <button
+                    type="submit"
+                    class="bg-pink-600 hover:bg-pink-700 text-white font-extrabold text-2xl px-12 py-5 rounded-full shadow-2xl transition transform hover:-translate-y-1 active:scale-95"
+            >
+                제출하기
+            </button>
+        </div>
+    </div>
+
+    <!-- 오른쪽: 제출자 목록 -->
+    <div id="list" class="flex-[0.7] bg-indigo-50 rounded-3xl p-8 shadow-inner border-2 border-indigo-400 overflow-auto max-h-[650px]">
+        <h2 class="text-4xl font-extrabold text-indigo-900 mb-8">제출자 목록</h2>
+        <div
+                th:each="submit : ${submitStudentListDtos}"
+                th:object="${submit}"
+                class="space-y-6"
+        >
+            <a
+                    id="detail"
+                    th:href="@{/post/submit/detail}"
+                    class="block bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition cursor-pointer"
+            >
+                <p
+                        th:text="*{name}"
+                        class="text-xl font-bold text-indigo-900 mb-1 truncate"
+                ></p>
+                <p
+                        th:text="*{email}"
+                        class="text-indigo-700 mb-2 truncate"
+                ></p>
+                <p
+                        th:text="*{isSubmit ? '✅ 제출완료' : '❌ 제출안함'}"
+                        class="font-semibold"
+                        th:classappend="${isSubmit} ? 'text-green-600' : 'text-red-600'"
+                ></p>
+            </a>
+        </div>
+    </div>
+</form>
 </body>
 </html>
-<script>
-
-</script>
