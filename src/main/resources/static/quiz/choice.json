@@ -228,5 +228,69 @@
       { "optionNum": 2, "optionContext": "My friend is a Japan." },
       { "optionNum": 3, "optionContext": "My friend is Japanese person." }
     ]
+  },
+
+  {
+    "quiz_id": 33,
+    "question": "Choose the correct sentence to introduce your friend:",
+    "options": [
+      { "optionNum": 1, "optionContext": "This is my friend, Sarah." },
+      { "optionNum": 2, "optionContext": "This my friend is Sarah." },
+      { "optionNum": 3, "optionContext": "This is friend my, Sarah." }
+    ]
+  },
+
+  {
+    "quiz_id": 34,
+    "question": "Which question asks where your friend lives?",
+    "options": [
+      { "optionNum": 1, "optionContext": "Where does your friend live?" },
+      { "optionNum": 2, "optionContext": "Where your friend lives?" },
+      { "optionNum": 3, "optionContext": "Where do your friend live?" }
+    ]
+  },
+
+  {
+    "quiz_id": 36,
+    "question": "Fill in the blank: “He ______ playing basketball.”",
+    "options": [
+      { "optionNum": 1, "optionContext": "like" },
+      { "optionNum": 2, "optionContext": "likes" },
+      { "optionNum": 3, "optionContext": "liking" }
+    ]
+  },
+
+  {
+    "quiz_id": 37,
+    "question": "Choose the correct way to say your friend’s nationality:",
+    "options": [
+      { "optionNum": 1, "optionContext": "My friend is Japanese." },
+      { "optionNum": 2, "optionContext": "My friend is a Japan." },
+      { "optionNum": 3, "optionContext": "My friend is Japanese person." }
+    ]
+  },
+
+  {
+    "quiz_id": 39,
+    "question": "Which sentence correctly describes your friend’s hobby?",
+    "options": [
+      { "optionNum": 1, "optionContext": "She enjoy reading books." },
+      { "optionNum": 2, "optionContext": "She enjoys reading books." },
+      { "optionNum": 3, "optionContext": "She enjoying reading books." }
+    ]
+  },
+
+  {
+    "quiz_id": 40,
+    "question": "Choose the correct way to introduce your friend at a party:",
+    "options": [
+      { "optionNum": 1, "optionContext": "This is my friend, Sarah." },
+      { "optionNum": 2, "optionContext": "That is my friend Sarah." },
+      { "optionNum": 3, "optionContext": "Here my friend, Sarah is." }
+    ]
   }
+
+
+
+
 ]
