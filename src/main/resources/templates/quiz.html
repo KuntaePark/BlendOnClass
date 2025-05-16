@@ -234,8 +234,7 @@
 
             renderQuiz(0);
 
-            document.addEventListener('visibilitychange', function (){
-                if(document.visibilityState === "hidden"){
+            window.addEventListener('beforeunload', function (){
                     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
                     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
@@ -251,7 +250,6 @@
                     }).catch(e => {
                         console.error("퀴즈 종료 전송 실패:",e);
                     });
-                }
             });
 
             const skipBtn = document.getElementById('skipBtn');
