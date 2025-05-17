@@ -17,4 +17,6 @@ public interface AuthorityRepository extends JpaRepository<Authority, Long> {
     Optional<Authority> findByAccountIdAndClassroomId(Long accountId, Long accountId1);
 
     Authority findByAccount_Id(Long studentId);
+
+    List<Authority> findByClassroom_Id(Long classroomId);
 }

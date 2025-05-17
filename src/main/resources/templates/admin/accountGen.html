@@ -47,18 +47,18 @@
                     <p class="font-normal text-gray-500">단일 계정을 생성합니다.</p>
                 </div>
             <form id="single-create-form" th:action="@{/admin/accountGen/single}" method="post"
-                  th:object="${accountDto}" class="flex-2 flex flex-col gap-8">
+                  th:object="${accountDto}" class="flex-1 flex flex-col gap-8">
                 <div class="input-container">
                     <label th:for="name">이름</label>
                     <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                        class="text-red-600"></p>
-                    <input type="text" th:field="*{name}" class="input-area w-[400px]"/>
+                    <input type="text" th:field="*{name}" placeholder="홍길동" class="input-area"/>
                 </div>
                 <div class="input-container">
                     <label th:for="email">이메일</label>
                     <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
                        class="text-red-600"></p>
-                    <input type="text" th:field="*{email}" class="input-area w-[400px]"/>
+                    <input type="text" th:field="*{email}" placeholder="example@example.com" class="input-area"/>
                 </div>
                 <div class="input-container">
                     <label th:for="role">역할</label>

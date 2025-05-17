@@ -13,54 +13,82 @@
 <th:block layout:fragment="script">
     <script th:src="@{/javascript/classroomMng.js}"></script>
     <script th:src="@{/javascript/modal.js}"></script>
+    <script th:inline="javascript">
+        const result = [[${authListDtos}]];
+        $(function() {
+            if(result != null) {
+                //권한 목록 갱신
+                updateAuthTable(result);
+            }
+        })
+    </script>
 </th:block>
 
 
 <th:block layout:fragment="main">
+    <!-- 메인 컨테이너 -->
     <div class="main-container">
         <div class="flex flex-row items-center">
+            <!-- 제목 -->
             <div id="page-title" class="title-box flex-1">
                 <span>반 관리</span>
                 <span class="title-sub">반을 추가 및 삭제하고, 해당 반에 대한 권한을 수정합니다.</span>
             </div>
+            <!-- 버튼 박스 -->
             <div class="flex flex-row gap-2 justify-end">
                 <button type="button" class="rectangle-button bg-(--primary-color)" onclick="openModal($('#modal-add-classroom'))">반 추가</button>
                 <button type="button" class="rectangle-button bg-red-400" onclick="openModal($('#modal-reset-classroom'))">반 초기화</button>
             </div>
         </div>
-        <div class="flex-1 flex flex-row gap-2 pt-2">
+        <!-- 반 목록 및 권한 목록 표시 -->
+        <div class="flex-1 flex flex-row gap-2 pt-2 overflow-auto">
+            <!-- 반 목록 -->
             <div id="classroom-list-container" class="h-full flex-1 flex flex-col max-w-[200px] p-2 border-1 bg-(--primary-color) text-white rounded-xl">
                 <div class="text-xl w-full text-center py-2">반 목록</div>
                 <div class="w-full h-[1px] mb-2 bg-gray-300"></div>
-                <ul id="class-list" class="flex flex-1 flex-col gap-2 overflow-scroll scrollbar-hide scroll-py-8">
+                <ul id="class-list" class="flex flex-1 flex-col gap-2 overflow-auto scrollbar-hide scroll-py-8">
                     <li th:each="classroomDto : ${classroomDtos}" th:object="${classroomDto}"
                     class="py-1 rounded-2xl text-center  hover:bg-gray-100 hover:text-gray-800">
                         <a th:text="*{grade+'학년 '+classroomNum+'반'}" th:href="@{'/admin/classroom?id='+*{id}}"></a>
                     </li>
                 </ul>
             </div>
-            <div id="classroom-account-list" class="h-full flex-1 p-2 flex flex-col gap-2 overflow-hidden">
-                <span class="text-xl py-2">소속 계정 목록</span>
-                <th:block th:if="${accountListDtos != null && accountListDtos.size() > 0}">
-                <div id="table-header" class="flex justify-end">
-                    <form class="flex-1 flex flex-row items-center gap-2"
-                          th:action="@{/admin/accounts}" method="get">
-                        <!-- 검색 바 -->
-                        <th:block th:replace="~{fragment/components::searchBar}"></th:block>
-                    </form>
-                    <button class="rectangle-button bg-(--primary-color)">
-                        <span class="text-white text-base">권한 추가</span>
-                    </button>
-                </div>
-                    <div th:replace="~{fragment/account-table :: accountTable(${accountListDtos},
-                    ~{fragment/account-table::classroommng-action})}" class="flex-1 overflow-auto"></div>
+            <!-- 반 권한 목록 -->
+            <div id="classroom-account-list" class="h-full flex-1 p-2 flex flex-col gap-2 overflow-auto">
+                <!-- 소속 계정 존재 시 -->
+                <th:block th:if="${authListDtos != null && authListDtos.size() > 0}">
+                    <div id="table-header" class="flex flex-row justify-end">
+                        <p class="flex-1 text-xl py-2">소속 계정 목록</p>
+                        <button class="rectangle-button bg-(--primary-color)" th:onclick="redirectTo([[${'/admin/classroom/authAdd?id='+classroomId}]])">
+                            <span class="text-white text-base">권한 추가</span>
+                        </button>
+                    </div>
+                    <!-- 테이블 -->
+                    <div  class="flex-1 overflow-auto">
+                        <table class="admin-table">
+                            <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>로그인 아이디</th>
+                                <th>이메일</th>
+                                <th>구분</th>
+                                <th>권한 종류</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </th:block>
-                <th:block th:unless="${accountListDtos != null}">
+                <!-- 반 미선택 시 -->
+                <th:block th:unless="${authListDtos != null}">
                     <div class="bg-gray-100 flex-1 flex items-center justify-center rounded-2xl">
                         <span class="text-gray-900 text-xl">반을 선택해주세요.</span>
                     </div>
                 </th:block>
-                <th:block th:if="${accountListDtos != null && accountListDtos.size() == 0}">
+                <!-- 해당 반에 대한 권한 미존재 시 -->
+                <th:block th:if="${authListDtos != null && authListDtos.size() == 0}">
                     <div class="bg-gray-100 flex-1 flex items-center justify-center rounded-2xl">
                         <span class="text-gray-900 text-xl">해당 반에 대한 권한을 가지고 있는 계정이 없습니다.</span>
                     </div>
@@ -68,6 +96,7 @@
             </div>
         </div>
     </div>
+    <!-- 반 추가 모달 -->
     <div id="modal-add-classroom" class="modal-container w-[600px] h-[600px]">
         <div class="modal-main">
             <div class="modal-header flex flex-row items-center mb-2">
@@ -100,6 +129,7 @@
             </div>
         </div>
     </div>
+    <!-- 반 리셋 모달 -->
     <div id="modal-reset-classroom" class="modal-container w-[400px] h-[320px]">
         <div class="modal-main">
             <div class="flex-1">
@@ -118,6 +148,27 @@
             </div>
         </div>
     </div>
+    <!-- 권한 삭제 모달 -->
+    <div id="delete-auth-modal" class="modal-container w-[400px] h-[320px]">
+        <div class="modal-main">
+            <div class="flex-1">
+                <div class="flex">
+                    <div class="m-auto w-14 h-14 bg-red-400 rounded-full flex items-center justify-center">
+                        <img class="w-8 h-8 invert mb-1" src="/images/icons/icon_warning.png" alt="경고 아이콘">
+                    </div>
+                </div>
+                <p class="font-bold my-8 text-center">
+                    해당 권한을 삭제합니다.
+                    <br/>계속하시겠습니까?
+                </p>
+            </div>
+            <div class="button-box">
+                <button class="rectangle-button bg-red-400 w-12" onclick="deleteAuth()">확인</button>
+                <button class="rectangle-button bg-(--primary-color) w-12" onclick="closeModal($('#delete-auth-modal'))">취소</button>
+            </div>
+        </div>
+    </div>
+    <!-- 모달 표시 시 배경 필터 -->
     <div id="background-overlay" onclick="closeAllModal()" class="fixed w-[100vw] h-[100vh] top-0 left-0 opacity-80 bg-gray-400 z-40 hidden"></div>
 </th:block>
 </html>

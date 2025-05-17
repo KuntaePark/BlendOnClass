@@ -20,6 +20,7 @@ import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,24 +44,21 @@ public class AccountService {
 
 
     //계정 목록 검색 및 반환
-    public Page<AccountListDto> searchAccountList(Pageable pageable, AccountSearchDto accountSearchDto) {
+    public Page<AccountListDto> searchAccountList(AccountSearchDto accountSearchDto) {
         //todo
         //검색
-        List<Account> accounts = null;
+        Pageable pageable = PageRequest.of(accountSearchDto.getPageNum(), 8);
+        Page<Account> accounts = null;
         String keyword = accountSearchDto.getKeyword();
         ROLE role = accountSearchDto.getRoleType();
         System.out.println(role + " " + keyword);
         if(role != null) {
-            accounts = accountRepository.findByRoleAndNameContaining(role, keyword, pageable);
+            accounts = accountRepository.findByRoleAndNameContainingAndRoleNot(role, keyword, ROLE.ADMIN, pageable);
         } else {
-            accounts = accountRepository.findByNameContaining(keyword, pageable);
+            accounts = accountRepository.findByNameContainingAndRoleNot(keyword, ROLE.ADMIN, pageable);
         }
 
-        List<AccountListDto> accountListDtos = accounts.stream()
-                .map(AccountListDto::from)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(accountListDtos, pageable, accounts.size());
+        return accounts.map(AccountListDto::from);
     }
 
     //단일 계정 정보 조회, 계정 정보 수정 시 필요
@@ -216,13 +214,5 @@ public class AccountService {
     //계정 삭제
     public void deleteAccount(Long accountId) {
         accountRepository.deleteById(accountId);
-    }
-
-
-    public List<Account> getAllAccounts() {
-        Iterable<Account> iterable = accountRepository.findAll();
-        List<Account> accounts = new ArrayList<>();
-        iterable.forEach(accounts::add);
-        return accounts;
     }
 }

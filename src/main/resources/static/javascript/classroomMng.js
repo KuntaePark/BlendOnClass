@@ -1,5 +1,6 @@
 //onload
 const toAddClasses = [];
+let toDelete = null;
 $(function() {
     $('#class-input').on('submit', function(e) {
         e.preventDefault();
@@ -20,6 +21,50 @@ $(function() {
         }
     })
 });
+
+//계정 목록 업데이트
+function updateAuthTable(result) {
+    //update table
+    const $tbody = $('.admin-table tbody');
+    $tbody.empty();
+    result.forEach((row) => {
+        console.log(row);
+        const $tr = $('<tr>');
+        const $name = $('<td>').text(row.name);
+        const $loginId = $('<td>').text(row.loginId);
+        const $email = $('<td>').text(row.email);
+        let roleText;
+        switch(row.role) {
+            case 'STUDENT':
+                roleText = '학생';
+                break;
+            case 'TEACHER':
+                roleText = '교사';
+                break;
+        }
+        const $role = $('<td>').text(roleText);
+        const $aType = $('<td>').text(row.atype);
+        const $td = $('<td>').addClass('action-column');
+
+        const $deleteButton = $('<button/>', {
+            "class" : "square-button-10 bg-red-400 flex",
+        })
+        $deleteButton.on('click', function(e) {
+            const $deleteAuthModal = $('#delete-auth-modal');
+            openModal($deleteAuthModal);
+            toDelete = row.id;
+        });
+
+        $('<img/>', {
+            "src" : "/images/icons/icon_delete.png",
+            "class" : "min-w-6 h-6 invert m-auto"
+        }).appendTo($deleteButton);
+
+        $td.append($deleteButton);
+        $tr.append($name, $loginId, $email, $role, $aType, $td);
+        $tbody.append($tr);
+    })
+}
 
 function updateList() {
     const toAddList = $("#to-add-list");
@@ -73,5 +118,9 @@ async function requestClassroomAdd() {
         }
         });
     });
+}
 
+function deleteAuth() {
+    alert("delete auth"+toDelete);
+    toDelete = null;
 }

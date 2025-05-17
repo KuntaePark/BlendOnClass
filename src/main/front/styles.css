@@ -30,11 +30,11 @@
 
 /*-- table --*/
 .admin-table {
-    @apply table-auto border-collapse text-left mt-2 w-full;
+    @apply table-auto border-collapse text-left w-full;
 }
 
 .admin-table thead th{
-    @apply text-black font-bold p-2 sticky top-0;
+    @apply text-black font-bold p-2 sticky bg-white top-0 border-b-1 border-gray-200;
 }
 
 .admin-table tbody tr {
@@ -50,9 +50,10 @@
 }
 /*-- table --*/
 
-/*-- admin --*/
+/*-- main container --*/
 .main-container {
-    @apply flex-1 flex flex-col max-h-full px-8 py-10 gap-10 border-1 rounded-xl bg-white shadow-xl border-gray-200
+    @apply flex-1 flex flex-col max-h-full
+    px-8 py-10 gap-10 border-1 rounded-xl bg-white shadow-xl border-gray-200
 }
 
 .main-container .title-box {
@@ -62,7 +63,7 @@
 .main-container .title-box .title-sub {
     @apply text-base font-light;
 }
-/*-- admin --*/
+/*-- main container --*/
 
 
 /*-- class list li --*/
@@ -70,6 +71,7 @@
     @apply h-10 p-2 shadow-sm bg-white my-2 mx-1 rounded flex items-center;
 }
 
+/*-- scroll hide --*/
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
@@ -78,6 +80,7 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;     /* Firefox */
 }
+/*-- scroll hide --*/
 
 /*-- inputs --*/
 .input-container {
@@ -128,3 +131,4 @@
 .white-dot {
     @apply min-w-2 h-2 my-2 mr-2 bg-white rounded-full;
 }
+/*-- board --*/

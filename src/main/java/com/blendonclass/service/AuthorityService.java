@@ -6,6 +6,7 @@ package com.blendonclass.service;
 import com.blendonclass.constant.ROLE;
 import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.admin.AccountListDto;
+import com.blendonclass.dto.admin.AuthListDto;
 import com.blendonclass.dto.admin.AuthReqListDto;
 import com.blendonclass.entity.Account;
 import com.blendonclass.entity.AuthRequest;
@@ -75,14 +76,11 @@ public class AuthorityService {
     }
 
     //특정 반의 권한 보유자 모두 조회
-    public List<AccountListDto> getAllAccountsOfClassroom(Long classroomId){
-        Classroom classroom = classroomRepository.findById(classroomId).get();
-        List<Authority> authorities = authorityRepository.findByClassroom(classroom);
-        List<AccountListDto> accountListDtos = authorities.stream()
-                .map(authority -> AccountListDto.from(authority.getAccount()))
-                .collect(Collectors.toList());
+    public List<AuthListDto> getAllAccountsOfClassroom(Long classroomId){
+        List<Authority> authorities = authorityRepository.findByClassroom_Id(classroomId);
+       List<AuthListDto> authListDtos = authorities.stream().map(AuthListDto::from).collect(Collectors.toList());
 
-        return accountListDtos;
+        return authListDtos;
     }
 
     public List<AccountListDto> getAllStudentsOfClassroom(Long classroommId) {
