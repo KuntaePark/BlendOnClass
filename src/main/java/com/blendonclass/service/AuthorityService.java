@@ -5,6 +5,7 @@ package com.blendonclass.service;
 
 import com.blendonclass.constant.ROLE;
 import com.blendonclass.constant.SUBJECT;
+import com.blendonclass.dto.ClassroomListDto;
 import com.blendonclass.dto.admin.AccountListDto;
 import com.blendonclass.dto.admin.AuthListDto;
 import com.blendonclass.dto.admin.AuthReqListDto;
@@ -37,16 +38,14 @@ public class AuthorityService {
     private final AccountRepository accountRepository;
     private final ClassroomRepository classroomRepository;
 
-    public List<Classroom> getClassroomsByAccountId(Long accountId) {
+    public List<ClassroomListDto> getClassroomsByAccountId(Long accountId) {
         List<Authority> authorities = authorityRepository.findByAccountId(accountId);
         return authorities.stream()
-                .map(Authority::getClassroom)
+                .map(ClassroomListDto::fromAuthority)
                 .distinct()
                 .collect(Collectors.toList());
     }
 
-    //권한 목록을 엑셀 파일로 받아 일괄 생성
-    public void addAuthorityByFile(MultipartFile file) {}
 
     //단일 권한 추가
     public void addAuthority(Long accountId, Long classroomId, SUBJECT authType) {

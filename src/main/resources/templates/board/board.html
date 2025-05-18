@@ -2,6 +2,7 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{fragment/default}">
 
 <th:block layout:fragment="css"></th:block>
@@ -21,12 +22,19 @@
                     <img class="w-8 h-8 mt-1" src="/images/icons/icon_notice.png" alt="공지 아이콘">
                     <p>공지사항</p>
                 </div>
-                <a class="board-add-button" th:href="@{'/board/notice/write?id='+${classroomId}}">
-                    <p class="">+</p>
-                </a>
+                <th:block sec:authorize="hasRole('ROLE_TEACHER')">
+                    <a class="board-add-button" th:href="@{'/board/notice/write?classroomId='+${classroomId}}">
+                        <p class="">+</p>
+                    </a>
+                </th:block>
+                <th:block sec:authorize="!hasRole('ROLE_TEACHER')">
+                    <div class="board-add-button-disabled">
+                        <p class="">+</p>
+                    </div>
+                </th:block>
                 <div class="board-list">
                     <div class="board-list-box" th:each="notice : ${noticeShowDtos.getContent()}"
-                    th:onclick="redirectTo([[${'/board/notice/detail?id='+notice.nbId}]])">
+                    th:onclick="redirectTo([[${'/board/notice/detail?id='+notice.nbId+'&classroomId='+classroomId}]])">
                         <div class="white-dot"></div>
                         <div>
                             <div class="title" th:text="${notice.title}"></div>
@@ -42,12 +50,19 @@
                     <img class="w-8 h-8 mt-1" src="/images/icons/icon_question.png" alt="질문 아이콘">
                     질문 게시판
                 </div>
-                <a class="board-add-button" th:href="@{'/board/question/write?id='+${classroomId}}">
-                    <p class="">+</p>
-                </a>
+                <th:block sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a class="board-add-button" th:href="@{'/board/question/write?classroomId='+${classroomId}}">
+                        <p class="">+</p>
+                    </a>
+                </th:block>
+                <th:block sec:authorize="!hasRole('ROLE_STUDENT')">
+                    <div class="board-add-button-disabled">
+                        <p class="">+</p>
+                    </div>
+                </th:block>
                 <div class="board-list">
                     <div class="board-list-box" th:each="question : ${questionShowDtos.getContent()}"
-                        th:onclick="redirectTo([[${'/board/question/detail?id='+question.id}]])">
+                        th:onclick="redirectTo([[${'/board/question/detail?id='+question.id+'&classroomId='+classroomId}]])">
                         <div class="white-dot"></div>
                         <div>
                             <div class="title" th:text="${question.title}">
@@ -65,9 +80,16 @@
                     <img class="w-8 h-8 mt-1" src="/images/icons/icon_homework.png" alt="과제 아이콘">
                     과제
                 </div>
-                <a class="board-add-button" th:href="@{'/board/assignment/write?id='+${classroomId}}">
-                    <p class="">+</p>
-                </a>
+                <th:block sec:authorize="hasRole('ROLE_TEACHER')">
+                    <a class="board-add-button" th:href="@{'/board/assignment/write?id='+${classroomId}}">
+                        <p class="">+</p>
+                    </a>
+                </th:block>
+                <th:block sec:authorize="!hasRole('ROLE_TEACHER')">
+                    <div class="board-add-button-disabled">
+                        <p class="">+</p>
+                    </div>
+                </th:block>
                 <div class="board-list">
                     <div class="board-list-box" th:each="assignment : ${assignmentShowDtos.getContent()}"
                     th:onclick="redirectTo([[${'board/assignment/detail?abId='+assignment.abId+'&classroomId='+classroomId}]])">

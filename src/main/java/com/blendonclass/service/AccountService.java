@@ -120,7 +120,7 @@ public class AccountService {
     }
 
     //엑셀 파일로 계정 일괄 생성, 생성 성공 시 로그인 아이디, 비밀번호 저장된 csv 파일 전달
-    public File createAccountByFile(MultipartFile file) throws IllegalArgumentException {
+    public String createAccountByFile(MultipartFile file) throws IllegalArgumentException {
         //허용되지 않은 확장자 사용 시 exception
         String fileName = file.getOriginalFilename();
         if(fileName != null && !fileName.isBlank()) {
@@ -197,14 +197,17 @@ public class AccountService {
                         new String[] {record[0], record[1], record[2], loginId, password}
                 );
             }
-            
-            //생성 성공 했을 시, 생성된 로그인 아이디, 비밀번호 csv 파일로 저장
-            File tempFile = File.createTempFile("생성결과", ".csv");
-            CSVWriter csvWriter = new CSVWriter(new FileWriter(tempFile));
-            csvWriter.writeNext(new String[] {"이름", "이메일", "구분", "아이디", "비밀번호"});
-            csvWriter.writeAll(results);
 
-            return tempFile;
+            //생성 성공 했을 시, 생성된 로그인 아이디, 비밀번호 csv 파일로 저장
+            File genFile = new File("C:/files/admin/생성결과.csv");
+            try(CSVWriter csvWriter = new CSVWriter(new FileWriter(genFile, false)); ) {
+                csvWriter.writeNext(new String[] {"이름", "이메일", "구분", "아이디", "비밀번호"});
+                csvWriter.writeAll(results);
+            } catch(IOException e) {
+                throw new IllegalArgumentException("완료 csv 작성 중 오류가 발생했습니다.");
+            }
+
+            return "/files/admin/"+genFile.getName();
             
         } catch (IOException | CsvException e) {
             throw new IllegalArgumentException("파일 처리 중 오류가 발생했습니다.");

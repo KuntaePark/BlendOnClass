@@ -26,6 +26,18 @@
     @apply h-10 p-2 text-white rounded-md flex items-center justify-center hover:opacity-80 hover:cursor-pointer;
 }
 
+.page-button {
+    @apply hover:font-bold hover:cursor-pointer;
+}
+
+.button-hover {
+    @apply hover:cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out;
+}
+
+.button-selected {
+    @apply border-3 rounded-md border-white;
+}
+
 /*-- buttons --*/
 
 /*-- table --*/
@@ -53,7 +65,8 @@
 /*-- main container --*/
 .main-container {
     @apply flex-1 flex flex-col max-h-full
-    px-8 py-10 gap-10 border-1 rounded-xl bg-white shadow-xl border-gray-200
+    px-8 py-10 gap-10 rounded-xl bg-white;
+    /*shadow-xl border-gray-200 border-1*/
 }
 
 .main-container .title-box {
@@ -62,6 +75,10 @@
 
 .main-container .title-box .title-sub {
     @apply text-base font-light;
+}
+
+.rounded-border-box {
+    @apply rounded-xl border-1 border-gray-300;
 }
 /*-- main container --*/
 
@@ -83,8 +100,16 @@
 /*-- scroll hide --*/
 
 /*-- inputs --*/
+.input-form {
+    @apply flex flex-col gap-6 flex-1;
+}
+
 .input-container {
     @apply flex flex-col justify-start gap-2;
+}
+
+.input-container label {
+    @apply font-bold text-xl;
 }
 
 .input-area {
@@ -105,6 +130,11 @@
     @apply bg-white border-gray-400 border-4 h-12 rounded-xl flex items-center justify-center
     text-gray-400 text-2xl font-bold shadow-sm hover:border-gray-900 hover:text-gray-900
     transition-all duration-200 ease-in-out
+}
+
+.board-add-button-disabled {
+    @apply bg-white border-gray-200 border-4 h-12 rounded-xl flex items-center justify-center
+    text-gray-200 text-2xl font-bold shadow-sm
 }
 
 .board-list {

@@ -81,14 +81,14 @@ function updatePaging(result) {
         $prev.hide();
     } else {
         $prev.show();
-        $prev.attr('onclick','getSearchResult(event,'+(result.number - 1)+')');
+        $prev.attr('onclick','getSearchResult('+(result.number - 1)+')');
     }
 
     if(result.number === (result.totalPages - 1)) {
         $next.hide();
     } else {
         $next.show();
-        $next.attr('onclick','getSearchResult(event,'+(result.number + 1)+')');
+        $next.attr('onclick','getSearchResult('+(result.number + 1)+')');
     }
 
     //페이지 정보 갱신

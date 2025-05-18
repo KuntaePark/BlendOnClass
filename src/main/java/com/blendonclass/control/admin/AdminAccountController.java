@@ -4,10 +4,7 @@ package com.blendonclass.control.admin;
     계정 관리 페이지
  */
 
-import com.blendonclass.dto.admin.AccountDto;
-import com.blendonclass.dto.admin.AccountListDto;
-import com.blendonclass.dto.admin.AccountSearchDto;
-import com.blendonclass.dto.admin.AuthReqListDto;
+import com.blendonclass.dto.admin.*;
 import com.blendonclass.service.AccountService;
 import com.blendonclass.service.AuthorityService;
 import jakarta.validation.Valid;
@@ -66,7 +63,12 @@ public class AdminAccountController {
     
     //수정된 계정 정보 저장 요청
     @PostMapping("/saveInfo")
-    public String saveAccountInfo(AccountDto accountDto, Model model) {
+    public String saveAccountInfo(@Valid AccountDto accountDto,
+                                  BindingResult bindingResult,
+                                  Model model) {
+        if(bindingResult.hasErrors()) {
+            return "admin/accountMod";
+        }
         accountService.updateAccount(accountDto);
         return "redirect:/admin/accounts";
     }
@@ -95,8 +97,11 @@ public class AdminAccountController {
             return "admin/accountGen";
         }
 
-        accountService.saveAccount(accountDto);
-        return "redirect:/admin/accountGen?genType=single";
+        AccountGeneratedDto accountGeneratedDto = accountService.saveAccount(accountDto);
+        model.addAttribute("accountGeneratedDto", accountGeneratedDto);
+        model.addAttribute("accountDto", accountDto);
+        model.addAttribute("genType","single");
+        return "admin/accountGen";
     }
 
     //파일 통한 계정 일괄 생성 요청
@@ -110,14 +115,20 @@ public class AdminAccountController {
             return "admin/accountGen";
         }
         //file 서비스에 전달
+        String downloadUrl = null;
         try {
-            accountService.createAccountByFile(file);
+            downloadUrl = accountService.createAccountByFile(file);
+
         } catch(IllegalArgumentException e) {
             model.addAttribute("fileLoadError",e.getMessage());
             model.addAttribute("accountDto", new AccountDto());
             model.addAttribute("genType","multi");
             return "admin/accountGen";
         }
-        return "redirect:/admin/accountGen?genType=multi";
+
+        model.addAttribute("accountDto", new AccountDto());
+        model.addAttribute("genType","multi");
+        model.addAttribute("downloadUrl", downloadUrl);
+        return "admin/accountGen";
     }
 }

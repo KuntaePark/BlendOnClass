@@ -30,7 +30,7 @@ public class NoticeBoardService {
     public void saveNotice(NoticeWriteDto noticeWriteDto, MultipartFile multipartFile) {
         //계정 id와 반 id로 검색
         Authority authority = authorityRepository.findByAccountIdAndClassroomId(noticeWriteDto.getWriterId(),noticeWriteDto.getClassroomId())
-                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다."));
+                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다.")).get(0);
         String fileName = null;
         if (multipartFile != null && !multipartFile.isEmpty()) {
             try {
@@ -52,11 +52,12 @@ public class NoticeBoardService {
         noticeBoardRepository.save(noticeBoard);
     }
 
+    //공지 삭제
     public void deleteNotice(Long nbId){
-
         noticeBoardRepository.deleteById(nbId);
     }
 
+    //board main용 notice 목록
     public Page<NoticeShowDto> getNoticeList(Pageable pageable, Long classroomId){
         List<NoticeShowDto> noticeList = noticeBoardRepository.findNoticeBoardByClassroomId(classroomId,pageable)
                 .stream().map(NoticeShowDto::from).collect(Collectors.toList());
@@ -64,6 +65,7 @@ public class NoticeBoardService {
         return new PageImpl<>(noticeList, pageable, noticeList.size());
     }
 
+    //notice 상세
     public NoticeShowDto getNoticeDetail(Long nbId, Long accountId) {
         NoticeBoard noticeBoard = noticeBoardRepository.findById(nbId).get();
         NoticeShowDto noticeShowDto = NoticeShowDto.from(noticeBoard);
@@ -75,14 +77,9 @@ public class NoticeBoardService {
         return noticeShowDto;
     }
 
-    public boolean checkWriter(Long nbId, Long accountId) {
-        //해당 글의 작성자인지 체크
+    //수정 위한 notice 검색
+    public NoticeWriteDto getNoticeWriteDto(Long nbId) {
         NoticeBoard noticeBoard = noticeBoardRepository.findById(nbId).get();
-        if(noticeBoard.getAuthority().getAccount().getId().equals(accountId)){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return NoticeWriteDto.from(noticeBoard);
     }
 }
