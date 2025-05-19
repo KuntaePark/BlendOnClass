@@ -10,16 +10,15 @@
 <th:block layout:fragment="main">
     <div class="main-container rounded-border-box">
         <div class="title-box">
-            <p>공지 작성</p>
+            <p>시스템 공지 작성</p>
         </div>
         <form method="post"
-              th:object="${noticeWriteDto}"
-              th:action="@{'/board/notice/write?id='+${classroomId}}" enctype="multipart/form-data"
+              th:object="${sysAnnDetailDto}"
+              th:action="@{'/admin/announce/write'}"
               class="input-form">
 
-            <input type="hidden" th:field="*{nbId}"/>
-            <input type="hidden" th:field="*{writerId}"/>
-            <input type="hidden" th:field="*{classroomId}"/>
+            <input type="hidden" th:field="*{saId}"/>
+            <input type="hidden" th:field="*{writeTime}"/>
             <div class="input-container">
                 <label th:for="title">제목</label>
                 <p class="text-red-400" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
@@ -30,15 +29,14 @@
                 <p class="text-red-400" th:if="${#fields.hasErrors('context')}" th:errors="*{context}"></p>
                 <textarea class="input-area flex-1" type="text" th:field="*{context}"></textarea>
             </div>
-            <div class="input-container">
-                <label for="file">첨부 파일 선택</label>
-                <input class="input-area w-[400px]" id="file" type="file" name="file">
-            </div>
             <div class="button-box">
+                <div class="flex-1 flex flex-row justify-start">
+                    <a class="flex-none rectangle-button bg-(--primary-color)" href="/admin/announce">목록으로</a>
+                </div>
                 <button type="submit" class="rectangle-button bg-(--primary-color)">
                     저장
                 </button>
-                <button type="button" class="rectangle-button bg-gray-500" th:onclick="redirectTo([[${'/board?id='+classroomId}]])">
+                <button type="button" class="rectangle-button bg-red-400" th:onclick="redirectTo('/admin/announce')">
                     취소
                 </button>
             </div>

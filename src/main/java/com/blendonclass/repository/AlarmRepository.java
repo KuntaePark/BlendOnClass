@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
-    List<Alarm> findByClassroomId(Long id);
+    List<Alarm> findByClassroom_IdOrderByAlarmTimeDesc(Long id);
+    List<Alarm> findByAccount_IdOrderByAlarmTimeDesc(Long id);
 }

@@ -27,16 +27,20 @@
                 <div class="bg-gray-200 h-[1px] w-full"></div>
                 <div th:text="*{context}" class="flex-1"></div>
                 <a th:href="*{fileUrl}" class="rectangle-button bg-(--primary-color)" download>첨부파일 다운로드</a>
-                <div class="button-box" th:if="*{isWriter}">
-                    <div class="rectangle-button bg-(--primary-color)">수정</div>
-                    <div class="rectangle-button bg-gray-500">삭제</div>
+                <div class="button-box">
+                    <th:block th:if="*{isWriter}">
+                        <div class="rectangle-button bg-(--primary-color)">수정</div>
+                        <div class="rectangle-button bg-gray-500">삭제</div>
+                    </th:block>
+                    <th:block sec:authorize="hasRole('ROLE_STUDENT')">
+                        <a th:href="@{'/board/assignment/submit/write?id='+${assignmentShowDto.abId}+'&classroomId='+${classroomId}}"
+                        class="rectangle-button bg-(--primary-color) button-hover">제출하기</a>
+                    </th:block>
                 </div>
             </div>
             <!-- 제출자 목록 -->
+            <th:block sec:authorize="hasRole('ROLE_TEACHER')">
             <div class="rounded-xl bg-(--primary-color) w-[360px] p-4 justify-center flex flex-col gap-2 text-white overflow-auto">
-                <a th:href="@{'/board/assignment/submit/write?id='+${assignmentShowDto.abId}+'&classroomId='+${classroomId}}" sec:authorize="hasRole('ROLE_STUDENT')"
-                class="text-center font-bold text-base hover:scale-110 hover:cursor-pointer">제출하기</a>
-                <th:block sec:authorize="hasRole('ROLE_TEACHER')">
                 <p class="text-white font-bold text-2xl">제출자 목록</p>
                 <div class="bg-white min-h-[1px] w-full"></div>
                 <div id="submit-list" class="flex-1 flex flex-col gap-2 overflow-auto">
@@ -56,8 +60,8 @@
                         </a>
                     </div>
                 </div>
-                </th:block>
-            </div>
+                </div>
+            </th:block>
         </div>
     </div>
 </th:block>

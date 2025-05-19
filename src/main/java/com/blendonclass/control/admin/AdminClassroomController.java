@@ -43,7 +43,7 @@ public class AdminClassroomController {
         List<AuthListDto> authListDtos = null;
         if(classroomId != null) {
             //해당 반의 권한 목록 표시
-            authListDtos = authorityService.getAllAccountsOfClassroom(classroomId);
+            authListDtos = authorityService.getAllAuthoritiesOfClassroom(classroomId);
             model.addAttribute("authListDtos", authListDtos);
         }
         model.addAttribute("classroomId", classroomId);

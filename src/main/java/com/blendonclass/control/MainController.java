@@ -1,6 +1,7 @@
 package com.blendonclass.control;
 
 import com.blendonclass.constant.ROLE;
+import com.blendonclass.dto.AlarmListDto;
 import com.blendonclass.dto.ClassroomListDto;
 import com.blendonclass.entity.Authority;
 import com.blendonclass.entity.Classroom;
@@ -50,11 +51,21 @@ public class MainController {
     public String student(Model model) {return "redirect:/student/main";}
 
     @GetMapping(value={"/teacher", "/teacher/{id}"})
-    public String teacher(@PathVariable("id") Optional<Long> cid, Principal principal, Model model) {
+    public String teacher(@PathVariable("id") Optional<Long> classroomId, Principal principal, Model model) {
         Long id = Long.parseLong(principal.getName());
 
         List<ClassroomListDto> classroomListDtos = authorityService.getClassroomsByAccountId(id);
+        //해당 반 알림 로드
+        List<AlarmListDto> alarmListDtos = null;
+        if(classroomId.isPresent()) {
+            alarmListDtos = alarmService.getAlarmByClassroomId(classroomId.get());
+        } else {
+            alarmListDtos = alarmService.getAlarmByClassroomId(classroomListDtos.get(0).getClassroomId());
+        }
+
         model.addAttribute("classroomListDtos", classroomListDtos);
+        model.addAttribute("classroomId",classroomId.orElse(classroomListDtos.get(0).getClassroomId()));
+        model.addAttribute("alarmListDtos", alarmListDtos);
         //todo - 반 바뀔 떄마다 alarm 및 진도율 재로드
         return "teacherMain";
     }

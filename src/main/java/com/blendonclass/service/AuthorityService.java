@@ -74,8 +74,8 @@ public class AuthorityService {
         return new PageImpl<>(authReqListDtos, pageable, authReqListDtos.size());
     }
 
-    //특정 반의 권한 보유자 모두 조회
-    public List<AuthListDto> getAllAccountsOfClassroom(Long classroomId){
+    //특정 반의 권한 모두 조회
+    public List<AuthListDto> getAllAuthoritiesOfClassroom(Long classroomId){
         List<Authority> authorities = authorityRepository.findByClassroom_Id(classroomId);
        List<AuthListDto> authListDtos = authorities.stream().map(AuthListDto::from).collect(Collectors.toList());
 
@@ -107,12 +107,6 @@ public class AuthorityService {
                 .filter(a -> subjects.contains(a.getAuthType())) // 과목 필터링
                 .map(Authority::getClassroom)
                 .distinct()
-                .collect(Collectors.toList());
-    }
-
-    public List<Authority> getAuthoritiesByAccountId(Long accountId) {
-        return authorityRepository.findByAccountId(accountId).stream()
-                .filter(a -> a != null && a.getClassroom() != null) // 💥 null 방지
                 .collect(Collectors.toList());
     }
 

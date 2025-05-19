@@ -1,7 +1,9 @@
 package com.blendonclass.control;
 
+import com.blendonclass.dto.AlarmListDto;
 import com.blendonclass.dto.LessonDetailDto;
 import com.blendonclass.dto.LessonDto;
+import com.blendonclass.service.AlarmService;
 import com.blendonclass.service.CustomUserDetails;
 import com.blendonclass.service.LessonService;
 import jakarta.servlet.http.HttpSession;
@@ -23,9 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentController {
     private final LessonService lessonService;
-
-
-
+    private final AlarmService alarmService;
 
     @GetMapping("/")
     public String home() {
@@ -35,17 +35,17 @@ public class StudentController {
     // 학생 메인 페이지 + 모든 정보 로드
     @GetMapping("/main") // URL을 "/student/main"으로 변경 (더 직관적)
     public String studentMain(Model model, Principal principal) {
-        System.out.println("📥 studentMain 호출됨");
-        Long loggedId = Long.parseLong(principal.getName());
+        Long id = Long.parseLong(principal.getName());
 
-        LessonDto lastLessonDto = lessonService.getLastLesson(loggedId);
+        LessonDto lastLessonDto = lessonService.getLastLesson(id);
         model.addAttribute("lastLesson", lastLessonDto);
+
+        //알림
+        List<AlarmListDto> alarmListDtos = alarmService.getAlarmByAccountId(id);
 
         model.addAttribute("selectedGrade", lastLessonDto.getGrade());
         model.addAttribute("selectedSubject", lastLessonDto.getSubject());
-        model.addAttribute("notifications", "알림 리스트");
-
-
+        model.addAttribute("alarmListDtos", alarmListDtos);
 
         return "studentMain"; // 학생 메인 페이지로 이동
     }

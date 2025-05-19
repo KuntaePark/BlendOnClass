@@ -26,17 +26,22 @@ public class SysAnnService {
     
     //시스템 공지 목록을 페이지로 반환
     public Page<SysAnnListDto> getSysAnnList(Pageable pageable) {
-        List<SystemAnnounce> systemAnnounces = systemAnnounceRepository.findAllByOrderByWriteTimeDesc(pageable);
-        List<SysAnnListDto> sysAnnListDtos = systemAnnounces.stream()
-                .map(SysAnnListDto::from)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(sysAnnListDtos, pageable, systemAnnounces.size());
+        Page<SystemAnnounce> systemAnnounces = systemAnnounceRepository.findAllByOrderByWriteTimeDesc(pageable);
+        return systemAnnounces.map(SysAnnListDto::from);
     }
 
     //시스템 공지 상세 표시
-    public SysAnnDetailDto getSysAnnDetail(Long saId) {return null;}
+    public SysAnnDetailDto getSysAnnDetail(Long saId) {
+        return SysAnnDetailDto.from(systemAnnounceRepository.findById(saId).get());
+    }
 
     //시스템 공지 수정 업로드
-    public void saveSysAnnDetail(SysAnnDetailDto sysAnnDetailDto) {}
+    public void saveSysAnnDetail(SysAnnDetailDto sysAnnDetailDto) {
+        systemAnnounceRepository.save(sysAnnDetailDto.to());
+    }
+
+    //시스템 공지 삭제
+    public void deleteAnnounce(Long saId) {
+        systemAnnounceRepository.deleteById(saId);
+    }
 }
