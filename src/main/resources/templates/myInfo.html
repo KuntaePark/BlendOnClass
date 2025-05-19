@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
+
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+
+<div layout:fragment="main" id="main">
+    <div class="main-container">
+        <div class="flex flex-row gap-8 py-10">
+            <div class="flex-1">
+                <p class="text-2xl">정보 수정</p>
+                <p class="font-normal text-gray-500">계정 정보를 수정합니다.</p>
+            </div>
+            <form id="single-create-form" th:action="@{/admin/saveInfo}" method="post"
+                  th:object="${accountDto}" class="flex-1 flex flex-col gap-8">
+                <div class="input-container">
+                    <label th:for="name">이름</label>
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                       class="text-red-600"></p>
+                    <input type="text" th:field="*{name}" placeholder="홍길동" class="input-area"/>
+                </div>
+                <div class="input-container">
+                    <label th:for="email">이메일</label>
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                       class="text-red-600"></p>
+                    <input type="text" th:field="*{email}" placeholder="example@example.com" class="input-area"/>
+                </div>
+                <div class="button-box mt-4">
+                    <button type="submit" class="rectangle-button bg-(--primary-color)">수정</button>
+                    <button type="button" class="rectangle-button bg-red-400"
+                            onclick="redirectTo('/admin/accounts')">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</html>
