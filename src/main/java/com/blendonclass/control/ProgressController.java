@@ -1,6 +1,7 @@
 package com.blendonclass.control;
 
 import com.blendonclass.constant.SUBJECT;
+import com.blendonclass.dto.ChapterDto;
 import com.blendonclass.dto.ChapterLessonDto;
 import com.blendonclass.dto.ProgressDto;
 import com.blendonclass.entity.Progress;
@@ -32,6 +33,7 @@ public class ProgressController {
                                      Model model) {
         //todo - 해당 과목의 progress 찾기
         List<ChapterLessonDto> chapterLessonDtos = null;
+        List<ChapterDto> chapterDtos = null;
         ProgressDto progressDto = null;
         int grade = classroomService.getGradeOfClassroom(classroomId);
 
@@ -39,8 +41,10 @@ public class ProgressController {
             chapterLessonDtos = lessonService.getAllLessons(grade, subject);
             Progress progress = progressService.getProgress(classroomId, subject);
             progressDto = progress != null ? ProgressDto.from(progress) : new ProgressDto();
+            chapterDtos = lessonService.getChapterWithLessons(1,subject);
         }
 
+        model.addAttribute("chapters", chapterDtos);
         model.addAttribute("lessons", chapterLessonDtos);
         model.addAttribute("subject", subject);
         model.addAttribute("classroomId", classroomId);

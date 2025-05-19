@@ -39,28 +39,54 @@ function selectRange(id) {
 }
 
 function showRange() {
-    const buttons = Array.from($('.range-button'));
-    if(startId < 0 || endId < 0) {
-        buttons.forEach(button => {
-            if(button.value == startId || button.value == endId)
-                setSelectedStyle(button);
-            else
-                setDefaultStyle(button);
+    const buttonGroups = document.querySelectorAll('.lesson-step-group');
+
+    if (startId < 0 || endId < 0) {
+        buttonGroups.forEach(group => {
+            const btn = group.querySelector('button');
+            const connector = group.querySelector('.connector-line');
+            const val = parseInt(btn.value);
+
+            // 버튼은 선택된 것만 파란색, 나머지는 회색
+            if (val === startId || val === endId) {
+                setSelectedStyle(btn);
+            } else {
+                setDefaultStyle(btn);
+            }
+
+            // 연결선은 전부 회색으로 초기화
+            setLineStyle(connector, false);
         });
+
         $('#submit-button').attr('disabled', true);
         return;
     }
-    buttons.forEach(button => {
-        if(button.value >= startId && button.value <= endId) {
-            //선택 스타일
-            setSelectedStyle(button);
+
+
+    // 선택 범위 있는 경우
+    buttonGroups.forEach(group => {
+        const btn = group.querySelector('button');
+        const connector = group.querySelector('.connector-line');
+        const val = parseInt(btn.value);
+
+        if (val >= startId && val <= endId) {
+            setSelectedStyle(btn);
+            // endId의 오른쪽 연결선은 제외
+            if (val !== endId) {
+                setLineStyle(connector, true);
+            } else {
+                setLineStyle(connector, false);
+            }
         } else {
-            //미선택 스타일
-            setDefaultStyle(button);
+            setDefaultStyle(btn);
+            setLineStyle(connector, false);
         }
-    })
+    });
+
     $('#submit-button').attr('disabled', false);
 }
+
+
 
 function setProgress(classroomId) {
     console.log('working');
@@ -109,11 +135,22 @@ function onSubjectChange(classroomId,subject) {
 }
 
 function setSelectedStyle(element) {
-    element.classList.remove('bg-white');
-    element.classList.add('bg-(--primary-color)');
+    element.classList.remove('bg-gray-300');
+    element.classList.add('bg-blue-400');
 }
 
 function setDefaultStyle(element) {
-    element.classList.remove('bg-(--primary-color)');
-    element.classList.add('bg-white');
+    element.classList.remove('bg-blue-400');
+    element.classList.add('bg-gray-300');
+}
+
+function setLineStyle(line, selected) {
+    if (!line) return;
+    if (selected) {
+        line.classList.remove('bg-gray-300');
+        line.classList.add('bg-blue-400');
+    } else {
+        line.classList.remove('bg-blue-400');
+        line.classList.add('bg-gray-300');
+    }
 }

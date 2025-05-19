@@ -37,58 +37,80 @@
             <p class="title-sub">해당 반의 진도를 설정하세요.</p>
         </div>
 
-        <!-- 과목 선택 -->
-        <div>
-            <label for="subj-select" class="hidden">과목 선택</label>
-            <select id="subj-select" name="subj-select"
-                    th:onchange="onSubjectChange([[${classroomId}]], this.value)"
-                    class="border rounded px-3 py-2 w-60">
-                <option value="">과목 선택</option>
-                <th:block th:with="SUBJECT=${T(com.blendonclass.constant.SUBJECT)}">
-                    <th:block th:each="subject : ${SUBJECT.values()}">
-                        <option th:if="${subject != SUBJECT.HR}"
-                                th:value="${subject}"
-                                th:text="${subject.getSubject()}"></option>
-                    </th:block>
-                </th:block>
-            </select>
-        </div>
+        <!--  좌우 나란히 정렬을 위한 flex 컨테이너 -->
+        <div class="flex gap-10 mt-6 flex-1 overflow-auto">
 
-        <div th:if="${subject != null}"
-             id="progress-form"
-             class="flex flex-col gap-4 mt-6">
-            <th:block th:if="${progress.id != null}">
-                <p class="text-red-500">해당 과목의 진도가 존재합니다.</p>
-            </th:block>
-            <p id="warning" class="text-sm text-red-600"></p>
+            <!-- 왼쪽: 진도 설정 폼 (과목 선택, 종료일, 버튼) -->
+            <div class="flex flex-col gap-4 w-1/3">
 
-            <!-- 레슨 버튼들 -->
-            <div th:if="${lessons != null}"
-                 class="flex gap-2 overflow-x-auto p-4 snap-x">
-                <button th:each="lesson : ${lessons}"
-                        th:value="${lesson.lessonId}"
-                        th:onclick="selectRange([[${lesson.lessonId}]])"
-                        class="range-button snap-center flex-none w-16 h-16 border-4 border-(--primary-color) rounded-xl hover:bg-white hover:scale-110 transition-all duration-200">
+                <!-- 과목 선택 -->
+                <div>
+                    <label for="subj-select">과목 선택</label>
+                    <select id="subj-select" name="subj-select"
+                            th:onchange="onSubjectChange([[${classroomId}]], this.value)"
+                            class="border rounded px-3 py-2 w-full">
+                        <option value="">과목</option>
+                        <th:block th:with="SUBJECT=${T(com.blendonclass.constant.SUBJECT)}">
+                            <th:block th:each="subject : ${SUBJECT.values()}">
+                                <option th:if="${subject != SUBJECT.HR}"
+                                        th:value="${subject}"
+                                        th:text="${subject.getSubject()}"></option>
+                            </th:block>
+                        </th:block>
+                    </select>
+                </div>
+
+                <!-- 진도 종료일 선택 (과목 선택 아래에 위치) -->
+                <div>
+                    <label for="end-date" class="block mb-1">진도 종료일 선택</label>
+                    <input id="end-date" type="date"
+                           class="border rounded px-3 py-2 w-full"/>
+                </div>
+
+                <!-- 안내 및 버튼 -->
+                <div th:if="${progress.id != null}">
+                    <p class="text-red-500 text-sm">해당 과목의 진도가 존재합니다.</p>
+                </div>
+                <p id="warning" class="text-sm text-red-600"></p>
+
+                <button id="submit-button"
+                        type="button"
+                        th:onclick="setProgress([[${classroomId}]])"
+                        class="w-full py-2 bg-blue-600 text-white text-sm rounded disabled:opacity-50"
+                        disabled>
+                    <span th:if="${progress != null}">수정하기</span>
+                    <span th:unless="${progress != null}">등록하기</span>
                 </button>
             </div>
 
-            <!-- 진도 종료일 선택 -->
-            <div>
-                <label for="end-date" class="block mb-1">진도 종료일 선택</label>
-                <input id="end-date" type="date"
-                       class="border rounded px-3 py-2 w-60"/>
+            <!-- 오른쪽: 대단원 + 소단원 리스트 -->
+            <div class="w-2/3 overflow-auto">
+                <div th:each="chapter : ${chapters}" class="mb-8">
+                    <!-- 대단원 제목은 왼쪽 정렬 -->
+                    <h2 th:text="${chapter.title}" class="text-lg font-bold mb-2 text-left">대단원 제목</h2>
+
+                    <!-- 소단원 버튼들 -->
+                    <div class="flex items-center gap-0 flex-wrap">
+                        <th:block th:each="lesson, stat : ${chapter.lessonDtoList}">
+                            <div class="lesson-step-group relative flex items-center cursor-pointer"
+                                 th:onclick="selectRange([[${lesson.lessonId}]])">
+                                <!-- 버튼 -->
+                                <button type="button"
+                                        th:text="${lesson.lessonId}"
+                                        th:value="${lesson.lessonId}"
+                                        th:title="${lesson.lessonTitle}"
+                                        class="range-button w-10 h-10 rounded-md text-white font-bold flex items-center justify-center
+                                bg-gray-300 hover:bg-blue-400 transition-opacity z-10 cursor-pointer">
+                                </button>
+
+                                <!-- 연결선 -->
+                                <div th:if="${!stat.last}"
+                                     class="connector-line w-8 h-1 bg-gray-300 -ml-1 -mr-1 z-0 pointer-events-none"></div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
             </div>
-
-
-            <!-- 제출 버튼 (작게 조정) -->
-            <button id="submit-button"
-                    type="button"
-                    th:onclick="setProgress([[${classroomId}]])"
-                    class="w-40 py-1 bg-blue-600 text-white text-sm rounded disabled:opacity-50"
-                    disabled>
-                <span th:if="${progress != null}">수정하기</span>
-                <span th:unless="${progress != null}">등록하기</span>
-            </button>
         </div>
     </div>
 </th:block>

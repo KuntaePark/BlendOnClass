@@ -2,10 +2,7 @@ package com.blendonclass.service;
 
 import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.*;
-import com.blendonclass.entity.Lesson;
-import com.blendonclass.entity.LessonDetail;
-import com.blendonclass.entity.LessonRecord;
-import com.blendonclass.entity.Score;
+import com.blendonclass.entity.*;
 import com.blendonclass.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -118,6 +115,27 @@ public class LessonService {
 
     }
 
+
+    public List<ChapterDto> getChapterWithLessons(int grade, SUBJECT subject) {
+        // 1. 대단원 목록 조회
+        List<Chapter> chapters = chapterRepository.findByGradeAndSubject(grade, subject);
+
+        // 2. 각 대단원에 대해 소단원 조회 및 DTO 구성
+        return chapters.stream()
+                .map(chapter -> {
+                    // 해당 대단원의 소단원들
+                    List<Lesson> lessons = lessonRepository.findByChapter_Id(chapter.getId());
+
+                    // Lesson → LessonDto로 변환
+                    List<LessonDto> lessonDtoList = lessons.stream()
+                            .map(LessonDto::from)
+                            .collect(Collectors.toList());
+
+                    // Chapter → ChapterDto로 변환
+                    return ChapterDto.from(chapter, lessonDtoList);
+                })
+                .collect(Collectors.toList());
+    }
 
 }
 
