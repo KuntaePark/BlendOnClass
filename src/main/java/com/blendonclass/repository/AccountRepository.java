@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,5 +22,8 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
 
     @Query("select a.email from Account a")
     List<String> findAllEmails();
+
+    @Query("select a.email from Account a where a.id != :id")
+    List<String> findAllEmailsExcept(@Param("id") Long id);
 
 }

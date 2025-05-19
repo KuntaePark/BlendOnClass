@@ -15,13 +15,13 @@
                 <p class="text-2xl">정보 수정</p>
                 <p class="font-normal text-gray-500">계정 정보를 수정합니다.</p>
             </div>
-            <form id="single-create-form" th:action="@{/admin/saveInfo}" method="post"
-                  th:object="${accountDto}" class="flex-1 flex flex-col gap-8">
+            <form th:action="@{myInfo}" method="post"
+                  th:object="${userAccountDto}" class="flex-1 flex flex-col gap-8">
                 <div class="input-container">
-                    <label th:for="name">이름</label>
-                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-                       class="text-red-600"></p>
-                    <input type="text" th:field="*{name}" placeholder="홍길동" class="input-area"/>
+                    <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{name}"/>
+                    <input type="hidden" th:field="*{role}"/>
+                    <input type="hidden" th:field="*{loginId}"/>
                 </div>
                 <div class="input-container">
                     <label th:for="email">이메일</label>
@@ -29,10 +29,23 @@
                        class="text-red-600"></p>
                     <input type="text" th:field="*{email}" placeholder="example@example.com" class="input-area"/>
                 </div>
+                <div class="input-container">
+                    <label th:for="password">비밀번호</label>
+                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                       class="text-red-600"></p>
+                    <input type="password" th:field="*{password}" placeholder="비밀번호 입력..." class="input-area"/>
+                </div>
+                <div class="input-container">
+                    <label th:for="confirmPassword">비밀번호 확인</label>
+                    <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
+                       class="text-red-600"></p>
+                    <input type="password" th:field="*{confirmPassword}" placeholder="비밀번호 확인..." class="input-area"/>
+                </div>
+
                 <div class="button-box mt-4">
                     <button type="submit" class="rectangle-button bg-(--primary-color)">수정</button>
                     <button type="button" class="rectangle-button bg-red-400"
-                            onclick="redirectTo('/admin/accounts')">취소</button>
+                            onclick="redirectTo('/')">취소</button>
                 </div>
             </form>
         </div>

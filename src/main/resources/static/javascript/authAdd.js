@@ -44,28 +44,63 @@ function updateAccountTable(result) {
         const $name = $('<td>').text(row.name);
         const $loginId = $('<td>').text(row.loginId);
         const $email = $('<td>').text(row.email);
+
         let roleText;
+        const authorities = getAuthorities(row.email);
+        console.log(authorities);
+        //권한 들고 있는지 체크
+        //보유 시,
+        //학생 -> 비활성화
+        //교사 -> 1개면 활성, 2개면 비활
+        const $td = $('<td>').addClass('action-column');
+        let $modifyButton = null;
+
         switch(row.role) {
             case 'STUDENT':
                 roleText = '학생';
+                if(authorities.length > 0) {
+                    //권한 있음, 버튼 비활
+                    $modifyButton = setDisabled();
+                } else {
+                    $modifyButton = setAble();
+                    $modifyButton.on('click', function() {
+                        //모달 열고 확인 시 생성
+                        $('#student-name').text(row.name);
+                        $('#student-add-form').attr(
+                            'action', '/admin/classroom/authAdd?id='+row.id+'&classroomId='+classroomDto.id
+                        )
+                        openModal($('#student-add-modal'));
+                    })
+                }
                 break;
             case 'TEACHER':
                 roleText = '교사';
+                if(authorities.length === 2) {
+                    //권한 풀
+                    $modifyButton = setDisabled();
+                } else {
+                    let ownedAuthText= null;
+                    if(authorities.length === 1) {
+                        //권한 하나
+                        $modifyButton = setHalfAble();
+                        ownedAuthText = '보유 중인 권한: '+authorities[0].atype;
+                    } else {
+                        $modifyButton = setAble();
+                        ownedAuthText ='';
+                    }
+                    $modifyButton.on('click', function() {
+                        $('#teacher-name').text(row.name);
+                        $('#teacher-add-form').attr(
+                            'action', '/admin/classroom/authAdd?id='+row.id+'&classroomId='+classroomDto.id
+                        )
+                        $('#owned-auth').text(ownedAuthText);
+                        openModal($('#teacher-add-modal'));
+                    })
+                }
                 break;
         }
+
         const $role = $('<td>').text(roleText);
-        const $td = $('<td>').addClass('action-column');
-        const $modifyButton = $('<button/>', {
-            "class" : "square-button-10 bg-(--primary-color) flex",
-        })
-        $modifyButton.on('click', function(e) {
-            //권한 추가 모달 열기
-            alert("open add");
-        })
-        $('<img/>', {
-            "src" : "/images/icons/icon_add.png",
-            "class" : "min-w-4 h-4 invert m-auto"
-        }).appendTo($modifyButton);
 
         $td.append($modifyButton);
         $tr.append($name, $loginId, $email, $role, $td);
@@ -96,4 +131,48 @@ function updatePaging(result) {
     const endNum = result.number * result.size + result.numberOfElements;
     $('#page-info').text('총 '+result.totalElements+' 개의 결과 중 '+startNum+'...'+endNum+'');
 
+}
+
+function getAuthorities(email) {
+    return authListDtos.filter(item => item.email === email);
+}
+
+function setDisabled() {
+    //초록 체크 버튼
+    const $modifyButton = $('<button/>', {
+        "class" : "square-button-10-disabled flex bg-green-400",
+        'disabled' : true,
+    })
+    $('<img/>', {
+        "class" : "min-w-4 h-4 invert m-auto",
+        'src' : '/images/icons/icon_check.png',
+        'alt' : '체크 이미지',
+    }).appendTo($modifyButton);
+    return $modifyButton;
+}
+
+function setAble() {
+    //회색 버튼
+    const $modifyButton = $('<button/>', {
+        "class" : "square-button-10 flex bg-(--primary-color)",
+    })
+    $('<img/>', {
+        "class" : "min-w-4 h-4 invert m-auto",
+        'src' : '/images/icons/icon_add.png',
+        'alt' : '추가 아이콘',
+    }).appendTo($modifyButton);
+    return $modifyButton;
+}
+
+function setHalfAble() {
+    //노랑 버튼
+    const $modifyButton = $('<button/>', {
+        "class" : "square-button-10 flex bg-yellow-400",
+    })
+    $('<img/>', {
+        "class" : "min-w-4 h-4 invert m-auto",
+        'src' : '/images/icons/icon_add.png',
+        'alt' : '추가 아이콘',
+    }).appendTo($modifyButton);
+    return $modifyButton;
 }

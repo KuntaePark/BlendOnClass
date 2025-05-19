@@ -1,7 +1,6 @@
 package com.blendonclass.service;
 
 import com.blendonclass.constant.SUBJECT;
-import com.blendonclass.dto.ProgRateCalcDto;
 import com.blendonclass.dto.ProgressDto;
 import com.blendonclass.dto.ProgressListDto;
 import com.blendonclass.entity.Progress;

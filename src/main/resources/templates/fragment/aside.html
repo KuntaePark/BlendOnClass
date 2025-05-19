@@ -35,18 +35,18 @@
             </ul>
         </th:block>
         <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-            <ul class="mt-2 space-y-2 text-white text-[20px] font-bold">
-                <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
+            <ul class="mt-2 space-y-2 text-white text-[18px] font-md w-full max-w-[200px] mx-auto px-6">
+                <li class="flex items-center gap-3 cursor-pointer min-h-[40px]">
                     <img src="/images/OurClass.png" alt="우리반 아이콘" class="w-9 h-9" />
-                    <a href="/admin/accounts">계정 관리</a>
+                    <a href="/admin/accounts" class="leading-none hover:text-[20px] transition-all duration-100">계정 관리</a>
                 </li>
-                <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
+                <li class="flex items-center gap-3 cursor-pointer min-h-[40px]">
                     <img src="/images/Listening.png" alt="강의 아이콘" class="w-10 h-10" />
-                    <a href="/admin/classroom" class="leading-none">반 관리</a>
+                    <a href="/admin/classroom" class="leading-none hover:text-[20px] transition-all duration-100">반 관리</a>
                 </li>
-                <li class="flex items-center gap-3 hover:text-[#59e9df] cursor-pointer min-h-[40px]">
+                <li class="flex items-center gap-3 cursor-pointer min-h-[40px]">
                     <img src="/images/Score.png" alt="학습성과 아이콘" class="w-9 h-9" />
-                    <a href="/admin/announce" class="leading-none">공지사항 관리</a>
+                    <a href="/admin/announce" class="leading-none hover:text-[20px] transition-all duration-100">공지 관리</a>
                 </li>
             </ul>
         </th:block>
