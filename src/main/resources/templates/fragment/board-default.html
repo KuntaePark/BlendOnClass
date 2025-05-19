@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> BlendOnClass </title>
+
+    <!--  tailwind  -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!--  chart.js  -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/default.css">
+
+    <th:block layout:fragment="css"></th:block>
+    <th:block layout:fragment="script"></th:block>
+    <script th:inline="javascript">
+        $(function() {
+            const role = [[${session.role.role}]];
+            if(role === 'ROLE_ADMIN') {
+                $(":root").css({"--primary-color":"var(--admin-color)"});
+            }
+        })
+
+        function redirectTo(url) {
+            location.href = url;
+        }
+    </script>
+
+
+</head>
+<body>
+<div id="wrap" class="board-wrap flex flex-col max-w-[100vw] h-[100vh]">
+    <th:block th:replace="fragment/aside::aside"></th:block>
+    <th:block th:replace="fragment/board-header::header"></th:block>
+    <div class="mx-auto w-[1280px] flex-1 flex flex-col overflow-auto py-4">
+        <th:block layout:fragment="main"></th:block>
+    </div>
+    <div
+            class="menu-trigger fixed top-24 left-0 w-6 h-10 bg-(--primary-color) rounded-r-md cursor-pointer hover:opacity-80 transition-all duration-300 flex items-center justify-center">
+        <div class="p-auto">
+            <img src="/images/icons/right-arrow.png" alt="화살표 아이콘" class="invert w-4 h-4"/>
+        </div>
+        <span class="text-black hover:text-[#fcfeff] text-lg font-ico"></span>
+    </div>
+    <!--    <th:block th:replace="fragment/footer::footer"></th:block>-->
+</div>
+
+
+</body>
+</html>
