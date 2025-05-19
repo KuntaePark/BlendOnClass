@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,12 +39,12 @@ public class AssignmentBoardService {
 
     public void saveAssignmentBoard(AssignmentWriteDto assignmentWriteDto, MultipartFile multipartFile) {
         Authority authority = authorityRepository.findByAccountIdAndClassroomId(assignmentWriteDto.getWriterId(),assignmentWriteDto.getClassroomId())
-                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다."));
+                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다.")).get(0);
 
         String fileName = null;
         if (multipartFile != null && !multipartFile.isEmpty()) {
             try {
-                String uploadDir = "C:/assignment/"; // 예: /home/ubuntu/uploads/ 또는 C:/uploads/
+                String uploadDir = "C:/uploads/"; // 예: /home/ubuntu/uploads/ 또는 C:/uploads/
                 fileName = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
                 Path filePath = Paths.get(uploadDir + fileName);
                 Files.createDirectories(filePath.getParent()); // 폴더 없으면 생성
@@ -54,7 +55,7 @@ public class AssignmentBoardService {
         }
         AssignmentBoard assignmentBoard = AssignmentBoard.from(assignmentWriteDto, authority);
         if (fileName != null) {
-            assignmentBoard.setFileUrl("/assignment/" + fileName); // 사용자 접근용 경로
+            assignmentBoard.setFileUrl("/uploads/" + fileName); // 사용자 접근용 경로
         }
         assignmentBoardRepository.save(assignmentBoard);
     }
@@ -87,6 +88,7 @@ public class AssignmentBoardService {
         
         //새 entity 생성
         SubmitBoard submitBoard = new SubmitBoard();
+        submitBoard.setId(submitWriteDto.getSbId());
         submitBoard.setContext(submitWriteDto.getContext());
         submitBoard.setAccount(account);
         submitBoard.setAssignmentBoard(assignmentBoard);
@@ -95,7 +97,7 @@ public class AssignmentBoardService {
         String fileName = null;
         if (multipartFile != null && !multipartFile.isEmpty()) {
             try {
-                String uploadDir = "C:/submit/"; // 예: /home/ubuntu/uploads/ 또는 C:/uploads/
+                String uploadDir = "C:/uploads/"; // 예: /home/ubuntu/uploads/ 또는 C:/uploads/
                 fileName = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
                 Path filePath = Paths.get(uploadDir + fileName);
                 Files.createDirectories(filePath.getParent()); // 폴더 없으면 생성
@@ -106,17 +108,25 @@ public class AssignmentBoardService {
         }
 
         if (fileName != null) {
-            submitBoard.setFileUrl("/submit/" + fileName); // 사용자 접근용 경로
+            submitBoard.setFileUrl("/uploads/" + fileName); // 사용자 접근용 경로
         }
         submitBoardRepository.save(submitBoard);
     }
 
+    //과제 제출 삭제
     public void deleteSubmit(Long sbId){
-
+        submitBoardRepository.deleteById(sbId);
     }
 
-    public SubmitShowDto getSubmitDetail(Long sbId){
-        return SubmitShowDto.from(submitBoardRepository.findById(sbId).get());
+    public SubmitShowDto getSubmitDetail(Long sbId, Long accountId){
+        SubmitBoard submitBoard = submitBoardRepository.findById(sbId).get();
+        SubmitShowDto submitShowDto = SubmitShowDto.from(submitBoard);
+        if(submitBoard.getAccount().getId().equals(accountId)){
+            submitShowDto.setIsWriter(true);
+        } else {
+            submitShowDto.setIsWriter(false);
+        }
+        return submitShowDto;
     }
 
     public Page<AssignmentShowDto> getAssignmentList(Pageable pageable, Long classroomId){
@@ -131,7 +141,9 @@ public class AssignmentBoardService {
     public List<SubmitStudentListDto> getSubmitStudentList(Long abId, Long classroomId) {
         //존재하는 제출자 목록
         List<SubmitStudentListDto> submitStudentListDtos = submitBoardRepository.findSubmitBoardByAbIdAndClassroomId(abId, classroomId);
-
+        for(SubmitStudentListDto submitStudentListDto : submitStudentListDtos){
+            System.out.println(submitStudentListDto);
+        }
         //반 학생 불러오기
         List<AccountListDto> accountListDtos = authorityService.getAllStudentsOfClassroom(classroomId);
         for(AccountListDto account : accountListDtos) {
@@ -153,4 +165,15 @@ public class AssignmentBoardService {
         return submitStudentListDtos;
     }
 
+    public SubmitWriteDto getSubmitWriteDto(Long sbId) {
+        return SubmitWriteDto.fromSubmitBoard(submitBoardRepository.findById(sbId).get());
+    }
+    public Long findSbByAccountIdAndAbId(Long accountId, Long abId) {
+       SubmitBoard submitBoard = submitBoardRepository.findByAccount_IdAndAssignmentBoard_Id(accountId,abId);
+       if(submitBoard != null) {
+           return submitBoard.getId();
+       } else {
+           return null;
+       }
+    }
 }

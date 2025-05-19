@@ -28,9 +28,9 @@ public class QuestionBoardService {
 
     public void saveQuestion(QuestionWriteDto questionWriteDto){
          Authority authority = authorityRepository.findByAccountIdAndClassroomId(questionWriteDto.getWriterId(),questionWriteDto.getClassroomId())
-                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다."));
-         System.out.println(questionWriteDto.getId());
+                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다.")).get(0);
         QuestionBoard questionBoard = QuestionBoard.toQuestionSaveBoard(questionWriteDto, authority, null);
+        System.out.println(questionBoard);
         questionBoardRepository.save(questionBoard);
     }
 
@@ -104,5 +104,9 @@ public class QuestionBoardService {
     public AnswerWriteDto answerShow(Long id) {
         QuestionBoard questionBoard = questionBoardRepository.findById(id).get();
         return AnswerWriteDto.from(questionBoard);
+    }
+
+    public QuestionWriteDto getQuestionWriteDto(Long qbId) {
+        return QuestionWriteDto.toQuestionWriteDto(questionBoardRepository.findById(qbId).get());
     }
 }

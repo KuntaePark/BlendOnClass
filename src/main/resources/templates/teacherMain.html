@@ -4,112 +4,154 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragment/default}">
 <th:block layout:fragment="css"></th:block>
-<th:block layout:fragment="script"></th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        const classroomList = [[${classroomListDtos}]]
+        let classroomId = [[${classroomId}]];
+        const classrooms = [];
+        $(function() {
+            const $ul = $('#classroom-list-ul');
+            classroomList.forEach(classroom => {
+                //클릭 시 전역 classroom 변수를 설정
+                if(classroomId == null) {classroomId = classroom.classroomId;}
+                const findIndex = classrooms.indexOf(classroom.classroomId);
+                if(findIndex >= 0) {
+                    //이미 존재, 반 중첩
+                    $($('.class-list-elem').get(findIndex)).append(makeBadge(classroom.subject));
+                    return;
+                } else {
+                    classrooms.push(classroom.classroomId);
+                }
+                //없으니까 추가
+                const $li = $('<li>', {
+                    'class' : 'p-2 class-list-elem text-white font-bold text-lg button-hover flex flex-row justify-end gap-2',
+                })
+                if(classroom.classroomId === classroomId) {
+                    $li.addClass('button-selected');
+                }
+                $li.on('click', function(e) {
+                    location.href = '/teacher/'+classroom.classroomId;
+                });
+                $('<p>', {
+                    'text' : (classroom.grade+'학년 '+classroom.classroomNum+'반'),
+                    'class' : 'flex-1'
+                }).appendTo($li);
+                $li.append(makeBadge(classroom.subject));
+                $ul.append($li);
+            })
+        })
+
+        function makeBadge(type) {
+            let className = '';
+            switch (type) {
+                case '담임':
+                    className='bg-red-400 text-white-800 font-bold'
+                    break;
+                case '영어':
+                    className='bg-amber-400 text-white-800 font-bold'
+                    break;
+                case '국어':
+                    className='bg-indigo-200 text-indigo-800'
+                    break;
+                case '수학':
+                    className='bg-amber-200 text-amber-800'
+                    break;
+                default:
+                    className='bg-gray-100 text-gray-700'
+            }
+            const $div = $('<div>', {
+                "class": className + ' w-10 h-6 rounded-md text-sm font-medium flex flex-row items-center justify-center',
+            });
+            const $span = $('<span>', {
+                'text' : type,
+                'class' : 'text-sm font-medium'
+            })
+
+            $div.append($span);
+            return $div;
+        }
+
+    </script>
+</th:block>
 
 
 <th:block layout:fragment="main">
-    <div class="flex justify-center mt-12 w-full">
-        <div class="flex flex-col items-start w-[980px]">
-
-            <h1 class="text-2xl font-bold text-gray-900 mb-6">교사 메인 페이지</h1>
-
+    <div class="main-container">
+        <div class="title-box">
+            <p><b class="text-(--primary-color)">BlendOnClass</b>에 오신 것을 환영합니다!</p>
+            <p class="title-sub">학생들의 학습성과를 확인하고, 학생들과 소통하세요!</p>
+        </div>
+        <div class="flex flex-row flex-1 gap-8">
             <!-- 상단 알림 + 버튼 + 반 목록 -->
-            <div class="flex gap-8 items-stretch h-[320px] w-full">
+            <div class="flex-1 flex-col flex gap-10">
+                <div class="flex-2 flex flex-row gap-4 w-full">
 
-                <!-- 알람 박스 -->
-                <div class="bg-white rounded-lg shadow-lg w-[500px] flex flex-col">
-                    <div class="bg-blue-600 w-full px-6 py-2 rounded-t-lg">
-                        <div class="flex items-center space-x-2">
-                            <img src="/images/alarm.png" alt="알람 아이콘" class="w-6 h-6" />
-                            <h2 class="text-white text-xl font-semibold tracking-widest">알람</h2>
+                    <!-- 알람 박스 -->
+                    <div class="bg-white rounded-lg shadow-lg flex-1 flex flex-col">
+                        <div class="bg-blue-600 w-full px-6 py-4 rounded-lg">
+                            <div class="flex items-center space-x-2">
+                                <img src="/images/alarm.png" alt="알람 아이콘" class="w-6 h-6" />
+                                <h2 class="text-white text-xl font-semibold tracking-widest">알람</h2>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-4 px-6 py-2 border-b border-gray-300 text-sm font-semibold text-gray-700 bg-gray-50">
+                            <div class="text-center col-span-3">메시지</div>
+                            <div class="text-center col-span-1">등록일</div>
+                        </div>
+                        <div class="px-6 py-2 space-y-3 overflow-y-auto flex-1">
+                            <th:block th:each="alarm : ${alarmListDtos}">
+                                <div class="grid grid-cols-4 border-b border-dotted pb-2">
+                                    <div class="text-center text-gray-800 text-sm font-medium col-span-3">
+                                        <span th:text="${alarm.message}">알림 내용</span>
+                                    </div>
+                                    <div class="text-center text-sm text-gray-500 col-span-1">
+                                        <span th:text="${#temporals.format(alarm.alarmTime, 'yyyy-MM-dd (E)')}"></span>
+                                    </div>
+                                </div>
+                            </th:block>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 px-6 py-2 border-b border-gray-300 text-sm font-semibold text-gray-700 bg-gray-50">
-                        <div class="text-center">메시지</div>
-                        <div class="text-center">등록일</div>
-                    </div>
-                    <div class="px-6 py-2 space-y-3 overflow-y-auto flex-1">
-                        <th:block th:each="alarm : ${ar}">
-                            <div class="grid grid-cols-2 border-b border-dotted pb-2">
-                                <div class="text-center text-gray-800 text-sm font-medium">
-                                    <span th:text="${alarm.message}">알림 내용</span>
-                                </div>
-                                <div class="text-center text-sm text-gray-500">
-                                    <span th:text="${#temporals.format(alarm.alarmTime, 'yyyy-MM-dd (E)')}"></span>
-                                </div>
-                            </div>
-                        </th:block>
-                    </div>
-                </div>
 
-                <!-- 버튼 박스 -->
-                <ul class="flex flex-col justify-center divide-y divide-gray-300 bg-gray-100 text-[--primary-color] text-[20px] font-bold p-4 rounded-lg w-[200px] h-full">
-                    <li class="flex items-center gap-3 py-6 hover:text-[#59e9df] cursor-pointer">
-                        <img src="/images/Scoreblack.png" alt="학습성과 아이콘" class="w-9 h-9" />
-                        <a th:href="@{'/teacher/myscore?id='+${classroomId}}" class="flex-1 leading-none">학습 성과</a>
-                    </li>
-                    <li class="flex items-center gap-3 py-6 hover:text-[#59e9df] cursor-pointer">
-                        <img src="/images/OurClassblack.png" alt="우리반 아이콘" class="w-9 h-9" />
-                        <a th:href="@{'board?id='+${classroomId}}" class="flex-1 leading-none">우리반 게시판</a>
-                    </li>
-                    <li class="flex items-center gap-3 py-6 hover:text-[#59e9df] cursor-pointer">
-                        <img src="/images/Progress.png" alt="진도 아이콘" class="w-10 h-10" />
-                        <a th:href="@{'/teacher/progress?id='+${classroomId}}" class="flex-1 leading-none">진도 설정</a>
-                    </li>
-                </ul>
-
-                <!-- 반 목록 (텍스트 링크 나열) -->
-
-                <!-- 반 목록 (수평으로 과목 나열, 중복 반 제거) -->
-                <div class="bg-blue-600 text-white rounded-2xl  p-6 flex flex-col items-start gap-4 w-[220px] h-[448px] shadow-lg ">
-                    <h3 class="text-2xl font-bold text-center w-full">반 목록</h3>
-                    <ul class="flex flex-col space-y-3 w-full">
-                        <!-- authorities 를 인덱스(stat)와 함께 순회 -->
-                        <th:block th:each="auth, stat : ${authorities}">
-                            <!-- 첫 요소이거나, 이전 요소와 다른 classroom.id 만 출력 -->
-                            <li th:if="${stat.index == 0 or authorities[stat.index - 1].classroom.id != auth.classroom.id}"
-                                class="flex items-center space-x-2">
-                                <!-- 반 텍스트: 무조건 한 줄로 -->
-                                <span class="text-lg font-medium whitespace-nowrap">
-        [[${auth.classroom.grade}]]학년 [[${auth.classroom.classroomNum}]]반
-      </span>
-
-                                <!-- 과목 배지들: flex-nowrap + whitespace-nowrap -->
-                                <div class="flex flex-nowrap items-center space-x-2">
-                                    <th:block th:each="inner : ${authorities}">
-                                        <a
-                                                th:if="${inner.classroom.id} == ${auth.classroom.id}"
-                                                th:href="@{/teacher/{id}(id=${auth.classroom.id})}"
-                                                class="inline-flex items-center justify-center h-6 px-2 rounded-md text-sm font-medium whitespace-nowrap"
-                                                th:classappend="${
-              inner.authType.subject == '담임' ? 'bg-red-400 text-white-800 font-bold' :
-              inner.authType.subject == '영어' ? 'bg-amber-400 text-white-800 font-bold' :
-              inner.authType.subject == '국어' ? 'bg-indigo-200 text-indigo-800' :
-              inner.authType.subject == '수학' ? 'bg-amber-200 text-amber-800' :
-              'bg-gray-100 text-gray-700'
-            }"
-                                        >
-                                            [[${inner.authType.subject}]]
-                                        </a>
-                                    </th:block>
-
-                            </li>
-                        </th:block>
+                    <!-- 버튼 박스 -->
+                    <ul class="flex flex-col justify-center bg-gray-100 text-[--primary-color] text-[20px] font-bold p-4 rounded-lg shadow-lg w-[200px] h-full">
+                        <li class="flex items-center gap-3 py-6 cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out">
+                            <img src="/images/Scoreblack.png" alt="학습성과 아이콘" class="w-9 h-9" />
+                            <button onclick="redirectTo('/teacher/myscore?id='+classroomId)" class="flex-1 leading-none">학습 성과</button>
+                        </li>
+                        <li class="w-full min-h-[1px] h-[1px] bg-gray-300"></li>
+                        <li class="flex items-center gap-3 py-6 cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out">
+                            <img src="/images/OurClassblack.png" alt="우리반 아이콘" class="w-9 h-9" />
+                            <button onclick="redirectTo('/board?id='+classroomId)" class="flex-1 leading-none">우리반 게시판</button>
+                        </li>
+                        <li class="w-full min-h-[1px] h-[1px] bg-gray-300"></li>
+                        <li class="flex items-center gap-3 py-6 cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out">
+                            <img src="/images/Progress.png" alt="진도 아이콘" class="w-10 h-10" />
+                            <button onclick="redirectTo('/teacher/progress?id='+classroomId)" class="flex-1 leading-none">진도 설정</button>
+                        </li>
                     </ul>
+
+
                 </div>
-
-
+                <!-- 진도율 박스 (알람+버튼 박스와 너비 동일) -->
+                <div class="flex-1 flex-col flex">
+                    <div class="flex-1">up</div>
+                    <div class="flex-1">
+                        <div class="text-xl font-bold text-gray-800 mb-2">영어</div>
+                        <div class="relative w-full h-6 bg-blue-100 rounded-full overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-blue-500" style="width: 70%;"></div>
+                        </div>
+                        <div class="mt-1 text-right font-semibold text-gray-700">70%</div>
+                    </div>
+                    <div class="flex-1">down</div>
+                </div>
             </div>
 
-            <!-- 진도율 박스 (알람+버튼 박스와 너비 동일) -->
-            <div class="mt-10 w-[730px]">
-                <div class="text-xl font-bold text-gray-800 mb-2">영어</div>
-                <div class="relative w-full h-6 bg-blue-100 rounded-full overflow-hidden">
-                    <div class="absolute top-0 left-0 h-full bg-blue-500" style="width: 70%;"></div>
-                </div>
-                <div class="mt-1 text-right font-semibold text-gray-700">70%</div>
+            <!-- 반 목록 (수평으로 과목 나열, 중복 반 제거) -->
+            <div class="bg-blue-600 text-white rounded-2xl  py-6 px-2 flex flex-col items-start gap-4 w-[220px] shadow-lg ">
+                <h3 class="text-2xl font-bold text-center w-full">반 목록</h3>
+                <ul id="classroom-list-ul" class="flex flex-col gap-2 w-full">
+                </ul>
             </div>
-
         </div> <!-- /.flex-col -->
     </div>
     </div><!-- /.flex-center -->

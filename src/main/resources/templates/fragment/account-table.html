@@ -2,30 +2,18 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:fragment="accountTable(accountData, actionColumn)">
+<th:block th:fragment="accountTable">
     <table class="admin-table">
         <thead>
-        <tr>
-            <th>이름</th>
-            <th>로그인 아이디</th>
-            <th>이메일</th>
-            <th>구분</th>
-            <th></th>
-        </tr>
+            <tr>
+                <th>이름</th>
+                <th>로그인 아이디</th>
+                <th>이메일</th>
+                <th>구분</th>
+                <th></th>
+            </tr>
         </thead>
-        <tbody class="overflow-scroll">
-        <tr
-            th:each="account : ${accountData}"
-            th:object="${account}"
-            th:unless="${account.loginId.equals('admin')}">
-            <td th:text="*{name}"></td>
-            <td th:text="*{loginId}"></td>
-            <td th:text="*{email}"></td>
-            <td th:text="*{role.roleName}"></td>
-            <td class="action-column">
-                <div th:replace="${actionColumn}">default</div>
-            </td>
-        </tr>
+        <tbody>
         </tbody>
     </table>
 </th:block>

@@ -2,6 +2,7 @@ package com.blendonclass.control;
 
 
 import com.blendonclass.constant.SUBJECT;
+import com.blendonclass.dto.ClassroomListDto;
 import com.blendonclass.entity.Classroom;
 import com.blendonclass.service.AuthorityService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class TeacherController {
         }
 
         List<Classroom> classrooms = authorityService.getClassroomsByAccountIdAndSubjects(accountId, subjects);
+
 
         model.addAttribute("accountId", accountId);
         model.addAttribute("subjects", subjects);

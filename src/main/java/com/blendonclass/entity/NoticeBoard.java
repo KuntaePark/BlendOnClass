@@ -35,6 +35,7 @@ public class NoticeBoard {
 
     public static NoticeBoard toNoticeBoard(NoticeWriteDto noticeWriteDto, Authority authority) {
         NoticeBoard noticeBoard = new NoticeBoard();
+        noticeBoard.setId(noticeWriteDto.getNbId());
         noticeBoard.setTitle(noticeWriteDto.getTitle());
         noticeBoard.setContext(noticeWriteDto.getContext());
         noticeBoard.setAuthority(authority);

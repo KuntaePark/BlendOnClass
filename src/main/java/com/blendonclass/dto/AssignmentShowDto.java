@@ -20,15 +20,18 @@ public class AssignmentShowDto {
     private LocalDateTime writeTime;
     private LocalDate dueDate;
     private Boolean isWriter;
-  //  private String fileUrl;
+    private String fileUrl;
 
     public static AssignmentShowDto from(AssignmentBoard assignmentBoard) {
         AssignmentShowDto assignmentShowDto = new AssignmentShowDto();
         assignmentShowDto.setAbId(assignmentBoard.getId());
+        assignmentShowDto.setClassroomId(assignmentBoard.getAuthority().getClassroom().getId());
+        assignmentShowDto.setWriterName(assignmentBoard.getAuthority().getAccount().getName());
+        assignmentShowDto.setWriterEmail(assignmentBoard.getAuthority().getAccount().getEmail());
         assignmentShowDto.setTitle(assignmentBoard.getTitle());
         assignmentShowDto.setContext(assignmentBoard.getContext());
         assignmentShowDto.setWriteTime(assignmentBoard.getWriteTime());
-     //   assignmentShowDto.setFileUrl(assignmentBoard.getFileUrl());
+        assignmentShowDto.setFileUrl(assignmentBoard.getFileUrl());
         assignmentShowDto.setDueDate(assignmentBoard.getDueDate());
         return assignmentShowDto;
     }

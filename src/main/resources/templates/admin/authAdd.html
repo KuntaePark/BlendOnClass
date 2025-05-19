@@ -6,8 +6,9 @@
 
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script">
-    <script th:src="@{/javascript/accountMng.js}"></script>
+    <script th:src="@{/javascript/authAdd.js}"></script>
     <script th:inline="javascript">
+        const classroomDto = [[${classroomDto}]];
         $(function() {
             updateAccountTable([[${accountListDtos}]]);
             updatePaging([[${accountListDtos}]]);
@@ -15,22 +16,35 @@
     </script>
 </th:block>
 
-
 <th:block layout:fragment="main">
     <div class="main-container">
+        <!-- 제목 -->
         <div class="title-box">
-            <span>계정 관리</span>
-            <span class="text-base font-light">계정 검색, 추가, 삭제 및 정보수정</span>
+            <p>권한 추가하기</p>
+            <p class="title-sub">
+               <span class="font-bold text-red-400" th:text="${classroomDto.grade+'학년 '+classroomDto.classroomNum}+'반'"/>에 대한 권한을 추가합니다.</p>
         </div>
-        <div class="flex-1 flex flex-col w-full">
+        <!-- 계정 목록 -->
+        <div class="flex-1 flex-col">
             <div id="table-header" class="flex flex-row py-2 border-b-1 gap-2 items-center border-gray-200">
-                <form id= "searchbar-form" class="flex-1 flex flex-row items-center gap-2">
+                <form id="searchbar-form" class="flex-1 flex flex-row items-center gap-2">
                     <!-- 검색 바 -->
                     <th:block th:replace="~{fragment/components::searchBar}"></th:block>
                 </form>
-                <a href="/admin/accountGen" class="rectangle-button bg-(--primary-color)">계정 추가</a>
             </div>
-            <th:block th:replace="~{fragment/account-table :: accountTable}"></th:block>
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>로그인 아이디</th>
+                    <th>이메일</th>
+                    <th>구분</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
         <!--  paging  -->
         <div id="page-select" class="flex flex-row gap-2 w-full">

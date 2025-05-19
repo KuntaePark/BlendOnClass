@@ -4,35 +4,22 @@ const filters = {
 }
 
 let data = null;
-
-const ctx = document.getElementById('myChart').getContext('2d');
-const chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: [],
-        datasets: []
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            zoom : {
-                pan : {
-                    enabled: true,
-                    mode: 'xy'
-                },
-                zoom: {
-                    wheel: {enabled: true},
-                    pinch: {enabled: true},
-                    mode: 'xy'
-                }
-            }
-        },
-        scales: { y: { beginAtZero: true, max: 100 } }
-    }
-});
+let chart = null;
 
 //onload
 $(function() {
+    const ctx = document.getElementById('myChart').getContext('2d');
+    chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: []
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
     if(classroomId) {filters.grade = grade};
     $('#grade-select').on('change', function() {onFilterChange($(this).val(), "grade")});
     $('#subj-select').on('change', function() {onFilterChange($(this).val(), "subject")});
@@ -97,10 +84,11 @@ function drawByChapter() {
         data.filter(data => {
             if(data.chapterTitle === label) {
                 completeRates += data.completeRate??0;
-                attemptCounts += data.attemptcount??0;
+                attemptCounts += data.attemptCount??0;
                 count++;
             }
         })
+        console.log(attemptCounts);
         completeRateData.push(completeRates / count);
         attemptCountData.push(attemptCounts / count);
     })
@@ -111,12 +99,12 @@ function drawByChapter() {
     chart.data.datasets = [{
         label: `${'수학'} - 대단원별 평균 완수율`,
         data: completeRateData,
-        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+        backgroundColor: 'rgba(13, 101, 211, 0.8)'
     },
     {
         label: `${'수학'} - 대단원별 평균 시도횟수`,
         data: attemptCountData,
-        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+        backgroundColor: 'rgba(124, 62, 255, 0.8)'
     }
     ];
     chart.update();
@@ -139,12 +127,12 @@ function drawByLesson() {
     chart.data.datasets = [{
         label: `${'수학'} - 소단원별 완수율`,
         data: completeRateData,
-        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+        backgroundColor: 'rgba(13, 101, 211, 0.8)'
     },
     {
         label: `${'수학'} - 소단원별 시도 횟수`,
         data: attemptCountData,
-        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+        backgroundColor: 'rgba(124, 62, 255, 0.8)'
     }];
     chart.update();
 }

@@ -12,6 +12,5 @@ public class AssignmentWriteDto {
     private String title;
     private Long classroomId;
     private String context;
-    private LocalDateTime writeTime;
     private LocalDate dueDate;
 }

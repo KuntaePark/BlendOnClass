@@ -20,8 +20,16 @@ public class QuestionBoardController {
 
     //질문 작성 페이지 요청
     @GetMapping("/question/write")
-    public String getQuestionWritePage(@RequestParam("id") Long classroomId, Model model){
-        QuestionWriteDto questionWriteDto = new QuestionWriteDto();
+    public String getQuestionWritePage(@RequestParam(name="id", required = false) Long qbId,
+                                        @RequestParam("classroomId") Long classroomId,
+                                       Model model){
+        QuestionWriteDto questionWriteDto = null;
+        if(qbId != null){
+            questionWriteDto = questionBoardService.getQuestionWriteDto(qbId);
+        } else {
+            questionWriteDto = new QuestionWriteDto();
+        }
+        System.out.println("페이지 요청 시: "+questionWriteDto);
         model.addAttribute("questionWriteDto", questionWriteDto);
         model.addAttribute("classroomId", classroomId);
         return "board/questionWrite";
@@ -31,7 +39,7 @@ public class QuestionBoardController {
     @PostMapping("/question/write")
     public String saveQuestion(QuestionWriteDto questionWriteDto,
                                Principal principal,
-                               @RequestParam("id") Long classroomId,
+                               @RequestParam("classroomId") Long classroomId,
                                Model model){
         Long id = Long.parseLong(principal.getName());
         System.out.println(questionWriteDto);
@@ -44,33 +52,38 @@ public class QuestionBoardController {
     }
 
     @PostMapping("/question/delete")
-    public String deleteQuestion(@RequestParam("id") Long qbId){
+    public String deleteQuestion(@RequestParam("id") Long qbId, @RequestParam("classroomId") Long classroomId){
         questionBoardService.deleteQuestion(qbId);
-        return "redirect:/student";
+        return "redirect:/board?id="+classroomId;
     }
 
     //답변 삭제
     @PostMapping("/question/answer/delete")
-    public String deleteAnswer(@RequestParam("id") Long qbId, Principal principal){
+    public String deleteAnswer(@RequestParam("id") Long qbId,
+                               @RequestParam("classroomId") Long classroomId,
+                               Principal principal){
         Long id = Long.parseLong(principal.getName());
         questionBoardService.deleteAnswer(qbId, id);
-        return "redirect:/student";
+        return "redirect:/board/question/detail?id="+qbId+"&classroomId="+classroomId;
     }
     
     //질문 상세 페이지 요청
     @GetMapping("/question/detail")
-    public String getQuestionDetail(@RequestParam("id") Long qbId, Principal principal, Model model){
+    public String getQuestionDetail(@RequestParam("id") Long qbId, @RequestParam("classroomId") Long classroomId, Principal principal, Model model){
         Long accountId = Long.parseLong(principal.getName());
         QuestionShowDto questionShowDto = questionBoardService.getQuestionDetail(qbId,accountId);
         model.addAttribute("questionShowDto", questionShowDto);
+        model.addAttribute("classroomId", classroomId);
         return "board/questionDetail";
     }
 
     //질문 답변 저장
     @PostMapping("/question/answer/write")
-    public String saveAnswer(@RequestParam("id") Long qbId, Principal prinicpal, @RequestParam String aContext){
-        Long id = Long.parseLong(prinicpal.getName());
+    public String saveAnswer(@RequestParam("id") Long qbId,
+                             @RequestParam("classroomId") Long classroomId,
+                             Principal principal, @RequestParam String aContext){
+        Long id = Long.parseLong(principal.getName());
         questionBoardService.saveAnswer(qbId, id, aContext);
-        return "redirect:/student";
+        return "redirect:/board/question/detail?id="+qbId+"&classroomId="+classroomId;
     }
 }

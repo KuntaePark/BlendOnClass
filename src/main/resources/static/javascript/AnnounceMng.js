@@ -1,10 +1,3 @@
-//onload
-$(function() {
-    $('#searchbar-form').on('submit', function(e) {
-        e.preventDefault();
-        getSearchResult(0);
-    })
-})
 
 function deleteAccount(id) {
     alert("계정 삭제");
@@ -15,14 +8,11 @@ function deleteAccount(id) {
 async function getSearchResult(pageNum) {
     await new Promise((resolve, reject) => {
         const data = {
-            pageNum,
-            keyword: $("#keyword").val(),
-            searchType : 'NAME',
-            roleType: $("#roleType").val(),
+            pageNum
         }
         $.ajax({
             type: "GET",
-            url: "/admin/accounts/search",
+            url: "/admin/announce",
             data,
             success: function(result) {
                 console.log(result);

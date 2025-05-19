@@ -2,14 +2,9 @@
 $(function() {
     $('#searchbar-form').on('submit', function(e) {
         e.preventDefault();
-        getSearchResult(0);
+        getSearchResult();
     })
 })
-
-function deleteAccount(id) {
-    alert("계정 삭제");
-}
-
 
 //계정 검색
 async function getSearchResult(pageNum) {
@@ -60,25 +55,19 @@ function updateAccountTable(result) {
         }
         const $role = $('<td>').text(roleText);
         const $td = $('<td>').addClass('action-column');
-        const $modifyButton = $('<a/>', {
+        const $modifyButton = $('<button/>', {
             "class" : "square-button-10 bg-(--primary-color) flex",
-            "href" : "/admin/modifyAccount?id="+row.id,
+        })
+        $modifyButton.on('click', function(e) {
+            //권한 추가 모달 열기
+            alert("open add");
         })
         $('<img/>', {
-            "src" : "/images/icons/icon_modify.png",
-            "class" : "min-w-6 h-6 invert m-auto"
+            "src" : "/images/icons/icon_add.png",
+            "class" : "min-w-4 h-4 invert m-auto"
         }).appendTo($modifyButton);
 
-        const $deleteButton = $('<button/>', {
-            "class" : "square-button-10 bg-red-400 flex",
-            "onclick" : "deleteAccount("+row.id+")",
-        })
-        $('<img/>', {
-            "src" : "/images/icons/icon_delete.png",
-            "class" : "min-w-6 h-6 invert m-auto"
-        }).appendTo($deleteButton);
-
-        $td.append($modifyButton, $deleteButton);
+        $td.append($modifyButton);
         $tr.append($name, $loginId, $email, $role, $td);
         $tbody.append($tr);
     })

@@ -1,70 +1,48 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>공지사항 작성</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 min-h-screen flex items-center justify-center p-8">
-<div id="main" class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-10">
-    <form
-            th:action="@{'/board/notice/write?id='+${classroomId}}"
-            th:object="${noticeWriteDto}"
-            method="post"
-            enctype="multipart/form-data"
-            class="space-y-8"
-    >
-        <!-- 제목 -->
-        <div>
-            <label for="title" class="block text-2xl font-extrabold text-indigo-900 mb-3">제목</label>
-            <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    th:field="*{title}"
-                    placeholder="공지사항 제목을 입력하세요"
-                    class="w-full rounded-2xl border-4 border-indigo-700 px-6 py-4 text-xl font-semibold text-indigo-900 focus:border-pink-500 focus:ring-4 focus:ring-pink-300 outline-none shadow-lg transition"
-                    required
-            />
-        </div>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
 
-        <!-- 내용 -->
-        <div>
-            <label for="context" class="block text-2xl font-extrabold text-indigo-900 mb-3">내용</label>
-            <textarea
-                    id="context"
-                    name="context"
-                    cols="30"
-                    rows="10"
-                    th:field="*{context}"
-                    placeholder="공지사항 내용을 입력하세요"
-                    class="w-full rounded-2xl border-4 border-indigo-700 px-6 py-5 text-lg text-indigo-800 resize-none focus:border-pink-500 focus:ring-4 focus:ring-pink-300 outline-none shadow-lg transition"
-                    required
-            ></textarea>
-        </div>
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
 
-        <!-- 파일첨부 -->
-        <div>
-            <label for="fileUrl" class="block text-2xl font-extrabold text-indigo-900 mb-3">파일첨부</label>
-            <input
-                    type="file"
-                    id="fileUrl"
-                    name="fileUrl"
-                    class="w-full text-indigo-900 font-semibold"
-            />
+<th:block layout:fragment="main">
+    <div class="main-container rounded-border-box">
+        <div class="title-box">
+            <p>공지 작성</p>
         </div>
+        <form method="post"
+              th:object="${noticeWriteDto}"
+              th:action="@{'/board/notice/write?id='+${classroomId}}" enctype="multipart/form-data"
+              class="input-form">
 
-        <!-- 제출 버튼 -->
-        <div>
-            <input
-                    type="submit"
-                    id="submit"
-                    value="글작성"
-                    class="w-full bg-pink-600 hover:bg-pink-700 text-white font-extrabold text-2xl px-12 py-5 rounded-full shadow-2xl transition transform hover:-translate-y-1 active:scale-95 cursor-pointer"
-            />
-        </div>
-    </form>
-</div>
-</body>
+            <input type="hidden" th:field="*{nbId}"/>
+            <input type="hidden" th:field="*{writerId}"/>
+            <input type="hidden" th:field="*{classroomId}"/>
+            <div class="input-container">
+                <label th:for="title">제목</label>
+                <p class="text-red-400" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+                <input class="input-area" type="text" th:field="*{title}">
+            </div>
+            <div class="input-container flex-1">
+                <label th:for="context">내용</label>
+                <p class="text-red-400" th:if="${#fields.hasErrors('context')}" th:errors="*{context}"></p>
+                <textarea class="input-area flex-1" type="text" th:field="*{context}"></textarea>
+            </div>
+            <div class="input-container">
+                <label for="file">첨부 파일 선택</label>
+                <input class="input-area w-[400px]" id="file" type="file" name="file">
+            </div>
+            <div class="button-box">
+                <button type="submit" class="rectangle-button bg-(--primary-color)">
+                    저장
+                </button>
+                <button type="button" class="rectangle-button bg-gray-500" th:onclick="redirectTo([[${'/board?id='+classroomId}]])">
+                    취소
+                </button>
+            </div>
+        </form>
+    </div>
+</th:block>
 </html>
