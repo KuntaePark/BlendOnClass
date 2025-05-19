@@ -9,16 +9,18 @@
 </head>
 
 <th:block layout:fragment="css"></th:block>
-<th:block layout:fragment="script"></th:block>
+<th:block layout:fragment="script">
+    <script src="/javaScript/getSysAnn.js"></script>
+    <script src="/javascript/modal.js"></script>
+</th:block>
 
-<div layout:fragment="main" id="main">
-
-
+<th:block layout:fragment="main">
+    <div class="main-container">
     <div class="rounded-lg mt-12 flex justify-center">
         <img src="/images/StudentMain.png" alt="Student Home 이미지" class="max-w-full h-auto object-contain" />
     </div>
 
-    <div class="flex justify-between mt-12 gap-6">
+    <div class="flex-1 flex justify-between gap-6">
 
         <div class="bg-white rounded-lg shadow-lg w-[600px] min-h-[240px]">
                 <div class="bg-(--primary-color) w-full px-6 py-3 rounded-t-lg">
@@ -29,7 +31,7 @@
                     </div>
                 </div>
 
-            <div class="p-6">
+            <div class="p-6 flex-1">
                 <div th:if="${lastLesson != null}" class="flex gap-6 items-center">
 
                     <!-- 왼쪽: 강의 이미지 -->
@@ -72,19 +74,46 @@
 
         </div>
 
-        <div class="bg-white rounded-lg shadow-lg w-[600px] min-h-[240px]">
-            <div class="bg-(--primary-color) w-full px-6 py-3 rounded-t-lg">
+        <div class="bg-white rounded-lg shadow-lg flex-1 flex flex-col">
+            <div class="bg-blue-600 w-full px-6 py-4 rounded-t-lg">
                 <div class="flex items-center space-x-2">
-                    <img src="/images/alarm.png" alt="학습 아이콘" class="w-7 h-7" />
+                    <img src="/images/alarm.png" alt="알람 아이콘" class="w-6 h-6" />
                     <h2 class="text-white text-xl font-semibold tracking-widest">알람</h2>
                 </div>
-
             </div>
-
-
+            <div class="grid grid-cols-4 px-6 py-2 border-b border-gray-300 text-sm font-semibold text-gray-700 bg-gray-50">
+                <div class="text-center col-span-3">메시지</div>
+                <div class="text-center col-span-1">등록일</div>
+            </div>
+            <div class="px-6 py-2 space-y-3 overflow-y-auto flex-1">
+                <th:block th:each="alarm : ${alarmListDtos}">
+                    <div class="grid grid-cols-4 border-b border-dotted pb-2">
+                        <div class="text-center text-gray-800 hover:text-gray-500 text-sm font-medium col-span-3">
+                            <a th:if="${!alarm.isSystem}" th:text="${alarm.message}" th:href="@{${alarm.alarmUrl}}">알림 내용</a>
+                            <button th:if="${alarm.isSystem}" th:onclick="getSysAnn([[${alarm.alarmUrl}]])" th:text="${alarm.message}"></button>
+                        </div>
+                        <div class="text-center text-sm text-gray-500 col-span-1">
+                            <span th:text="${#temporals.format(alarm.alarmTime, 'yyyy-MM-dd (E)')}"></span>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
         </div>
     </div>
-</div>
+    </div>
+    <div id="modal-show-announce" class="modal-container w-[600px] h-[600px]">
+        <div class="modal-main gap-4">
+            <div class="font-bold text-3xl">
+                공지 : <p id="title" class="inline"></p>
+            </div>
 
-
+            <div id="context" class="flex-1 text-black text-lg p-4 bg-gray-200 rounded-border-box"></div>
+            <div class="button-box">
+                <button type="button" onclick="closeModal($('#modal-show-announce'))" class="rectangle-button bg-red-400">확인</button>
+            </div>
+        </div>
+    </div>
+    <!-- 모달 표시 시 배경 필터 -->
+    <div id="background-overlay" onclick="closeAllModal()" class="fixed w-[100vw] h-[100vh] top-0 left-0 opacity-80 bg-gray-400 z-40 hidden"></div>
+</th:block>
 </html>

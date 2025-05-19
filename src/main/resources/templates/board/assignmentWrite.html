@@ -40,9 +40,9 @@
                 <button type="submit" class="rectangle-button bg-(--primary-color)">
                     저장
                 </button>
-                <button type="button" class="rectangle-button bg-gray-500">
+                <a th:href="@{'/board?id='+${classroomId}}" type="button" class="rectangle-button bg-gray-500">
                     취소
-                </button>
+                </a>
             </div>
         </form>
     </div>

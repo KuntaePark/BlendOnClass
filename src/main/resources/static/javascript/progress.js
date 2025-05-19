@@ -110,10 +110,10 @@ function onSubjectChange(classroomId,subject) {
 
 function setSelectedStyle(element) {
     element.classList.remove('bg-white');
-    element.classList.add('bg-red-200');
+    element.classList.add('bg-(--primary-color)');
 }
 
 function setDefaultStyle(element) {
-    element.classList.remove('bg-red-200');
+    element.classList.remove('bg-(--primary-color)');
     element.classList.add('bg-white');
 }

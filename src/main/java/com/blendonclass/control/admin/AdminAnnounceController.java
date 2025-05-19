@@ -13,12 +13,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Optional;
 
@@ -65,5 +67,12 @@ public class AdminAnnounceController {
     public String deleteSysAnn(@RequestParam("id") Long saId) {
         sysAnnService.deleteAnnounce(saId);
         return "redirect:/admin/announce";
+    }
+
+    //사용자 시스템 공지 열람용
+    @GetMapping("/sysAnn")
+    @ResponseBody
+    public SysAnnDetailDto getSysAnnDetail(@RequestParam("id") Long saId) {
+        return sysAnnService.getSysAnnDetail(saId);
     }
 }

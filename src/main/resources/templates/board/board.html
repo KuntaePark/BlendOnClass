@@ -81,7 +81,7 @@
                     과제
                 </div>
                 <th:block sec:authorize="hasRole('ROLE_TEACHER')">
-                    <a class="board-add-button" th:href="@{'/board/assignment/write?id='+${classroomId}}">
+                    <a class="board-add-button" th:href="@{'/board/assignment/write?classroomId='+${classroomId}}">
                         <p class="">+</p>
                     </a>
                 </th:block>

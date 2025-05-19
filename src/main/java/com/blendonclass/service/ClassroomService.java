@@ -51,4 +51,8 @@ public class ClassroomService {
     public ClassroomDto getClassroomById(Long id) {
         return ClassroomDto.from(classroomRepository.findById(id).get());
     }
+
+    public int getGradeOfClassroom(Long classroomId) {
+        return classroomRepository.findById(classroomId).get().getGrade();
+    }
 }

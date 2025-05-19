@@ -1,13 +1,16 @@
 package com.blendonclass.control;
 
 import com.blendonclass.constant.ROLE;
+import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.AlarmListDto;
 import com.blendonclass.dto.ClassroomListDto;
+import com.blendonclass.dto.ProgressListDto;
 import com.blendonclass.entity.Authority;
 import com.blendonclass.entity.Classroom;
 import com.blendonclass.service.AlarmService;
 import com.blendonclass.service.AuthorityService;
 import com.blendonclass.service.ClassroomService;
+import com.blendonclass.service.ProgressService;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,8 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 @Getter@Setter
@@ -28,6 +33,7 @@ import java.util.Optional;
 public class MainController {
 
     private final AuthorityService authorityService;
+    private final ProgressService progressService;
     private final AlarmService alarmService;
 
 
@@ -53,18 +59,39 @@ public class MainController {
     @GetMapping(value={"/teacher", "/teacher/{id}"})
     public String teacher(@PathVariable("id") Optional<Long> classroomId, Principal principal, Model model) {
         Long id = Long.parseLong(principal.getName());
-
         List<ClassroomListDto> classroomListDtos = authorityService.getClassroomsByAccountId(id);
+
+        Long curClassroomId = classroomId.isPresent() ? classroomId.get() : classroomListDtos.get(0).getClassroomId();
+
         //해당 반 알림 로드
-        List<AlarmListDto> alarmListDtos = null;
-        if(classroomId.isPresent()) {
-            alarmListDtos = alarmService.getAlarmByClassroomId(classroomId.get());
+        List<AlarmListDto> alarmListDtos1 = alarmService.getAlarmByAccountIdAndClassroomId(id, curClassroomId);
+        //시스템 공지
+        List<AlarmListDto> alarmListDtos2 = alarmService.getSystemAlarm(id);
+        List<AlarmListDto> alarmListDtos = Stream.concat(alarmListDtos1.stream(), alarmListDtos2.stream()).toList();
+
+        //반 및 권한 목록을 가지고 있으므로, 해당 반에 대해 담임 권한이 있다면 전체 과목 진도를 가져옴
+        List<ClassroomListDto> curClassroomListDtos = classroomListDtos.stream().filter(
+                classroomListDto -> classroomListDto.getClassroomId().equals(curClassroomId))
+                .collect(Collectors.toList());
+
+        //진도율 모두 검색
+        List<ProgressListDto> progressListDtos = progressService.getProgressesOfClassroom(curClassroomId);
+        for(ProgressListDto progressListDto : progressListDtos) {
+            System.out.println(progressListDto);
+        }
+        if(curClassroomListDtos.stream().anyMatch(classroomListDto ->
+                classroomListDto.getSubject().equals("담임"))) {
+            model.addAttribute("progressListDtos", progressListDtos);
         } else {
-            alarmListDtos = alarmService.getAlarmByClassroomId(classroomListDtos.get(0).getClassroomId());
+            //해당 과목만
+            ClassroomListDto classroomListDto = curClassroomListDtos.get(0);
+            progressListDtos = progressListDtos.stream().filter(progressListDto ->
+                    progressListDto.getSubject().getSubject().equals(classroomListDto.getSubject())).collect(Collectors.toList());
+            model.addAttribute("progressListDtos", progressListDtos);
         }
 
         model.addAttribute("classroomListDtos", classroomListDtos);
-        model.addAttribute("classroomId",classroomId.orElse(classroomListDtos.get(0).getClassroomId()));
+        model.addAttribute("classroomId",curClassroomId);
         model.addAttribute("alarmListDtos", alarmListDtos);
         //todo - 반 바뀔 떄마다 alarm 및 진도율 재로드
         return "teacherMain";

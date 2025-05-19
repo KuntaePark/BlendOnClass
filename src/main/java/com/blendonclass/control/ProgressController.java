@@ -4,6 +4,7 @@ import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.ChapterLessonDto;
 import com.blendonclass.dto.ProgressDto;
 import com.blendonclass.entity.Progress;
+import com.blendonclass.service.ClassroomService;
 import com.blendonclass.service.LessonService;
 import com.blendonclass.service.ProgressService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ProgressController {
     private final LessonService lessonService;
     private final ProgressService progressService;
+    private final ClassroomService classroomService;
 
     @GetMapping("/teacher/progress")
     public String getProgressSetPage(@RequestParam("id") Long classroomId,
@@ -31,8 +33,10 @@ public class ProgressController {
         //todo - 해당 과목의 progress 찾기
         List<ChapterLessonDto> chapterLessonDtos = null;
         ProgressDto progressDto = null;
+        int grade = classroomService.getGradeOfClassroom(classroomId);
+
         if(subject != null) {
-            chapterLessonDtos = lessonService.getAllLessons(1, subject);
+            chapterLessonDtos = lessonService.getAllLessons(grade, subject);
             Progress progress = progressService.getProgress(classroomId, subject);
             progressDto = progress != null ? ProgressDto.from(progress) : new ProgressDto();
         }

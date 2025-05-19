@@ -38,12 +38,12 @@
         </div>
 
         <!-- 과목 선택 -->
-        <div class="mt-4">
-            <label for="subj-select">과목 선택</label>
+        <div>
+            <label for="subj-select" class="hidden">과목 선택</label>
             <select id="subj-select" name="subj-select"
                     th:onchange="onSubjectChange([[${classroomId}]], this.value)"
                     class="border rounded px-3 py-2 w-60">
-                <option value="">과목</option>
+                <option value="">과목 선택</option>
                 <th:block th:with="SUBJECT=${T(com.blendonclass.constant.SUBJECT)}">
                     <th:block th:each="subject : ${SUBJECT.values()}">
                         <option th:if="${subject != SUBJECT.HR}"
@@ -64,12 +64,11 @@
 
             <!-- 레슨 버튼들 -->
             <div th:if="${lessons != null}"
-                 class="flex gap-2 overflow-x-auto pb-2">
+                 class="flex gap-2 overflow-x-auto p-4 snap-x">
                 <button th:each="lesson : ${lessons}"
                         th:value="${lesson.lessonId}"
-                        th:text="${lesson.lessonId}"
                         th:onclick="selectRange([[${lesson.lessonId}]])"
-                        class="range-button flex-none w-10 h-10 border rounded hover:bg-gray-200">
+                        class="range-button snap-center flex-none w-16 h-16 border-4 border-(--primary-color) rounded-xl hover:bg-white hover:scale-110 transition-all duration-200">
                 </button>
             </div>
 

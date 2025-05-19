@@ -29,8 +29,13 @@ public class AssignmentBoardController {
 
     //과제 작성 페이지 요청
     @GetMapping("/assignment/write")
-    public String task(@RequestParam("id") Long classroomId, Model model) {
+    public String task(@RequestParam(name = "id", required = false) Long abId,
+                       @RequestParam("classroomId") Long classroomId,
+                       Model model) {
         AssignmentWriteDto assignmentWriteDto = new AssignmentWriteDto();
+        if(abId != null) {
+            assignmentWriteDto = assignmentBoardService.getAssignmentWriteDto(abId);
+        }
         model.addAttribute("assignmentWriteDto", assignmentWriteDto);
         model.addAttribute("classroomId", classroomId);
         return "board/assignmentWrite";
@@ -90,6 +95,13 @@ public class AssignmentBoardController {
         model.addAttribute("classroomId", classroomId);
         model.addAttribute("submitWriteDto", submitWriteDto);
         return "board/submitWrite";
+    }
+
+    //과제 글 삭제
+    @PostMapping("/assignment/delete")
+    public String deleteAssignment(@RequestParam("id") Long abId, @RequestParam("classroomId") Long classroomId, Model model) {
+        assignmentBoardService.deleteAssignmentBoard(abId);
+        return "redirect:/board?id=" + classroomId;
     }
 
     //과제 제출 저장

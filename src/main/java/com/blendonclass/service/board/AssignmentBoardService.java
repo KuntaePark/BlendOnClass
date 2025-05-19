@@ -176,4 +176,8 @@ public class AssignmentBoardService {
            return null;
        }
     }
+
+    public AssignmentWriteDto getAssignmentWriteDto(Long abId) {
+        return AssignmentWriteDto.from(assignmentBoardRepository.findById(abId).get());
+    }
 }

@@ -2,6 +2,7 @@ package com.blendonclass.repository;
 
 import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.LessonClassroomScoreDto;
+import com.blendonclass.dto.ProgRateCalcDto;
 import com.blendonclass.entity.ClassroomScore;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +19,16 @@ public interface ClassroomScoreRepository extends JpaRepository<ClassroomScore, 
 //    List<LessonScoreDto> findScoresByGradeAndSubjectAndClassroomId(int grade, SUBJECT subject, Long classroomId);
     List<ClassroomScore> findByClassroomIdOrderByLessonIdAsc(Long classroomId);
     List<ClassroomScore> findByClassroomIdAndLessonIdBetweenOrderByLessonIdAsc(Long classroomId, Long lessonId1, Long lessonId2);
-    float findAvgCompleteRateByClassroomIdAndLessonIdBetween(Long classroomId, Long lessonId1, Long lessonId2);
+
+    @Query("""
+        select cs.completeRate
+        from ClassroomScore cs
+        right join cs.lesson l on cs.lesson.id = l.id and cs.classroom.id = :classroomId
+        where l.id between :lessonId1 and :lessonId2
+        """)
+    List<Float> findCompleteRatesOfProgress(Long classroomId,Long lessonId1, Long lessonId2);
+
+
     @Query("""
     select new com.blendonclass.dto.LessonClassroomScoreDto(
         c.id, c.grade, c.subject, c.title, l.id, l.lessonTitle,
