@@ -2,7 +2,10 @@ package com.blendonclass.service;
 
 import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.dto.*;
-import com.blendonclass.entity.*;
+import com.blendonclass.entity.Lesson;
+import com.blendonclass.entity.LessonDetail;
+import com.blendonclass.entity.LessonRecord;
+import com.blendonclass.entity.Score;
 import com.blendonclass.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

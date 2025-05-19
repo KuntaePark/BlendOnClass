@@ -1,7 +1,164 @@
 @import "tailwindcss";
 
 @source "../resources/templates/**/*.{html,js}";
+@source "../resources/static/**/*.{css,js}";
 
-.modal {
-    @apply fixed top-[50vh] left-[50vw] -translate-x-[50%] -translate-y-[50%] bg-white rounded-lg border-1 border-gray-300 p-3 z-50 hidden;
+/*modal base*/
+.modal-container {
+    @apply fixed top-[50vh] left-[50vw] -translate-x-[50%]
+    -translate-y-[50%] bg-white rounded-lg shadow-md z-50 hidden;
 }
+
+.modal-main {
+    @apply px-8 py-10 flex flex-col w-full h-full;
+}
+
+.button-box {
+    @apply flex flex-row justify-end gap-2;
+}
+
+/*-- buttons --*/
+.square-button-10 {
+    @apply w-10 h-10 rounded-md flex items-center justify-center hover:opacity-80 hover:cursor-pointer
+}
+
+.rectangle-button {
+    @apply h-10 p-2 text-white rounded-md flex items-center justify-center hover:opacity-80 hover:cursor-pointer;
+}
+
+.page-button {
+    @apply hover:font-bold hover:cursor-pointer;
+}
+
+.button-hover {
+    @apply hover:cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out;
+}
+
+.button-selected {
+    @apply border-3 rounded-md border-white;
+}
+
+/*-- buttons --*/
+
+/*-- table --*/
+.admin-table {
+    @apply table-auto border-collapse text-left w-full;
+}
+
+.admin-table thead th{
+    @apply text-black font-bold p-2 sticky bg-white top-0 border-b-1 border-gray-200;
+}
+
+.admin-table tbody tr {
+    @apply odd:bg-gray-100 hover:bg-gray-300;
+}
+
+.admin-table td {
+    @apply h-14 py-2 px-2;
+}
+
+.admin-table .action-column {
+    @apply flex flex-row justify-end gap-2;
+}
+/*-- table --*/
+
+/*-- main container --*/
+.main-container {
+    @apply flex-1 flex flex-col max-h-full
+    px-8 py-10 gap-10 rounded-xl bg-white;
+    /*shadow-xl border-gray-200 border-1*/
+}
+
+.main-container .title-box {
+    @apply text-2xl font-bold flex flex-col gap-2
+}
+
+.main-container .title-box .title-sub {
+    @apply text-base font-light;
+}
+
+.rounded-border-box {
+    @apply rounded-xl border-1 border-gray-300;
+}
+/*-- main container --*/
+
+
+/*-- class list li --*/
+#to-add-list li {
+    @apply h-10 p-2 shadow-sm bg-white my-2 mx-1 rounded flex items-center;
+}
+
+/*-- scroll hide --*/
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+/*-- scroll hide --*/
+
+/*-- inputs --*/
+.input-form {
+    @apply flex flex-col gap-6 flex-1;
+}
+
+.input-container {
+    @apply flex flex-col justify-start gap-2;
+}
+
+.input-container label {
+    @apply font-bold text-xl;
+}
+
+.input-area {
+    @apply h-10 p-2 border-1 border-gray-300 focus:outline-gray-500 rounded-md;
+}
+
+
+/*-- board --*/
+.board-container {
+    @apply flex-1 rounded-lg flex flex-col overflow-hidden gap-4;
+}
+
+.board-title {
+    @apply text-black text-2xl mb-2 font-bold flex flex-row gap-2 items-center;
+}
+
+.board-add-button {
+    @apply bg-white border-gray-400 border-4 h-12 rounded-xl flex items-center justify-center
+    text-gray-400 text-2xl font-bold shadow-sm hover:border-gray-900 hover:text-gray-900
+    transition-all duration-200 ease-in-out
+}
+
+.board-add-button-disabled {
+    @apply bg-white border-gray-200 border-4 h-12 rounded-xl flex items-center justify-center
+    text-gray-200 text-2xl font-bold shadow-sm
+}
+
+.board-list {
+    @apply flex-1 flex flex-col gap-6 overflow-y-auto scroll-smooth;
+}
+
+.board-list-box {
+    @apply bg-blue-600 text-white rounded-xl p-8 w-full flex flex-row shadow-md hover:cursor-pointer
+    hover:bg-blue-700 transition-all duration-200 ease-in-out;
+}
+
+.board-list-box .title {
+    @apply text-xl font-bold mb-1 flex flex-row items-center gap-2;
+}
+
+.board-list-box .writer {
+    @apply text-sm text-gray-200 mb-4;
+}
+
+.board-list-box .context {
+    @apply text-sm
+}
+
+.white-dot {
+    @apply min-w-2 h-2 my-2 mr-2 bg-white rounded-full;
+}
+/*-- board --*/

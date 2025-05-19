@@ -13,12 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +30,7 @@ public class NoticeBoardService {
     public void saveNotice(NoticeWriteDto noticeWriteDto, MultipartFile multipartFile) {
         //계정 id와 반 id로 검색
         Authority authority = authorityRepository.findByAccountIdAndClassroomId(noticeWriteDto.getWriterId(),noticeWriteDto.getClassroomId())
-                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다."));
+                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다.")).get(0);
         String fileName = null;
         if (multipartFile != null && !multipartFile.isEmpty()) {
             try {
@@ -54,15 +52,12 @@ public class NoticeBoardService {
         noticeBoardRepository.save(noticeBoard);
     }
 
+    //공지 삭제
     public void deleteNotice(Long nbId){
-
         noticeBoardRepository.deleteById(nbId);
     }
 
-    public NoticeShowDto getNoticeDetail(Long nbId){
-        return null;
-    }
-
+    //board main용 notice 목록
     public Page<NoticeShowDto> getNoticeList(Pageable pageable, Long classroomId){
         List<NoticeShowDto> noticeList = noticeBoardRepository.findNoticeBoardByClassroomId(classroomId,pageable)
                 .stream().map(NoticeShowDto::from).collect(Collectors.toList());
@@ -70,9 +65,21 @@ public class NoticeBoardService {
         return new PageImpl<>(noticeList, pageable, noticeList.size());
     }
 
-    public NoticeShowDto findById(Long id) {
-        NoticeBoard noticeBoard = noticeBoardRepository.findById(id).orElse(null);
+    //notice 상세
+    public NoticeShowDto getNoticeDetail(Long nbId, Long accountId) {
+        NoticeBoard noticeBoard = noticeBoardRepository.findById(nbId).get();
         NoticeShowDto noticeShowDto = NoticeShowDto.from(noticeBoard);
+        if(noticeBoard.getAuthority().getAccount().getId().equals(accountId)){
+            noticeShowDto.setIsWriter(true);
+        } else {
+            noticeShowDto.setIsWriter(false);
+        }
         return noticeShowDto;
+    }
+
+    //수정 위한 notice 검색
+    public NoticeWriteDto getNoticeWriteDto(Long nbId) {
+        NoticeBoard noticeBoard = noticeBoardRepository.findById(nbId).get();
+        return NoticeWriteDto.from(noticeBoard);
     }
 }

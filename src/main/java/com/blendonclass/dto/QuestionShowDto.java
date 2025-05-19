@@ -18,6 +18,8 @@ public class QuestionShowDto {
     private String answererEmail;
     private String aContext;
     private String aWriteTime;
+    private Boolean isWriter;
+    private Boolean isAnswerer;
 
     public static QuestionShowDto from(QuestionBoard questionBoard){
         QuestionShowDto questionShowDto = new QuestionShowDto();

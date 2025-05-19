@@ -1,8 +1,5 @@
 package com.blendonclass.dto;
 
-import com.blendonclass.entity.Account;
-import com.blendonclass.entity.AssignmentBoard;
-import com.blendonclass.entity.SubmitBoard;
 import lombok.*;
 
 @Getter
@@ -11,9 +8,8 @@ import lombok.*;
 public class SubmitStudentListDto {
     private Long accountId;
     private Long abId;
+    private Long sbId;
     private String name;
     private String email;
     private boolean isSubmit;
-
-
 }

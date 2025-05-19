@@ -8,6 +8,10 @@ plugins {
 group = 'com'
 version = '0.0.1-SNAPSHOT'
 
+frontend {
+    nodeVersion = '22.15.0'
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)

@@ -7,64 +7,90 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
+
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script">
     <script th:src="@{/javascript/progress.js}"></script>
     <script th:inline="javascript">
         $(function() {
             progress = [[${progress}]];
-            subject = [[${subject}]];
-            if(progress != null) {
-                console.log(progress);
+            subject  = [[${subject}]];
+            if (progress != null) {
                 startId = progress.startLessonId ?? -1;
-                endId = progress.endLessonId ?? -1;
+                endId   = progress.endLessonId   ?? -1;
                 $('#end-date').val(progress.endDate);
                 showRange();
             }
-
-            if(subject != null) {
+            if (subject != null) {
                 $('#subj-select').val(subject);
             }
         });
     </script>
 </th:block>
 
-
-<div layout:fragment="main" id="main">
-    <h1>진도 설정 페이지</h1>
-    <div>
-        <select id="subj-select" th:onchange="onSubjectChange([[${classroomId}]], this.value)">
-            <option value="">과목 선택</option>
-            <th:block th:with="SUBJECT=${T(com.blendonclass.constant.SUBJECT)}">
-                <th:block th:each="subject : ${SUBJECT.values()}">
-                    <option th:if="${subject != SUBJECT.HR}" th:value="${subject}" th:text="${subject.getSubject()}"></option>
-                </th:block>
-            </th:block>
-        </select>
-    </div>
-    <div th:if="${subject != null}" id="progress-form" class="flex flex-col gap-2">
-        <th:block th:if="${progress.getId() != null}">
-            <p class="text-red-400">해당 과목의 진도가 존재합니다.</p>
-        </th:block>
-        <p id="warning"></p>
-        <div th:if="${lessons != null}" class="flex flex-1 gap-2 overflow-x-auto">
-            <button class="range-button w-10 h-10 flex-none border-2 rounded border-gray-400
-                            hover:bg-gray-200"
-                    type="button"
-                    th:each="lesson : ${lessons}"
-                    th:onclick="selectRange([[${lesson.lessonId}]])"
-                    th:text="${lesson.lessonId}"
-                    th:value="${lesson.lessonId}"></button>
+<!-- main fragment -->
+<th:block layout:fragment="main">
+    <div class="main-container">
+        <!-- 페이지 제목 (헤더에서 충분히 띄워주기 위해 mt-8 추가) -->
+        <div class="title-box">
+            <p>진도 설정</p>
+            <p class="title-sub">해당 반의 진도를 설정하세요.</p>
         </div>
-        <p>진도 종료일 선택</p>
-        <input id="end-date" type="date">
-        <button id="submit-button" type="button" th:onclick="setProgress([[${classroomId}]])"
-                class="px-2 py-2 border-1 rounded bg-gray-200 w-40" disabled>
-            <th:block th:if="${progress != null}">수정하기</th:block>
-            <th:block th:unless="${progress != null}">등록하기</th:block>
-        </button>
+
+        <!-- 과목 선택 -->
+        <div class="mt-4">
+            <label for="subj-select">과목 선택</label>
+            <select id="subj-select" name="subj-select"
+                    th:onchange="onSubjectChange([[${classroomId}]], this.value)"
+                    class="border rounded px-3 py-2 w-60">
+                <option value="">과목</option>
+                <th:block th:with="SUBJECT=${T(com.blendonclass.constant.SUBJECT)}">
+                    <th:block th:each="subject : ${SUBJECT.values()}">
+                        <option th:if="${subject != SUBJECT.HR}"
+                                th:value="${subject}"
+                                th:text="${subject.getSubject()}"></option>
+                    </th:block>
+                </th:block>
+            </select>
+        </div>
+
+        <div th:if="${subject != null}"
+             id="progress-form"
+             class="flex flex-col gap-4 mt-6">
+            <th:block th:if="${progress.id != null}">
+                <p class="text-red-500">해당 과목의 진도가 존재합니다.</p>
+            </th:block>
+            <p id="warning" class="text-sm text-red-600"></p>
+
+            <!-- 레슨 버튼들 -->
+            <div th:if="${lessons != null}"
+                 class="flex gap-2 overflow-x-auto pb-2">
+                <button th:each="lesson : ${lessons}"
+                        th:value="${lesson.lessonId}"
+                        th:text="${lesson.lessonId}"
+                        th:onclick="selectRange([[${lesson.lessonId}]])"
+                        class="range-button flex-none w-10 h-10 border rounded hover:bg-gray-200">
+                </button>
+            </div>
+
+            <!-- 진도 종료일 선택 -->
+            <div>
+                <label for="end-date" class="block mb-1">진도 종료일 선택</label>
+                <input id="end-date" type="date"
+                       class="border rounded px-3 py-2 w-60"/>
+            </div>
+
+
+            <!-- 제출 버튼 (작게 조정) -->
+            <button id="submit-button"
+                    type="button"
+                    th:onclick="setProgress([[${classroomId}]])"
+                    class="w-40 py-1 bg-blue-600 text-white text-sm rounded disabled:opacity-50"
+                    disabled>
+                <span th:if="${progress != null}">수정하기</span>
+                <span th:unless="${progress != null}">등록하기</span>
+            </button>
+        </div>
     </div>
-    <p id="startId"></p>
-    <p id="endId"></p>
-</div>
+</th:block>
 </html>

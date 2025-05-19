@@ -1,37 +1,21 @@
 package com.blendonclass.control;
 
-import com.blendonclass.dto.AssignmentShowDto;
-import com.blendonclass.dto.AssignmentWriteDto;
-import com.blendonclass.dto.SubmitStudentListDto;
-import com.blendonclass.dto.SubmitWriteDto;
-import com.blendonclass.dto.admin.AccountListDto;
-import com.blendonclass.entity.Account;
-import com.blendonclass.entity.AssignmentBoard;
+import com.blendonclass.dto.*;
 import com.blendonclass.service.AccountService;
 import com.blendonclass.service.AuthorityService;
 import com.blendonclass.service.board.AssignmentBoardService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/board")
 public class AssignmentBoardController {
     private final AssignmentBoardService assignmentBoardService;
 
@@ -43,47 +27,104 @@ public class AssignmentBoardController {
         return null;
     }
 
-    @GetMapping("/post/task")
+    //과제 작성 페이지 요청
+    @GetMapping("/assignment/write")
     public String task(@RequestParam("id") Long classroomId, Model model) {
         AssignmentWriteDto assignmentWriteDto = new AssignmentWriteDto();
         model.addAttribute("assignmentWriteDto", assignmentWriteDto);
         model.addAttribute("classroomId", classroomId);
-        return "task";
+        return "board/assignmentWrite";
     }
-    @PostMapping("/post/task")
+
+    //작성 과제 저장
+    @PostMapping("/assignment/write")
     public String submitAssignment(@RequestParam("id") Long classroomId,
                                    Principal principal,
-                                   @ModelAttribute AssignmentWriteDto assignmentWriteDto,
-                                   @RequestParam("fileUrl") MultipartFile multipartFile) {
+                                   AssignmentWriteDto assignmentWriteDto,
+                                   @RequestParam("file") MultipartFile multipartFile) {
         Long id = Long.parseLong(principal.getName());
         assignmentWriteDto.setWriterId(id);
         assignmentWriteDto.setClassroomId(classroomId);
         assignmentBoardService.saveAssignmentBoard(assignmentWriteDto, multipartFile);
-        return "redirect:/student";
+        return "redirect:/board?id=" + classroomId;
     }
-    @GetMapping("post/task/detail")
-    public String showAssignment(@RequestParam("abId") Long abId, @RequestParam("classroomId") Long classroomId, Model model) {
-        AssignmentShowDto assignmentShowDto = assignmentBoardService.showAssignment(abId);
+
+    //과제 상세 페이지 요청
+    @GetMapping("/assignment/detail")
+    public String getAssignmentDetail(@RequestParam("abId") Long abId,
+                                      @RequestParam("classroomId") Long classroomId, Principal principal, Model model) {
+        Long accountId = Long.parseLong(principal.getName());
+        AssignmentShowDto assignmentShowDto = assignmentBoardService.getAssignmentDetail(abId, accountId);
         model.addAttribute("assignmentShowDto", assignmentShowDto);
 
         //과제 제출자 목록
         List<SubmitStudentListDto> submitStudentListDtos = assignmentBoardService.getSubmitStudentList(abId, classroomId);
         model.addAttribute("submitStudentListDtos", submitStudentListDtos);
-
+        model.addAttribute("classroomId", classroomId);
         //반 학생 목록
-        return "assignment";
-    }
-    @PostMapping("/post/submit")
-    public String submit(@ModelAttribute SubmitWriteDto submitWriteDto,
-                         @ModelAttribute SubmitStudentListDto submitStudentListDto,
-                         MultipartFile multipartFile) {
-        assignmentBoardService.saveSubmit(submitWriteDto, submitStudentListDto, multipartFile);
-        return "redirect:/student";
-    }
-    public String deleteSubmit(@RequestParam("id") Long sbId, Model model) {
-        return null;
+        return "board/assignmentDetail";
     }
 
-    public String getSubmitDetail(@RequestParam("id") Long sbId, Model model) {return null;}
+    //과제 제출 페이지 요청
+    @GetMapping("/assignment/submit/write")
+    public String getSubmitPage(@RequestParam("id") Long abId,
+                                @RequestParam(name="sbId", required = false) Long sbId,
+                                @RequestParam("classroomId") Long classroomId,
+                                Principal principal,
+                                Model model) {
+
+        SubmitWriteDto submitWriteDto = null;
+        if(sbId != null) {
+            submitWriteDto = assignmentBoardService.getSubmitWriteDto(sbId);
+        } else {
+            submitWriteDto = new SubmitWriteDto();
+        }
+        
+        //과제 제출 있는 경우에도 로드
+        Long accountId = Long.parseLong(principal.getName());
+        Long sbId2 = assignmentBoardService.findSbByAccountIdAndAbId(accountId,abId);
+        if(sbId2 != null) {
+            submitWriteDto = assignmentBoardService.getSubmitWriteDto(sbId2);
+        }
+        model.addAttribute("abId", abId);
+        model.addAttribute("classroomId", classroomId);
+        model.addAttribute("submitWriteDto", submitWriteDto);
+        return "board/submitWrite";
+    }
+
+    //과제 제출 저장
+    @PostMapping("/assignment/submit/write")
+    public String submit(@RequestParam("id") Long abId,
+                         SubmitWriteDto submitWriteDto,
+                         MultipartFile file,
+                         Principal principal, Model model){
+        Long id = Long.parseLong(principal.getName());
+        Long classroomId = authorityService.getClassroomIdOfStudent(id);
+        submitWriteDto.setWriterId(id);
+        submitWriteDto.setAbId(abId);
+        System.out.println(submitWriteDto);
+        assignmentBoardService.saveSubmit(submitWriteDto, file);
+
+        return "redirect:/board/assignment/detail?abId="+abId+"&classroomId="+classroomId;
+    }
+
+    @PostMapping("/assignment/submit/delete")
+    public String deleteSubmit(@RequestParam("id") Long sbId,
+                               @RequestParam("abId") Long abId,
+                               @RequestParam("classroomId") Long classroomId,
+                               Model model) {
+        assignmentBoardService.deleteSubmit(sbId);
+        return "redirect:/board/assignment/detail?abId="+abId+"&classroomId="+classroomId;
+    }
+
+    //과제 제출물 상세 불러오기
+    @GetMapping("/assignment/submit/detail")
+    public String getSubmitDetail(@RequestParam("sbId") Long sbId, Principal principal, Model model) {
+        //제출물 불러오기
+        Long id = Long.parseLong(principal.getName());
+        SubmitShowDto submitShowDto = assignmentBoardService.getSubmitDetail(sbId, id);
+        model.addAttribute("submitShowDto", submitShowDto);
+        return "board/submitDetail";
+    }
 
 }

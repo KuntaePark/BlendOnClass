@@ -1,6 +1,5 @@
 package com.blendonclass.repository.board;
 
-import com.blendonclass.entity.NoticeBoard;
 import com.blendonclass.entity.QuestionBoard;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +16,7 @@ public interface QuestionBoardRepository extends JpaRepository<QuestionBoard, Lo
         from QuestionBoard qb
         join Authority a on qb.authority = a
         where a.classroom.id = :classroomId
-        order by qb.aWriteTime desc
+        order by qb.qWriteTime desc
     """)
     List<QuestionBoard> findQuestionBoardByClassroomId(@Param("classroomId") Long classroomId, Pageable pageable);
 }

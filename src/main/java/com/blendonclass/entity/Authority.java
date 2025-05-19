@@ -4,9 +4,11 @@ import com.blendonclass.constant.SUBJECT;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter@Setter
+@ToString
 public class Authority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

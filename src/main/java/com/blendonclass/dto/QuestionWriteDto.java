@@ -3,7 +3,6 @@ package com.blendonclass.dto;
 import com.blendonclass.entity.QuestionBoard;
 import lombok.*;
 
-import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
@@ -16,7 +15,9 @@ public class QuestionWriteDto {
 
     public static QuestionWriteDto toQuestionWriteDto(QuestionBoard questionBoard) {
         QuestionWriteDto questionWriteDto = new QuestionWriteDto();
-        //questionWriteDto.setId(questionBoard.getId());
+        questionWriteDto.setId(questionBoard.getId());
+        questionWriteDto.setWriterId(questionBoard.getAuthority().getAccount().getId());
+        questionWriteDto.setClassroomId(questionBoard.getAuthority().getClassroom().getId());
         questionWriteDto.setTitle(questionBoard.getTitle());
         questionWriteDto.setQContext(questionBoard.getQContext());
         return questionWriteDto;

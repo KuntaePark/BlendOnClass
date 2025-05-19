@@ -16,12 +16,11 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,24 +44,21 @@ public class AccountService {
 
 
     //계정 목록 검색 및 반환
-    public Page<AccountListDto> searchAccountList(Pageable pageable, AccountSearchDto accountSearchDto) {
+    public Page<AccountListDto> searchAccountList(AccountSearchDto accountSearchDto) {
         //todo
         //검색
-        List<Account> accounts = null;
+        Pageable pageable = PageRequest.of(accountSearchDto.getPageNum(), 8);
+        Page<Account> accounts = null;
         String keyword = accountSearchDto.getKeyword();
         ROLE role = accountSearchDto.getRoleType();
         System.out.println(role + " " + keyword);
         if(role != null) {
-            accounts = accountRepository.findByRoleAndNameContaining(role, keyword, pageable);
+            accounts = accountRepository.findByRoleAndNameContainingAndRoleNot(role, keyword, ROLE.ADMIN, pageable);
         } else {
-            accounts = accountRepository.findByNameContaining(keyword, pageable);
+            accounts = accountRepository.findByNameContainingAndRoleNot(keyword, ROLE.ADMIN, pageable);
         }
 
-        List<AccountListDto> accountListDtos = accounts.stream()
-                .map(AccountListDto::from)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(accountListDtos, pageable, accounts.size());
+        return accounts.map(AccountListDto::from);
     }
 
     //단일 계정 정보 조회, 계정 정보 수정 시 필요
@@ -124,7 +120,7 @@ public class AccountService {
     }
 
     //엑셀 파일로 계정 일괄 생성, 생성 성공 시 로그인 아이디, 비밀번호 저장된 csv 파일 전달
-    public File createAccountByFile(MultipartFile file) throws IllegalArgumentException {
+    public String createAccountByFile(MultipartFile file) throws IllegalArgumentException {
         //허용되지 않은 확장자 사용 시 exception
         String fileName = file.getOriginalFilename();
         if(fileName != null && !fileName.isBlank()) {
@@ -201,14 +197,17 @@ public class AccountService {
                         new String[] {record[0], record[1], record[2], loginId, password}
                 );
             }
-            
-            //생성 성공 했을 시, 생성된 로그인 아이디, 비밀번호 csv 파일로 저장
-            File tempFile = File.createTempFile("생성결과", ".csv");
-            CSVWriter csvWriter = new CSVWriter(new FileWriter(tempFile));
-            csvWriter.writeNext(new String[] {"이름", "이메일", "구분", "아이디", "비밀번호"});
-            csvWriter.writeAll(results);
 
-            return tempFile;
+            //생성 성공 했을 시, 생성된 로그인 아이디, 비밀번호 csv 파일로 저장
+            File genFile = new File("C:/files/admin/생성결과.csv");
+            try(CSVWriter csvWriter = new CSVWriter(new FileWriter(genFile, false)); ) {
+                csvWriter.writeNext(new String[] {"이름", "이메일", "구분", "아이디", "비밀번호"});
+                csvWriter.writeAll(results);
+            } catch(IOException e) {
+                throw new IllegalArgumentException("완료 csv 작성 중 오류가 발생했습니다.");
+            }
+
+            return "/files/admin/"+genFile.getName();
             
         } catch (IOException | CsvException e) {
             throw new IllegalArgumentException("파일 처리 중 오류가 발생했습니다.");
@@ -218,13 +217,5 @@ public class AccountService {
     //계정 삭제
     public void deleteAccount(Long accountId) {
         accountRepository.deleteById(accountId);
-    }
-
-
-    public List<Account> getAllAccounts() {
-        Iterable<Account> iterable = accountRepository.findAll();
-        List<Account> accounts = new ArrayList<>();
-        iterable.forEach(accounts::add);
-        return accounts;
     }
 }

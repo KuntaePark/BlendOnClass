@@ -44,7 +44,7 @@ public class QuestionBoard {
 
     public static QuestionBoard toQuestionSaveBoard(QuestionWriteDto questionWriteDto, Authority authority, Account account) {
         QuestionBoard questionBoard = new QuestionBoard();
-        //questionBoard.setId(questionWriteDto.getId());
+        questionBoard.setId(questionWriteDto.getId());
         questionBoard.setTitle(questionWriteDto.getTitle());
         questionBoard.setQContext(questionWriteDto.getQContext());
         questionBoard.setAuthority(authority);

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragment/default}">
+
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+<th:block layout:fragment="main">
+    <div th:object="${questionShowDto}" class="main-container">
+        <div class="title-box">
+            <p>질문</p>
+        </div>
+        <div class="flex-1 flex flex-col gap-4 border-1 rounded-xl border-gray-300 p-4">
+            <div th:text="*{title}" class="font-bold text-2xl"></div>
+            <p>
+                <b>작성자&nbsp</b>
+                <span th:text="*{writerName}"></span>
+            </p>
+            <div class="bg-gray-200 h-[1px] w-full"></div>
+            <div th:text="*{qContext}" class="flex-1"></div>
+            <div class="flex flex-col gap-4 p-4 rounded-xl border-4 border-blue-400 shadow-md">
+                <p class="text-2xl font-bold">답변</p>
+                <!-- 학생 -->
+                <th:block sec:authorize="hasRole('ROLE_STUDENT')">
+                    <th:block th:if="*{aContext != null}">
+                        <p>
+                            <b>작성자&nbsp</b>
+                            <span th:text="*{answererName}"></span>
+                        </p>
+                        <p th:text="*{aContext}"></p>
+                    </th:block>
+                    <th:block th:if="*{aContext == null}">
+                        <p>아직 답변이 등록되지 않았습니다.</p>
+                    </th:block>
+                </th:block>
+                <th:block sec:authorize="hasRole('ROLE_TEACHER')">
+                    <th:block th:if="*{aContext != null}">
+                        <p>
+                            <b>작성자&nbsp</b>
+                            <span th:text="*{answererName}"></span>
+                        </p>
+                        <p th:text="*{aContext}"></p>
+                        <th:block th:if="*{isAnswerer}">
+                            <div class="button-box">
+                                <form method="post" th:action="@{'/board/question/answer/delete?id='+*{id}+'&classroomId='+${classroomId}}">
+                                    <button type="submit" class="rectangle-button bg-(--primary-color)">삭제</button>
+
+                                </form>
+                            </div>
+                        </th:block>
+                    </th:block>
+                    <th:block th:if="*{aContext == null}">
+                        <form th:action="@{'/board/question/answer/write?id='+*{id}+'&classroomId='+${classroomId}}" method="post">
+                            <textarea
+                                    name="aContext"
+                                    rows="6"
+                                    placeholder="답변을 입력하세요..."
+                                    class="w-full p-4 text-lg rounded-2xl border-2 border-gray-200 focus:border-gray-400 outline-none resize-none transition"
+                                    required
+                            ></textarea>
+                            <div class="button-box">
+                                <button type="submit" class="rectangle-button bg-(--primary-color)">
+                                    답변 작성
+                                </button>
+                            </div>
+                        </form>
+                    </th:block>
+                </th:block>
+            </div>
+            <!-- 교사 -->
+
+            <!-- 답변란 (없을 시) -->
+            <div class="button-box" th:if="*{isWriter}">
+                <button class="rectangle-button bg-(--primary-color)" th:onclick="redirectTo([['/board/question/write?id='+*{id}+'&classroomId='+${classroomId}]])">수정</button>
+                <form method="post" th:action="@{'/board/question/delete?id='+*{id}+'&classroomId='+${classroomId}}">
+                    <button type="submit" class="rectangle-button bg-gray-500">삭제</button>
+                </form>
+            </div>
+            <div class="button-box" th:if="*{aContext != null}">
+                <p class="text-red-400">답변 작성 이후에는 질문 수정이 불가합니다.</p>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

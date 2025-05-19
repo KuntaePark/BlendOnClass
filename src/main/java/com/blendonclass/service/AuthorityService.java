@@ -5,7 +5,9 @@ package com.blendonclass.service;
 
 import com.blendonclass.constant.ROLE;
 import com.blendonclass.constant.SUBJECT;
+import com.blendonclass.dto.ClassroomListDto;
 import com.blendonclass.dto.admin.AccountListDto;
+import com.blendonclass.dto.admin.AuthListDto;
 import com.blendonclass.dto.admin.AuthReqListDto;
 import com.blendonclass.entity.Account;
 import com.blendonclass.entity.AuthRequest;
@@ -27,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -38,8 +38,14 @@ public class AuthorityService {
     private final AccountRepository accountRepository;
     private final ClassroomRepository classroomRepository;
 
-    //권한 목록을 엑셀 파일로 받아 일괄 생성
-    public void addAuthorityByFile(MultipartFile file) {}
+    public List<ClassroomListDto> getClassroomsByAccountId(Long accountId) {
+        List<Authority> authorities = authorityRepository.findByAccountId(accountId);
+        return authorities.stream()
+                .map(ClassroomListDto::fromAuthority)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
 
     //단일 권한 추가
     public void addAuthority(Long accountId, Long classroomId, SUBJECT authType) {
@@ -69,14 +75,11 @@ public class AuthorityService {
     }
 
     //특정 반의 권한 보유자 모두 조회
-    public List<AccountListDto> getAllAccountsOfClassroom(Long classroomId){
-        Classroom classroom = classroomRepository.findById(classroomId).get();
-        List<Authority> authorities = authorityRepository.findByClassroom(classroom);
-        List<AccountListDto> accountListDtos = authorities.stream()
-                .map(authority -> AccountListDto.from(authority.getAccount()))
-                .collect(Collectors.toList());
+    public List<AuthListDto> getAllAccountsOfClassroom(Long classroomId){
+        List<Authority> authorities = authorityRepository.findByClassroom_Id(classroomId);
+       List<AuthListDto> authListDtos = authorities.stream().map(AuthListDto::from).collect(Collectors.toList());
 
-        return accountListDtos;
+        return authListDtos;
     }
 
     public List<AccountListDto> getAllStudentsOfClassroom(Long classroommId) {
@@ -90,4 +93,27 @@ public class AuthorityService {
         }
         return accountListDtos;
     }
+
+    public Long getClassroomIdOfStudent(Long studentId) {
+        Authority authority = authorityRepository.findByAccount_Id(studentId);
+        return authority.getClassroom().getId();
+    }
+
+
+    public List<Classroom> getClassroomsByAccountIdAndSubjects(Long accountId, List<SUBJECT> subjects) {
+        List<Authority> authorities = authorityRepository.findByAccountId(accountId);
+
+        return authorities.stream()
+                .filter(a -> subjects.contains(a.getAuthType())) // 과목 필터링
+                .map(Authority::getClassroom)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<Authority> getAuthoritiesByAccountId(Long accountId) {
+        return authorityRepository.findByAccountId(accountId).stream()
+                .filter(a -> a != null && a.getClassroom() != null) // 💥 null 방지
+                .collect(Collectors.toList());
+    }
+
 }

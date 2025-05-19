@@ -7,47 +7,142 @@
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script">
     <script th:src="@{/javascript/accountGen.js}"></script>
+    <script th:src="@{/javascript/modal.js}"></script>
+    <script th:inline="javascript">
+        const genType = [[${genType}]]
+        const accountGeneratedDto = [[${accountGeneratedDto}]];
+        $(function() {
+            if(genType != null) {
+                switch(genType) {
+                    case "single":
+                        $('#createOption').val(1);
+                        onCreateOptionChange(document.getElementById('createOption'));
+                        break;
+                    case "multi":
+                        $('#createOption').val(2);
+                        onCreateOptionChange(document.getElementById('createOption'));
+                        break;
+                }
+            }
+            if(accountGeneratedDto != null) {
+                $('#loginId').text(accountGeneratedDto.loginId);
+                $('#password').text(accountGeneratedDto.password);
+                openModal($('#account-gen-modal'));
+            }
+        });
+    </script>
 </th:block>
 
 
-<div layout:fragment="main" id="main">
-    <h1>계정 생성 페이지</h1>
-    <div>
-        <select id="createOption" onchange=onCreateOptionChange(this)>
-            <option value="">생성 방식 선택</option>
-            <option value=1>단일 생성</option>
-            <option value=2>다중 생성</option>
-        </select>
-    </div>
-    <div id="single-create" class="hidden">
-        <p>단일생성</p>
-        <form id="single-create-form" th:action="@{/admin/accountGen/single}" method="post"
-              th:object="${accountDto}">
-            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-               class="text-red-600"></p>
-            <input type="text" th:field="*{name}"/>
-            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-               class="text-red-600"></p>
-            <input type="text" th:field="*{email}"/>
-            <p th:if="${#fields.hasErrors('role')}" th:errors="*{role}"
-               class="text-red-600"></p>
-            <select th:field="*{role}">
-                <option th:value="${null}">역할 선택</option>
-                <option th:value="${T(com.blendonclass.constant.ROLE).STUDENT}">학생</option>
-                <option th:value="${T(com.blendonclass.constant.ROLE).TEACHER}">교사</option>
+<th:block layout:fragment="main">
+    <div class="main-container">
+        <div class="title-box">
+            <span>계정 생성</span>
+            <span class="title-sub">계정을 생성합니다.</span>
+        </div>
+        <div>
+            <select id="createOption" onchange=onCreateOptionChange(this) class="input-area">
+                <option value="">생성 방식 선택</option>
+                <option value=1>단일 생성</option>
+                <option value=2>다중 생성</option>
             </select>
-            <button type="submit">계정 생성</button>
-        </form>
+        </div>
+        <div id="single-create" class="hidden flex-1">
+            <div class="h-full flex flex-row gap-8">
+                <div class="flex-1">
+                    <p class="text-2xl">단일 생성</p>
+                    <p class="font-normal text-gray-500">단일 계정을 생성합니다.</p>
+                </div>
+                <form id="single-create-form" th:action="@{/admin/accountGen/single}" method="post"
+                      th:object="${accountDto}" class="flex-1 flex flex-col gap-8">
+                    <div class="input-container">
+                        <label th:for="name">이름</label>
+                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                           class="text-red-600"></p>
+                        <input type="text" th:field="*{name}" placeholder="홍길동" class="input-area"/>
+                    </div>
+                    <div class="input-container">
+                        <label th:for="email">이메일</label>
+                        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                           class="text-red-600"></p>
+                        <input type="text" th:field="*{email}" placeholder="example@example.com" class="input-area"/>
+                    </div>
+                    <div class="input-container">
+                        <label th:for="role">역할</label>
+                        <p th:if="${#fields.hasErrors('role')}" th:errors="*{role}"
+                           class="text-red-600"></p>
+                        <select th:field="*{role}" class="input-area w-[160px]">
+                            <option th:value="${null}">역할 선택</option>
+                            <option th:value="${T(com.blendonclass.constant.ROLE).STUDENT}">학생</option>
+                            <option th:value="${T(com.blendonclass.constant.ROLE).TEACHER}">교사</option>
+                        </select>
+                    </div>
+                    <div class="button-box mt-4">
+                        <button type="submit" class="rectangle-button bg-(--primary-color)">계정 생성</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="multi-create" class="hidden flex-1">
+            <div class="flex-1 flex flex-row gap-8 h-full">
+                <div class="flex-1">
+                    <p class="text-2xl">일괄 생성</p>
+                    <p class="font-normal text-gray-500">파일을 업로드하여 계정을 일괄적으로 생성합니다.</p>
+                </div>
+                <div class="flex-1 flex flex-col gap-8">
+                    <div class="w-full bg-gray-200 text-black flex-1 p-4 rounded-md">
+                        <p class="font-bold text-xl">주의 사항</p>
+                        <ul class="list-disc list-inside my-4 flex flex-col gap-2">
+                            <li>파일은 .csv 확장자 형식만 가능합니다.</li>
+                            <li>파일의 첫줄은 반드시 '이름,이메일,구분' 이어야 합니다.</li>
+                            <li>매 줄마다 생성할 계정의 정보를 '이름,이메일,구분' 순으로 입력해주십시오.</li>
+                            <li>구분은 '학생' 또는 '교사'만 가능합니다.</li>
+                        </ul>
+                    </div>
+                    <form th:if="${downloadUrl == null}" id="multi-create-form" th:action="@{/admin/accountGen/multi}" method="post"
+                          enctype="multipart/form-data" class="flex flex-col">
+                        <label for="file-input">파일을 등록하세요(.csv 파일만 가능)</label>
+                        <p th:if="${fileLoadError!=null}" th:text="${fileLoadError}" class="text-red-600"></p>
+                        <input id="file-input" type="file" name="file" class="input-area">
+                        <div class="button-box pt-4">
+                            <button type="submit" class="rectangle-button bg-(--primary-color)">계정 생성</button>
+                            <button type="button" class="rectangle-button bg-red-400" onclick="redirectTo('admin/accounts')">취소</button>
+                        </div>
+                    </form>
+                    <th:block th:if="${downloadUrl != null}">
+                        <div class="flex flex-col gap-2">
+                            <p class="font-bold">계정 생성에 성공했습니다!</p>
+                            <p class="text-red-400">주의: 이 페이지에서 벗어나면 다시 파일을 다운로드 받을 수 없습니다. 반드시 파일을 다운로드해주시길 바랍니다.</p>
+                            <a th:href="@{${downloadUrl}}" download>생성 파일 다운로드</a>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <!-- 단일 계정 생성 성공 시 모달 -->
     </div>
-    <div id="multi-create" class="hidden">
-        <p>다중생성</p>
-        <form id="multi-create-form" th:action="@{/admin/accountGen/multi}" method="post"
-              enctype="multipart/form-data">
-            <p>파일을 등록하세요(.csv 파일만 가능)</p>
-            <p th:if="${fileLoadError!=null}" th:text="${fileLoadError}" class="text-red-600"></p>
-            <input type="file" name="file">
-            <button type="submit">계정 생성</button>
-        </form>
+    <div id="account-gen-modal" class="modal-container w-[400px] h-[320px]">
+        <div class="modal-main">
+            <div class="flex-1">
+                <div class="flex">
+                    <div class="m-auto w-14 h-14 bg-red-400 rounded-full flex items-center justify-center">
+                        <img class="w-8 h-8 invert mb-1" src="/images/icons/icon_warning.png" alt="경고 아이콘">
+                    </div>
+                </div>
+                <p class="font-bold my-8 text-center">
+                    계정 생성에 성공했습니다! 생성된 아이디와 비밀번호를 반드시 기록해두시길 바랍니다.
+                </p>
+                <p class="font-bold">생성 아이디</p>
+                <p id="loginId"></p>
+                <p class="font-bold">비밀번호</p>
+                <p id="password"></p>
+            </div>
+            <div class="button-box">
+                <button class="rectangle-button bg-red-400 w-12">확인</button>
+                <button class="rectangle-button bg-(--primary-color) w-12" onclick="closeModal($('#modal-reset-classroom'))">취소</button>
+            </div>
+        </div>
     </div>
-</div>
+    <div id="background-overlay" onclick="closeAllModal()" class="fixed w-[100vw] h-[100vh] top-0 left-0 opacity-80 bg-gray-400 z-40 hidden"></div>
+</th:block>
 </html>

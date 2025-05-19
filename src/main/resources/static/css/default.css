@@ -6,54 +6,7 @@
     --text-black: black;
     --base-font: "Noto Sans KR";
 }
-*margin{
-    margin : 0;
-    padding : 0;
-    box-sizing: border-box;
-}
-
-.notice{
-    display:block;
-    margin-bottom: 12px;
-}
-#notice{
-    width:200px;
-}
-#noticeDetail{
-    display: block;
-    margin-bottom: 12px;
-}
 
 * {
     font-family: var(--base-font), sans-serif;
-#QnA{
-    width:200px;
-}
-#task{
-    width:200px;
-}
-h4{
-    height:25px;
-    border : 1px solid black;
-    border-radius: 2px;
-}
-#question{
-    display:inline-block;
-    margin-bottom: 12px;
-}
-#answer{
-    display:inline-block;
-    margin-bottom: 12px;
-}
-.question{
-    display:block;
-    margin-bottom: 12px;
-}
-.task{
-    display:block;
-    margin-bottom: 12px;
-}
-#as{
-    display:block;
-    margin-bottom: 12px;
 }

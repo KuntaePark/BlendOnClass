@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragment/default}">
+
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+
+<th:block layout:fragment="main">
+    <div class="main-container">
+        <div class="title-box">
+            <p>공지 사항</p>
+        </div>
+        <!-- 공지 글 -->
+        <div th:object="${noticeShowDto}" class="flex-1 border-1 rounded-xl border-gray-300 p-4 flex flex-col gap-4">
+            <div th:text="*{title}" class="font-bold text-2xl"></div>
+            <p>
+                <b>작성자&nbsp</b>
+                <span th:text="*{writerName}"></span>
+            </p>
+            <div class="bg-gray-200 h-[1px] w-full"></div>
+            <div th:text="*{context}" class="flex-1"></div>
+            <a th:if="*{fileUrl != null}" th:href="*{fileUrl}" class="rectangle-button bg-(--primary-color)" download>첨부파일 다운로드</a>
+            <div class="button-box" th:if="*{isWriter}">
+                <a class="rectangle-button bg-(--primary-color)" th:href="@{'/board/notice/write?id='+*{nbId}+'&classroomId='+${classroomId}}">수정</a>
+                <form method="post" th:action="@{'/board/notice/delete?id='+*{nbId}+'&classroomId='+${classroomId}}">
+                    <button type="submit" class="rectangle-button bg-gray-500">삭제</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

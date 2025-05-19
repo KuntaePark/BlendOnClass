@@ -1,20 +1,18 @@
 package com.blendonclass.service.board;
 
 import com.blendonclass.dto.AnswerWriteDto;
-import com.blendonclass.dto.AssignmentShowDto;
 import com.blendonclass.dto.QuestionShowDto;
 import com.blendonclass.dto.QuestionWriteDto;
-import com.blendonclass.entity.Account;
 import com.blendonclass.entity.Authority;
 import com.blendonclass.entity.QuestionBoard;
 import com.blendonclass.repository.AccountRepository;
 import com.blendonclass.repository.AuthorityRepository;
 import com.blendonclass.repository.board.QuestionBoardRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,21 +20,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class QuestionBoardService {
-    @Autowired
-    private QuestionBoardRepository questionBoardRepository;
-
-    @Autowired
-    private AuthorityRepository authorityRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
+    private final QuestionBoardRepository questionBoardRepository;
+    private final AuthorityRepository authorityRepository;
+    private final AccountRepository accountRepository;
 
     public void saveQuestion(QuestionWriteDto questionWriteDto){
          Authority authority = authorityRepository.findByAccountIdAndClassroomId(questionWriteDto.getWriterId(),questionWriteDto.getClassroomId())
-                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다."));
-         System.out.println(questionWriteDto.getId());
+                .orElseThrow(() -> new RuntimeException("권한이 존재하지 않습니다.")).get(0);
         QuestionBoard questionBoard = QuestionBoard.toQuestionSaveBoard(questionWriteDto, authority, null);
+        System.out.println(questionBoard);
         questionBoardRepository.save(questionBoard);
     }
 
@@ -66,9 +60,27 @@ public class QuestionBoardService {
     }
 
 
+    public QuestionShowDto getQuestionDetail(Long qbId, Long accountId){
+        QuestionBoard questionBoard = questionBoardRepository.findById(qbId).get();
+        QuestionShowDto questionShowDto = QuestionShowDto.from(questionBoard);
+        //writer check
+        if(questionBoard.getAuthority().getAccount().getId().equals(accountId)){
+            questionShowDto.setIsWriter(true);
+        } else {
+            questionShowDto.setIsWriter(false);
+        }
 
-    public QuestionShowDto getQuestionDetail(Long qbId){
-        return QuestionShowDto.from(questionBoardRepository.findById(qbId).get());
+        //answerer check
+        if(questionBoard.getAccount() != null) {
+            if(questionBoard.getAccount().getId().equals(accountId)){
+                questionShowDto.setIsAnswerer(true);
+            } else {
+                questionShowDto.setIsAnswerer(false);
+            }
+        } else {
+            questionShowDto.setIsAnswerer(false);
+        }
+        return questionShowDto;
     }
 
     public Page<QuestionShowDto> getQuestionList(Pageable pageable, Long classroomId){
@@ -92,5 +104,9 @@ public class QuestionBoardService {
     public AnswerWriteDto answerShow(Long id) {
         QuestionBoard questionBoard = questionBoardRepository.findById(id).get();
         return AnswerWriteDto.from(questionBoard);
+    }
+
+    public QuestionWriteDto getQuestionWriteDto(Long qbId) {
+        return QuestionWriteDto.toQuestionWriteDto(questionBoardRepository.findById(qbId).get());
     }
 }

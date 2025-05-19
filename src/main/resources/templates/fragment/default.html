@@ -27,40 +27,35 @@
     <th:block layout:fragment="script"></th:block>
     <script th:inline="javascript">
         $(function() {
-            console.log("aaaa");
             const role = [[${session.role.role}]];
             if(role === 'ROLE_ADMIN') {
-                console.log('admin');
                 $(":root").css({"--primary-color":"var(--admin-color)"});
             }
         })
+
+        function redirectTo(url) {
+            location.href = url;
+        }
     </script>
 
 
 </head>
 <body>
-
-<div id="wrap">
-    <div id="body-wrap" class="flex flex-col">
-        <th:block th:replace="fragment/aside::aside"></th:block>
-        <div id="main-wrap"
-        class="absolute top-0 left-0 w-full transition-all duration-300 ease-in-out">
-            <th:block th:replace="fragment/header::header"></th:block>
-            <div id="main-container" class="mx-auto max-w-[1280px] px-2 px-6">
-                <th:block layout:fragment="main"></th:block>
-                <div
-                        class="menu-trigger absolute top-24 left-0 w-6 h-10 bg-(--primary-color) rounded-r-md cursor-pointer hover:opacity-80 transition-all duration-300 flex items-center justify-center">
-                    <div class="p-auto">
-                        <img src="/images/icons/right-arrow.png" alt="화살표 아이콘" class="invert w-4 h-4"/>
-                    </div>
-                    <span class="text-black hover:text-[#fcfeff] text-lg font-ico"></span>
-                </div>
-            </div>
+<div id="wrap" class="flex flex-col max-w-[100vw] h-[100vh]">
+    <th:block th:replace="fragment/aside::aside"></th:block>
+    <th:block th:replace="fragment/header::header"></th:block>
+    <div class="mx-auto w-[1280px] flex-1 flex flex-col overflow-auto py-4">
+        <th:block layout:fragment="main"></th:block>
+    </div>
+    <div
+            class="menu-trigger fixed top-24 left-0 w-6 h-10 bg-(--primary-color) rounded-r-md cursor-pointer hover:opacity-80 transition-all duration-300 flex items-center justify-center">
+        <div class="p-auto">
+            <img src="/images/icons/right-arrow.png" alt="화살표 아이콘" class="invert w-4 h-4"/>
         </div>
+        <span class="text-black hover:text-[#fcfeff] text-lg font-ico"></span>
     </div>
 <!--    <th:block th:replace="fragment/footer::footer"></th:block>-->
 </div>
-
 
 
 </body>

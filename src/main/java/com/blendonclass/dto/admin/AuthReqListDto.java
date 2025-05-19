@@ -8,7 +8,6 @@ import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.entity.AuthRequest;
 import lombok.Getter;
 import lombok.Setter;
-import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
 

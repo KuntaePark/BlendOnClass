@@ -17,4 +17,12 @@ public class ClassroomDto {
         dto.setClassroomNum(classroom.getClassroomNum());
         return dto;
     }
+
+    public Classroom to() {
+        Classroom classroom = new Classroom();
+        classroom.setId(getId());
+        classroom.setGrade(getGrade());
+        classroom.setClassroomNum(getClassroomNum());
+        return classroom;
+    }
 }

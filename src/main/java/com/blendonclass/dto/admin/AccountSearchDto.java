@@ -11,8 +11,8 @@ import lombok.Setter;
  */
 @Getter@Setter
 public class AccountSearchDto {
+    private int pageNum;
     private String keyword = "";
     private STYPE searchType = STYPE.NAME;
     private ROLE roleType = null;
-    private SUBJECT subject = null;
 }

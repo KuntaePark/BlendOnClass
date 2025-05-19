@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/default}">
+
+<th:block layout:fragment="css"></th:block>
+<th:block layout:fragment="script"></th:block>
+
+<th:block layout:fragment="main">
+    <div class="main-container">
+        <div class="title-box">
+            <p>공지 작성</p>
+        </div>
+        <form method="post"
+              th:object="${noticeWriteDto}"
+              th:action="@{'/board/notice/write?id='+${classroomId}}" enctype="multipart/form-data"
+              class="input-form">
+
+            <input type="hidden" th:field="*{nbId}"/>
+            <input type="hidden" th:field="*{writerId}"/>
+            <input type="hidden" th:field="*{classroomId}"/>
+            <div class="input-container">
+                <label th:for="title">제목</label>
+                <p class="text-red-400" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+                <input class="input-area" type="text" th:field="*{title}">
+            </div>
+            <div class="input-container flex-1">
+                <label th:for="context">내용</label>
+                <p class="text-red-400" th:if="${#fields.hasErrors('context')}" th:errors="*{context}"></p>
+                <textarea class="input-area flex-1" type="text" th:field="*{context}"></textarea>
+            </div>
+            <div class="input-container">
+                <label for="file">첨부 파일 선택</label>
+                <input class="input-area w-[400px]" id="file" type="file" name="file">
+            </div>
+            <div class="button-box">
+                <button type="submit" class="rectangle-button bg-(--primary-color)">
+                    저장
+                </button>
+                <button type="button" class="rectangle-button bg-gray-500" th:onclick="redirectTo([[${'/board?id='+classroomId}]])">
+                    취소
+                </button>
+            </div>
+        </form>
+    </div>
+</th:block>
+</html>

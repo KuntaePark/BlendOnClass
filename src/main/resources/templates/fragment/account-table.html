@@ -2,51 +2,42 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:fragment="accountTable(accountData, actionColumn)">
-    <table class="table-auto border-collapse text-left mt-2 w-full">
-        <thead class="text-gray-300 font-light p-2">
-        <tr>
-            <th class="pl-2">이름</th>
-            <th class="py-2">로그인 아이디</th>
-            <th class="py-2">이메일</th>
-            <th class="py-2">구분</th>
-            <th class="py-2"></th>
-        </tr>
+<th:block th:fragment="accountTable">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>이름</th>
+                <th>로그인 아이디</th>
+                <th>이메일</th>
+                <th>구분</th>
+                <th></th>
+            </tr>
         </thead>
-        <tbody class="overflow-scroll">
-        <tr class="odd:bg-gray-100 hover:bg-gray-300"
-            th:each="account : ${accountData}"
-            th:object="${account}"
-            th:unless="${account.loginId.equals('admin')}">
-            <td class="pl-2" th:text="*{name}"></td>
-            <td th:text="*{loginId}"></td>
-            <td th:text="*{email}"></td>
-            <td th:text="*{role.roleName}"></td>
-            <td class="flex flex-row justify-end gap-2 p-2">
-                <div th:replace="${actionColumn}">default</div>
-            </td>
-        </tr>
+        <tbody>
         </tbody>
     </table>
 </th:block>
 
 <th:block th:fragment="accountmng-action">
-    <div class="w-10 h-10 rounded-md bg-(--primary-color) flex items-center justify-center hover:opacity-80">
+    <div class="square-button-10 bg-(--primary-color)">
         <a th:href="@{'/admin/modifyAccount?id=' + ${account.id}}" class="w-6 h-6 flex items-center justify-center">
             <img src="/images/icons/icon_modify.png" class="min-w-6 h-6 invert">
         </a>
     </div>
-    <button class="w-10 h-10 rounded-md bg-red-400 flex items-center justify-center  hover:opacity-80 hover:cursor-pointer"
+    <button class="square-button-10 bg-red-400"
             th:onclick="deleteAccount([[*{id}]])">
         <img src="/images/icons/icon_delete.png" class="min-w-6 h-6 invert">
     </button>
 </th:block>
-</html>
+
 
 <th:block th:fragment="classroommng-action">
-    aaaa
+    <button class="square-button-10 bg-red-400">
+        <img src="/images/icons/icon_delete.png" class="min-w-6 h-6 invert">
+    </button>
 </th:block>
 
 <th:block th:fragment="classroom-modal-action">
     bbbb
 </th:block>
+</html>
