@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      layout:decorate="~{fragment/default}">
+      layout:decorate="~{fragment/board-default}">
 
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script"></th:block>
@@ -29,8 +29,10 @@
                 <a th:href="*{fileUrl}" class="rectangle-button bg-(--primary-color)" download>첨부파일 다운로드</a>
                 <div class="button-box">
                     <th:block th:if="*{isWriter}">
-                        <div class="rectangle-button bg-(--primary-color)">수정</div>
-                        <div class="rectangle-button bg-gray-500">삭제</div>
+                        <a th:href="@{'/board/assignment/write?id='+*{abId}+'&classroomId='+${classroomId}}" class="rectangle-button bg-(--primary-color)">수정</a>
+                        <form method="post" th:action="@{'/board/assignment/delete?id='+*{abId}+'&classroomId='+${classroomId}}">
+                            <button type="submit" class="rectangle-button bg-gray-500">삭제</button>
+                        </form>
                     </th:block>
                     <th:block sec:authorize="hasRole('ROLE_STUDENT')">
                         <a th:href="@{'/board/assignment/submit/write?id='+${assignmentShowDto.abId}+'&classroomId='+${classroomId}}"
@@ -43,7 +45,7 @@
             <div class="rounded-xl bg-(--primary-color) w-[360px] p-4 justify-center flex flex-col gap-2 text-white overflow-auto">
                 <p class="text-white font-bold text-2xl">제출자 목록</p>
                 <div class="bg-white min-h-[1px] w-full"></div>
-                <div id="submit-list" class="flex-1 flex flex-col gap-2 overflow-auto">
+                <div id="submit-list" class="flex-1 flex flex-col gap-2 overflow-auto scrollbar-hide">
                     <div th:each="submit:${submitStudentListDtos}" th:object="${submit}">
                         <a id="detail" th:href="@{'/board/assignment/submit/detail?sbId='+*{sbId}}"
                            th:classappend="*{isSubmit?'':'pointer-events-none'}" class="flex flex-row gap-4">

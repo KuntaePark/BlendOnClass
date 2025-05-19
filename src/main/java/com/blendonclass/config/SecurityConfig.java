@@ -21,7 +21,7 @@ public class SecurityConfig {
                         authorizeRequests -> authorizeRequests
                                 .requestMatchers("/images/**","/css/**").permitAll()
                                 .requestMatchers("/student/**","/student").hasRole("STUDENT")
-                                .requestMatchers("/teacher/**","/teacher").hasRole("TEACHER")
+                                .requestMatchers("/teacher/**","/teacher","/student/myscore").hasRole("TEACHER")
                                 .requestMatchers("/admin/**","/admin").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )

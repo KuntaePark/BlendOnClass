@@ -5,11 +5,18 @@
       layout:decorate="~{fragment/default}">
 <th:block layout:fragment="css"></th:block>
 <th:block layout:fragment="script">
+    <script src="/javascript/modal.js"></script>
+    <script src="/javascript/getSysAnn.js"></script>
     <script th:inline="javascript">
         const classroomList = [[${classroomListDtos}]]
         let classroomId = [[${classroomId}]];
         const classrooms = [];
+        let $progressContainer = null;
+        let totalItems = 0;
+        let currentIndex = 0;
         $(function() {
+            $progressContainer = $('#progress-container');
+            totalItems = $progressContainer.children().length;
             const $ul = $('#classroom-list-ul');
             classroomList.forEach(classroom => {
                 //클릭 시 전역 classroom 변수를 설정
@@ -70,6 +77,26 @@
             $div.append($span);
             return $div;
         }
+        function updateSlide() {
+            console.log(currentIndex);
+            $progressContainer.css('transform', `translateY(-${100 * currentIndex}%)`);
+        }
+
+        function slideUp() {
+            console.log("up");
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSlide();
+            }
+        }
+
+        function slideDown() {
+            console.log("down");
+            if (currentIndex < totalItems - 1) {
+                currentIndex++;
+                updateSlide();
+            }
+        }
 
     </script>
 </th:block>
@@ -82,13 +109,21 @@
             <p class="title-sub">학생들의 학습성과를 확인하고, 학생들과 소통하세요!</p>
         </div>
         <div class="flex flex-row flex-1 gap-8">
+
+            <!-- 반 목록 (수평으로 과목 나열, 중복 반 제거) -->
+            <div class="bg-blue-600 text-white rounded-2xl  py-6 px-2 flex flex-col items-start gap-4 w-[220px] shadow-lg ">
+                <h3 class="text-2xl font-bold text-center w-full">반 목록</h3>
+                <ul id="classroom-list-ul" class="flex flex-col gap-2 w-full">
+                </ul>
+            </div>
+
             <!-- 상단 알림 + 버튼 + 반 목록 -->
-            <div class="flex-1 flex-col flex gap-10">
-                <div class="flex-2 flex flex-row gap-4 w-full">
+            <div class="flex-1 flex-col flex gap-8">
+                <div class="flex-3 flex flex-row gap-4 w-full">
 
                     <!-- 알람 박스 -->
                     <div class="bg-white rounded-lg shadow-lg flex-1 flex flex-col">
-                        <div class="bg-blue-600 w-full px-6 py-4 rounded-lg">
+                        <div class="bg-blue-600 w-full px-6 py-4 rounded-t-lg">
                             <div class="flex items-center space-x-2">
                                 <img src="/images/alarm.png" alt="알람 아이콘" class="w-6 h-6" />
                                 <h2 class="text-white text-xl font-semibold tracking-widest">알람</h2>
@@ -101,8 +136,9 @@
                         <div class="px-6 py-2 space-y-3 overflow-y-auto flex-1">
                             <th:block th:each="alarm : ${alarmListDtos}">
                                 <div class="grid grid-cols-4 border-b border-dotted pb-2">
-                                    <div class="text-center text-gray-800 text-sm font-medium col-span-3">
-                                        <span th:text="${alarm.message}">알림 내용</span>
+                                    <div class="text-center text-gray-800 hover:text-gray-500 text-sm font-medium col-span-3">
+                                        <a th:if="${!alarm.isSystem}" th:text="${alarm.message}" th:href="@{${alarm.alarmUrl}}">알림 내용</a>
+                                        <button th:if="${alarm.isSystem}" th:onclick="getSysAnn([[${alarm.alarmUrl}]])" th:text="${alarm.message}"></button>
                                     </div>
                                     <div class="text-center text-sm text-gray-500 col-span-1">
                                         <span th:text="${#temporals.format(alarm.alarmTime, 'yyyy-MM-dd (E)')}"></span>
@@ -133,27 +169,54 @@
 
                 </div>
                 <!-- 진도율 박스 (알람+버튼 박스와 너비 동일) -->
-                <div class="flex-1 flex-col flex">
-                    <div class="flex-1">up</div>
-                    <div class="flex-1">
-                        <div class="text-xl font-bold text-gray-800 mb-2">영어</div>
-                        <div class="relative w-full h-6 bg-blue-100 rounded-full overflow-hidden">
-                            <div class="absolute top-0 left-0 h-full bg-blue-500" style="width: 70%;"></div>
-                        </div>
-                        <div class="mt-1 text-right font-semibold text-gray-700">70%</div>
+                <div class="flex-1 flex-col flex overflow-auto">
+                    <div class="flex items-end justify-center">
+                        <button onclick="slideUp()">
+                            <img src="/images/icons/icon_arrow_up.png" alt="화살표 아이콘" class="w-4 h-4 button-hover m-2"/>
+                        </button>
                     </div>
-                    <div class="flex-1">down</div>
+                    <div class="flex-1 overflow-hidden">
+                        <div id="progress-container" class="transition-transform duration-500 ease-in-out h-full">
+                            <div class="flex-1 w-full h-full flex flex-col gap-2 px-4 py-2  rounded-border-box" th:each="progress : ${progressListDtos}" th:object="${progress}">
+                                <div>
+                                    <p class="text-xl font-bold text-gray-800" th:text="*{subject.getSubject()}"></p>
+                                    <div class="flex flex-row">
+                                        <p class="flex-1 text-sm text-gray-500">
+                                            <b th:text="*{startTitle}"></b>부터&nbsp<b th:text="*{endTitle}"></b>까지
+                                        </p>
+                                        <div class="text-right font-semibold text-gray-700" th:text="*{completeRate+'%'}"></div>
+                                    </div>
+                                </div>
+                                <div class="w-full h-6 flex justify-start bg-blue-100 rounded-full overflow-hidden">
+                                    <div class="top-0 left-0 h-full bg-blue-500" th:style="*{'width:'+completeRate+'%;'}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start justify-center">
+                        <button onclick="slideDown()">
+                            <img src="/images/icons/icon_arrow_up.png" alt="화살표 아이콘" class="rotate-180 w-4 h-4 button-hover m-2"/>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- 반 목록 (수평으로 과목 나열, 중복 반 제거) -->
-            <div class="bg-blue-600 text-white rounded-2xl  py-6 px-2 flex flex-col items-start gap-4 w-[220px] shadow-lg ">
-                <h3 class="text-2xl font-bold text-center w-full">반 목록</h3>
-                <ul id="classroom-list-ul" class="flex flex-col gap-2 w-full">
-                </ul>
-            </div>
+
         </div> <!-- /.flex-col -->
     </div>
-    </div><!-- /.flex-center -->
+    <div id="modal-show-announce" class="modal-container w-[600px] h-[600px]">
+        <div class="modal-main gap-4">
+            <div class="font-bold text-3xl">
+                공지 : <p id="title" class="inline"></p>
+            </div>
+
+            <div id="context" class="flex-1 text-black text-lg p-4 bg-gray-200 rounded-border-box"></div>
+            <div class="button-box">
+                <button type="button" onclick="closeModal($('#modal-show-announce'))" class="rectangle-button bg-red-400">확인</button>
+            </div>
+        </div>
+    </div>
+    <!-- 모달 표시 시 배경 필터 -->
+    <div id="background-overlay" onclick="closeAllModal()" class="fixed w-[100vw] h-[100vh] top-0 left-0 opacity-80 bg-gray-400 z-40 hidden"></div>
 </th:block>
 </html>

@@ -5,6 +5,7 @@ package com.blendonclass.service;
  */
 
 import com.blendonclass.constant.ROLE;
+import com.blendonclass.dto.UserAccountDto;
 import com.blendonclass.dto.admin.AccountDto;
 import com.blendonclass.dto.admin.AccountGeneratedDto;
 import com.blendonclass.dto.admin.AccountListDto;
@@ -16,6 +17,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -64,6 +66,10 @@ public class AccountService {
     //단일 계정 정보 조회, 계정 정보 수정 시 필요
     public AccountDto getAccountInfo(Long accountId) {
         return AccountDto.from(accountRepository.findById(accountId).get());
+    }
+
+    public UserAccountDto getUserAccountInfo(Long userId) {
+        return UserAccountDto.from(accountRepository.findById(userId).get());
     }
 
     //단일 계정 생성, 생성 성공 시 로그인 아이디 및 비밀번호 반환
@@ -217,5 +223,16 @@ public class AccountService {
     //계정 삭제
     public void deleteAccount(Long accountId) {
         accountRepository.deleteById(accountId);
+    }
+
+    public void saveUserAccount(UserAccountDto userAccountDto) {
+        Account account = userAccountDto.toAccount();
+        accountRepository.save(account);
+    }
+
+    public boolean checkEmail(UserAccountDto userAccountDto) {
+        //이메일 중복 확인용
+        List<String> emails = accountRepository.findAllEmailsExcept(userAccountDto.getId());
+        return emails.contains(userAccountDto.getEmail());
     }
 }

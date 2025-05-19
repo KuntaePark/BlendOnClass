@@ -82,13 +82,21 @@ public class AdminClassroomController {
         AccountSearchDto accountSearchDto = new AccountSearchDto();
         accountSearchDto.setPageNum(0);
         Page<AccountListDto> accountListDtos = accountService.searchAccountList(accountSearchDto);
+
+        //권한 체크용 해당 반 권한 목록
+        List<AuthListDto> authListDtos = authorityService.getAllAuthoritiesOfClassroom(classroomId);
         model.addAttribute("accountListDtos", accountListDtos);
+        model.addAttribute("authListDtos", authListDtos);
         return "admin/authAdd";
     }
 
     //권한 추가 요청
     @PostMapping("/classroom/authAdd")
-    public String addAuthority(Model model) {
+    public String addAuthority(@RequestParam("id") Long accountId,
+                                @RequestParam("classroomId") Long classroomId,
+                                @RequestParam("subject") Optional<SUBJECT> subject,
+                                Model model) {
+        authorityService.addAuthority(accountId, classroomId, subject.orElse(null));
         return "redirect:/admin/classroom";
     }
 

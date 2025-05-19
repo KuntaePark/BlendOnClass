@@ -22,6 +22,10 @@
     @apply w-10 h-10 rounded-md flex items-center justify-center hover:opacity-80 hover:cursor-pointer
 }
 
+.square-button-10-disabled {
+    @apply w-10 h-10 rounded-md flex items-center justify-center
+}
+
 .rectangle-button {
     @apply h-10 p-2 text-white rounded-md flex items-center justify-center hover:opacity-80 hover:cursor-pointer;
 }
@@ -142,8 +146,8 @@
 }
 
 .board-list-box {
-    @apply bg-blue-600 text-white rounded-xl p-8 w-full flex flex-row shadow-md hover:cursor-pointer
-    hover:bg-blue-700 transition-all duration-200 ease-in-out;
+    @apply text-black rounded-xl p-8 w-full flex flex-row shadow-md hover:cursor-pointer
+    transition-all duration-200 ease-in-out;
 }
 
 .board-list-box .title {
@@ -151,7 +155,7 @@
 }
 
 .board-list-box .writer {
-    @apply text-sm text-gray-200 mb-4;
+    @apply text-sm text-black mb-4;
 }
 
 .board-list-box .context {
@@ -159,6 +163,17 @@
 }
 
 .white-dot {
-    @apply min-w-2 h-2 my-2 mr-2 bg-white rounded-full;
+    @apply min-w-2 h-2 my-2 mr-2 bg-black rounded-full;
 }
 /*-- board --*/
+
+/* background img */
+
+.board-wrap {
+    background-image: url("/images/bakground2.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* background img */

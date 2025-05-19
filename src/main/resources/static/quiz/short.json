@@ -13,11 +13,6 @@
   },
 
   {
-    "quiz_id": 15,
-    "question": "Translate into English: “안녕하세요, 제 이름은 김민준입니다.”"
-  },
-
-  {
     "quiz_id": 12,
     "question": "두 점 A, B에 대응하는 수가 각각 1과 2일 때 선분 AB의 길이는 얼마입니까?"
   },
@@ -30,6 +25,11 @@
   {
     "quiz_id": 14,
     "question": "어떤 정수 X에 대하여 X − 6 = 8일 때, X + 6의 값은 얼마입니까?"
+  },
+
+  {
+    "quiz_id": 15,
+    "question": "Translate into English: “안녕하세요, 제 이름은 김민준입니다.”"
   },
 
   {
@@ -70,5 +70,70 @@
   {
     "quiz_id": 32,
     "question": "Describe your friend’s personality: “친구는 친절하고 웃음이 많아요.”"
+  },
+
+  {
+    "quiz_id": 35,
+    "question": "Describe your friend’s personality: “친구는 친절하고 웃음이 많아요.”"
+  },
+
+  {
+    "quiz_id": 38,
+    "question": "Translate into English: “내 친구는 같은 학교에 다녀요.”"
+  },
+
+  {
+    "quiz_id": 41,
+    "question": "Introduce your friend John in one English sentence."
+  },
+
+  {
+    "quiz_id": 45,
+    "question": "900을 소인수분해하면 2<sup>a</sup>x3<sup>b</sup>x5<sup>c</sup>일 때, 자연수 a,b,c에 대하여 a+b+c의 값을 구하시오."
+  },
+
+  {
+    "quiz_id":46,
+    "question": "144/n이 자연수가 되도록 하는 자연수 n의 개수를 구하시오."
+  },
+
+  {
+    "quiz_id": 52,
+    "question": "두 자연수 120, A의 최대공약수가 10, 최소공배수가 840일 때, 자연수 A의 값을 구하시오."
+  },
+
+  {
+    "quiz_id": 53,
+    "question": "두 분수 n/45, n/60이 모두 자연수가 되도록 하는 자연수 n의 값 중에서 가장 작은 수를 구하시오."
+  },
+
+  {
+    "quiz_id": 55,
+    "question": "민성이는 세 식물 A,B,C 를 기르는데, A는 4일에 한 번, B는 6일에 한 번, C는 15일에 한 번 물을 준다고 한다. 4월 1일에 세 식물에 물을 동시에 주었을 때, 그 다음에 처음으로 세 식물에 물을 동시에 주는 날은 몇 월 며칠인지 구하시오"
+  },
+
+  {
+    "quiz_id": 60,
+    "question": "다음 수를 양의 부호 +  또는 음의 부호 - 를 사용하여 나타내시오. \n 수학 점수가 10점 내려간 것을 -10으로 나타낼 때, 수학 점수가 4점 오른 것을 나타내는 수"
+  },
+
+  {
+    "quiz_id": 61,
+    "question": "다음 수를 양의 부호 +  또는 음의 부호 - 를 사용하여 나타내시오. \n 0보다 3.7만큼 큰 수 "
+  },
+
+  {
+    "quiz_id": 64,
+    "question": "두 학생 A,B가 계단에서 가위바위보를 하는데 같은 위치에서 시작하여 이기면 2칸 올라가고, 비기면 1칸 올라가고, 지면 1칸 내려가기로 하였다. 가위바위보를 10번 하여 A가 5번 이기고 2번 비겼을 때, 게임이 끝난 후 A,B의 위치는 몇 칸 차이가 나는지 구하시오."
+  },
+
+  {
+    "quiz_id": 68,
+    "question": "-3이상이고 2보다 작은 정수 a에 대하여 |a|>2일 때, a의 값을 구하시오."
+  },
+
+  {
+    "quiz_id": 69,
+    "question": "유리수 x가 1/3 < x < 1/2 이면서 분모가 12인 기약 분수 한 가지를 구하시오."
   }
 ]

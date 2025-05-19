@@ -5,10 +5,12 @@ import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.entity.Progress;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
 @Getter@Setter
+@ToString
 public class ProgressListDto {
     private Long progressId;
     private String startTitle;
@@ -18,7 +20,7 @@ public class ProgressListDto {
     private float completeRate;
     private SUBJECT subject;
 
-    public ProgressListDto from(Progress progress, float completeRate) {
+    public static ProgressListDto from(Progress progress, float completeRate) {
         ProgressListDto progressListDto = new ProgressListDto();
 
         progressListDto.setProgressId(progress.getId());
