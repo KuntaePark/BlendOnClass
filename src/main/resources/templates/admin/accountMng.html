@@ -30,7 +30,19 @@
                 </form>
                 <a href="/admin/accountGen" class="rectangle-button bg-(--primary-color)">계정 추가</a>
             </div>
-            <th:block th:replace="~{fragment/account-table :: accountTable}"></th:block>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>이름</th>
+                        <th>로그인 아이디</th>
+                        <th>이메일</th>
+                        <th>구분</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
         <!--  paging  -->
         <div id="page-select" class="flex flex-row gap-2 w-full">
