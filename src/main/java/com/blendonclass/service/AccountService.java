@@ -29,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -205,7 +207,8 @@ public class AccountService {
             }
 
             //생성 성공 했을 시, 생성된 로그인 아이디, 비밀번호 csv 파일로 저장
-            File genFile = new File("C:/files/admin/생성결과.csv");
+            Files.createDirectories(Paths.get("C:/uploads/admin"));
+            File genFile = new File("C:/uploads/admin/생성결과.csv");
             try(CSVWriter csvWriter = new CSVWriter(new FileWriter(genFile, false)); ) {
                 csvWriter.writeNext(new String[] {"이름", "이메일", "구분", "아이디", "비밀번호"});
                 csvWriter.writeAll(results);
