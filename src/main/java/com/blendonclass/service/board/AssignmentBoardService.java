@@ -61,11 +61,7 @@ public class AssignmentBoardService {
     }
 
     public void deleteAssignmentBoard(Long abId){
-
-    }
-
-    public void getAssignmentBoard(Long abId){
-
+        assignmentBoardRepository.deleteById(abId);
     }
 
     public AssignmentShowDto getAssignmentDetail(Long id, Long accountId){

@@ -6,6 +6,8 @@ import com.blendonclass.dto.SubmitWriteDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -31,6 +33,7 @@ public class SubmitBoard {
 
     @ManyToOne
     @JoinColumn(name = "ab_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private AssignmentBoard assignmentBoard;
 
     @ManyToOne
