@@ -72,6 +72,7 @@ public class TeacherController {
 
         model.addAttribute("classroomListDtos", classroomListDtos);
         model.addAttribute("classroomDto", classroomDto);
+        model.addAttribute("classroomId",classroomDto.getId());
         model.addAttribute("alarmListDtos", alarmListDtos);
         return "teacherMain";
     }
