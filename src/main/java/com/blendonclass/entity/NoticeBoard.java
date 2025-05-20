@@ -1,6 +1,6 @@
 package com.blendonclass.entity;
 
-import com.blendonclass.dto.NoticeWriteDto;
+import com.blendonclass.dto.board.NoticeWriteDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

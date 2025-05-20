@@ -1,4 +1,4 @@
-package com.blendonclass.dto;
+package com.blendonclass.dto.board;
 
 import lombok.*;
 

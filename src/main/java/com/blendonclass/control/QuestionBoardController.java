@@ -1,7 +1,7 @@
 package com.blendonclass.control;
 
-import com.blendonclass.dto.QuestionShowDto;
-import com.blendonclass.dto.QuestionWriteDto;
+import com.blendonclass.dto.board.QuestionShowDto;
+import com.blendonclass.dto.board.QuestionWriteDto;
 import com.blendonclass.service.board.QuestionBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

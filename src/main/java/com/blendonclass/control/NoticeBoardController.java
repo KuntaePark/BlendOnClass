@@ -1,7 +1,7 @@
 package com.blendonclass.control;
 
-import com.blendonclass.dto.NoticeShowDto;
-import com.blendonclass.dto.NoticeWriteDto;
+import com.blendonclass.dto.board.NoticeShowDto;
+import com.blendonclass.dto.board.NoticeWriteDto;
 import com.blendonclass.service.board.NoticeBoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

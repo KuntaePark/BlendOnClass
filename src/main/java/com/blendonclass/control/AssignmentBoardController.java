@@ -1,7 +1,7 @@
 package com.blendonclass.control;
 
 import com.blendonclass.constant.ROLE;
-import com.blendonclass.dto.*;
+import com.blendonclass.dto.board.*;
 import com.blendonclass.service.AccountService;
 import com.blendonclass.service.AuthorityService;
 import com.blendonclass.service.CustomUserDetails;

@@ -14,18 +14,8 @@ import java.util.Optional;
 @Repository
 public interface ScoreRepository extends JpaRepository<Score, Long> {
     List<Score> account(Account account);
-
-    Score findByLessonIdAndAccountId(Long id, Long accountId);
-    List<Score> findByAccountIdOrderByLessonIdAsc(Long accountId);
     Optional<Score> findByAccountIdAndLessonId(Long accountId, Long lessonId);
     List<Score> findByAccountIdAndLessonIdBetweenOrderByLessonIdAsc(Long accountId, Long lessonId1, Long lessonId2);
-    @Query("""
-        select avg(s.completeRate)
-        from Score s
-                join s.lesson l
-                        where l.id between :lessonId1 and :lessonId2
-        """)
-    Double findAvgCompleteRateByLessonIdBetween(Long lessonId1, Long lessonId2);
 
     @Query("""
     select new com.blendonclass.dto.LessonScoreDto(

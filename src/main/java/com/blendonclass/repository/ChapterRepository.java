@@ -9,8 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ChapterRepository extends JpaRepository<Chapter, Integer> {
-
-    List<Chapter> findBySubject(SUBJECT subject);
-
     List<Chapter> findByGradeAndSubject(int i, SUBJECT subject);
 }

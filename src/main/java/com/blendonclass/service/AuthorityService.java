@@ -98,7 +98,11 @@ public class AuthorityService {
 
     public Long getClassroomIdOfStudent(Long studentId) {
         Authority authority = authorityRepository.findByAccount_Id(studentId);
-        return authority.getClassroom().getId();
+        if(authority != null) {
+            return authority.getClassroom().getId();
+        } else {
+            return null;
+        }
     }
 
 

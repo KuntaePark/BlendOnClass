@@ -1,11 +1,9 @@
-package com.blendonclass.dto;
+package com.blendonclass.dto.board;
 
 import com.blendonclass.entity.NoticeBoard;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 @Setter
 @Getter
 public class NoticeWriteDto {

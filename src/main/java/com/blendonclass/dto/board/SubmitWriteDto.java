@@ -1,9 +1,8 @@
-package com.blendonclass.dto;
+package com.blendonclass.dto.board;
 
 import com.blendonclass.entity.SubmitBoard;
 import lombok.*;
 
-import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString

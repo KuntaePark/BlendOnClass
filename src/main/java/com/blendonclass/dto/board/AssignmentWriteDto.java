@@ -1,10 +1,10 @@
-package com.blendonclass.dto;
+package com.blendonclass.dto.board;
 
 import com.blendonclass.entity.AssignmentBoard;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class AssignmentWriteDto {

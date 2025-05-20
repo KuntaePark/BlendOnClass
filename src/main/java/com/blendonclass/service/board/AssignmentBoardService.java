@@ -1,7 +1,7 @@
 package com.blendonclass.service.board;
 
-import com.blendonclass.dto.*;
 import com.blendonclass.dto.admin.AccountListDto;
+import com.blendonclass.dto.board.*;
 import com.blendonclass.entity.Account;
 import com.blendonclass.entity.AssignmentBoard;
 import com.blendonclass.entity.Authority;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,9 +1,12 @@
 package com.blendonclass.control;
 
 import com.blendonclass.dto.AlarmListDto;
+import com.blendonclass.dto.ClassroomListDto;
 import com.blendonclass.dto.LessonDetailDto;
 import com.blendonclass.dto.LessonDto;
+import com.blendonclass.dto.admin.ClassroomDto;
 import com.blendonclass.service.AlarmService;
+import com.blendonclass.service.AuthorityService;
 import com.blendonclass.service.CustomUserDetails;
 import com.blendonclass.service.LessonService;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +29,7 @@ import java.util.List;
 public class StudentController {
     private final LessonService lessonService;
     private final AlarmService alarmService;
+    private final AuthorityService authorityService;
 
     @GetMapping("/")
     public String home() {
@@ -43,10 +47,12 @@ public class StudentController {
         //알림
         List<AlarmListDto> alarmListDtos = alarmService.getAlarmByAccountId(id);
 
+        Long classroomId = authorityService.getClassroomIdOfStudent(id);
+
         model.addAttribute("selectedGrade", lastLessonDto.getGrade());
         model.addAttribute("selectedSubject", lastLessonDto.getSubject());
         model.addAttribute("alarmListDtos", alarmListDtos);
-
+        model.addAttribute("classroomId", classroomId);
         return "studentMain"; // 학생 메인 페이지로 이동
     }
 

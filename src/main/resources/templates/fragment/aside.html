@@ -36,7 +36,8 @@
                 </li>
                 <li class="flex items-center gap-3 cursor-pointer min-h-[40px]">
                     <img src="/images/OurClass.png" alt="우리반 아이콘" class="w-9 h-9" />
-                    <a th:href="@{'/board?id='+${classroomId}}" class="leading-none hover:text-[20px] transition-all duration-100">우리 반</a>
+                    <a th:if="${classroomId != null}" th:href="@{'/board?id='+${classroomId}}" class="leading-none hover:text-[20px] transition-all duration-100">우리 반</a>
+                    <a th:if="${classroomId == null}" class="leading-none pointer-events-none hover:cursor-none text-gray-300">우리 반</a>
                 </li>
                 <li sec:authorize="hasRole('ROLE_TEACHER')" class="flex items-center gap-3 cursor-pointer min-h-[40px]">
                     <img src="/images/Progress.png" alt="진도 아이콘" class="w-9 h-9 invert" />

@@ -1,15 +1,14 @@
 package com.blendonclass.control;
 
 import com.blendonclass.dto.*;
-import com.blendonclass.entity.Lesson;
-import com.blendonclass.entity.LessonDetail;
+import com.blendonclass.dto.QuizAnsweredDto;
+import com.blendonclass.dto.QuizDetailDto;
 import com.blendonclass.service.CustomUserDetails;
 import com.blendonclass.service.LessonService;
 import com.blendonclass.service.QuizService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

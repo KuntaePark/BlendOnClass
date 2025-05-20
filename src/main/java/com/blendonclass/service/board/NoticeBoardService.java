@@ -1,7 +1,7 @@
 package com.blendonclass.service.board;
 
-import com.blendonclass.dto.NoticeShowDto;
-import com.blendonclass.dto.NoticeWriteDto;
+import com.blendonclass.dto.board.NoticeShowDto;
+import com.blendonclass.dto.board.NoticeWriteDto;
 import com.blendonclass.entity.Authority;
 import com.blendonclass.entity.NoticeBoard;
 import com.blendonclass.repository.AuthorityRepository;

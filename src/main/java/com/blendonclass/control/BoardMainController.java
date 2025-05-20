@@ -1,8 +1,8 @@
 package com.blendonclass.control;
 
-import com.blendonclass.dto.AssignmentShowDto;
-import com.blendonclass.dto.NoticeShowDto;
-import com.blendonclass.dto.QuestionShowDto;
+import com.blendonclass.dto.board.AssignmentShowDto;
+import com.blendonclass.dto.board.NoticeShowDto;
+import com.blendonclass.dto.board.QuestionShowDto;
 import com.blendonclass.service.AuthorityService;
 import com.blendonclass.service.board.AssignmentBoardService;
 import com.blendonclass.service.board.NoticeBoardService;

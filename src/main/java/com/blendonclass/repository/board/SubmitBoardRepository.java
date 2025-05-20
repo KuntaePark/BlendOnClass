@@ -1,6 +1,6 @@
 package com.blendonclass.repository.board;
 
-import com.blendonclass.dto.SubmitStudentListDto;
+import com.blendonclass.dto.board.SubmitStudentListDto;
 import com.blendonclass.entity.Account;
 import com.blendonclass.entity.AssignmentBoard;
 import com.blendonclass.entity.SubmitBoard;
@@ -16,7 +16,7 @@ public interface SubmitBoardRepository extends JpaRepository<SubmitBoard, Long> 
 
     //해당 반의 해당 과제 제출물 전부 검색
     @Query("""
-        select new com.blendonclass.dto.SubmitStudentListDto (
+        select new com.blendonclass.dto.board.SubmitStudentListDto (
                 a.id, ab.id, sb.id, a.name, a.email, true
                 )
                 from SubmitBoard sb 
