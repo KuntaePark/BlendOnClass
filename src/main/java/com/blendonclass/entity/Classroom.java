@@ -22,8 +22,12 @@ public class Classroom {
     @ColumnDefault("0")
     private int studentCount;
 
-    public void StdCountD(){
+    public void dropStudent(){
         this.studentCount--;
 
+    }
+
+    public void addStudent() {
+        this.studentCount++;
     }
 }

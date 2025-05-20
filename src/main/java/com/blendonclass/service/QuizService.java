@@ -3,10 +3,7 @@ package com.blendonclass.service;
 import com.blendonclass.dto.QuizAnsweredDto;
 import com.blendonclass.dto.QuizDetailDto;
 import com.blendonclass.dto.QuizGradedDto;
-import com.blendonclass.entity.Lesson;
-import com.blendonclass.entity.Quiz;
-import com.blendonclass.entity.QuizOngoing;
-import com.blendonclass.entity.Score;
+import com.blendonclass.entity.*;
 import com.blendonclass.repository.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +21,10 @@ public class QuizService {
     private final QuizOngoingRepository quizOngoingRepository;
     private final AccountRepository accountRepository;
     private final ScoreRepository scoreRepository;
+    private final ClassroomScoreRepository classroomScoreRepository;
+    private final ClassroomRepository classroomRepository;
+
+    private final AuthorityService authorityService;
 
 
     // 퀴즈 5문제
@@ -145,6 +146,7 @@ public class QuizService {
         }
 
         scoreRepository.save(score);
+        updateClassroomScore(accountId, lessonId);
         quizOngoingRepository.delete(ongoing);
         return correctNum;
     }
@@ -162,5 +164,27 @@ public class QuizService {
             throw new IllegalStateException("해당 챕터에 소단원이 없습니다.");
         }
         return lessons.get(0).getId();
+    }
+    public void updateClassroomScore(Long studentId, Long lessonId) {
+        Long classroomId = authorityService.getClassroomIdOfStudent(studentId);
+        int studentCount = classroomRepository.findById(classroomId).get().getStudentCount();
+        List<Score> scores = scoreRepository.getScoresOfClassroomAndLesson(classroomId, lessonId);
+        int completeRateSum = 0;
+        int attemptCountSum = 0;
+        for(Score score : scores) {
+            completeRateSum += score.getCompleteRate();
+            attemptCountSum += score.getAttemptCount();
+        }
+        ClassroomScore classroomScore = classroomScoreRepository.findByClassroom_IdAndLesson_Id(classroomId, lessonId)
+                .orElseGet(() -> {
+            ClassroomScore newScore = new ClassroomScore();
+            newScore.setClassroom(classroomRepository.findById(classroomId).orElseThrow());
+            newScore.setLesson(lessonRepository.findById(lessonId).orElseThrow());
+            return newScore;
+        });;
+        classroomScore.setAttemptCount((float)attemptCountSum / (float)studentCount);
+        classroomScore.setCompleteRate((float)completeRateSum / (float)studentCount);
+        System.out.println(attemptCountSum + "" + completeRateSum);
+        classroomScoreRepository.save(classroomScore);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ClassroomScoreRepository extends JpaRepository<ClassroomScore, Long> {
@@ -33,4 +34,6 @@ public interface ClassroomScoreRepository extends JpaRepository<ClassroomScore, 
                          order by l.id asc
     """)
     List<LessonClassroomScoreDto> findScoresByGradeAndSubjectAndAccountId(int grade, SUBJECT subject, Long classroomId);
+
+    Optional<ClassroomScore> findByClassroom_IdAndLesson_Id(Long classroomId,Long lessonId);
 }

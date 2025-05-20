@@ -29,4 +29,14 @@ public interface ScoreRepository extends JpaRepository<Score, Long> {
                          order by l.id asc
     """)
     List<LessonScoreDto> findScoresByGradeAndSubjectAndAccountId(int grade, SUBJECT subject, Long accountId);
+
+    @Query("""
+    select s
+        from Score s
+            join s.account a
+                join Authority a2 on a2.account.id = a.id
+                    join a2.classroom c
+                    where c.id = :classroomId and s.lesson.id = :lessonId
+    """)
+    List<Score> getScoresOfClassroomAndLesson(Long classroomId, Long lessonId);
 }
