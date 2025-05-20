@@ -17,7 +17,7 @@
             <div th:text="*{title}" class="font-bold text-2xl"></div>
             <p>
                 <b>작성자&nbsp</b>
-                <span th:text="*{writerName}"></span>
+                <span class="text-gray-500 text-sm" th:text="*{writerName}"></span>
             </p>
             <div class="bg-gray-200 h-[1px] w-full"></div>
             <div th:text="*{qContext}" class="flex-1"></div>
@@ -41,6 +41,7 @@
                         <p>
                             <b>작성자&nbsp</b>
                             <span th:text="*{answererName}"></span>
+                            <span th:text="*{#temporals.format(aWriteTime,'YYYY-MM-dd HH:mm')}"></span>
                         </p>
                         <p th:text="*{aContext}"></p>
                         <th:block th:if="*{isAnswerer}">
@@ -73,7 +74,7 @@
             <!-- 교사 -->
 
             <!-- 답변란 (없을 시) -->
-            <div class="button-box" th:if="*{isWriter}">
+            <div class="button-box" th:if="*{isWriter && aContext == null}">
                 <button class="rectangle-button bg-(--primary-color)" th:onclick="redirectTo([['/board/question/write?id='+*{id}+'&classroomId='+${classroomId}]])">수정</button>
                 <form method="post" th:action="@{'/board/question/delete?id='+*{id}+'&classroomId='+${classroomId}}">
                     <button type="submit" class="rectangle-button bg-gray-500">삭제</button>

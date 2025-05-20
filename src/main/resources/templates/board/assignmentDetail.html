@@ -22,6 +22,7 @@
                 <p>
                     <b>작성자&nbsp</b>
                     <span th:text="*{writerName}"></span>
+                    <span class="text-gray-500 text-sm" th:text="*{#temporals.format(writeTime,'YYYY-MM-dd HH:mm')}"></span>
                 </p>
                 <div th:text="*{'제출 기한: '+#temporals.format(dueDate,'YYYY-MM-dd')}" class="text-red-400 font-bold text-xl"></div>
                 <div class="bg-gray-200 h-[1px] w-full"></div>

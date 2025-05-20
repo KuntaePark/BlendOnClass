@@ -20,6 +20,7 @@
             <p>
                 <b>작성자&nbsp</b>
                 <span th:text="*{writerName}"></span>
+                <span class="text-gray-500 text-sm" th:text="*{#temporals.format(writeTime,'YYYY-MM-dd HH:mm')}"></span>
             </p>
             <div class="bg-gray-200 h-[1px] w-full"></div>
             <div th:text="*{context}" class="flex-1"></div>

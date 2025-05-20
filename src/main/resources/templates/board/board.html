@@ -39,6 +39,7 @@
                             <div>
                                 <div class="title" th:text="${notice.title}"></div>
                                 <p class="writer" th:text="${notice.writerName}"></p>
+                                <span class="text-sm text-gray-800" th:text="${#temporals.format(notice.writeTime,'YYYY-MM-dd HH:mm')}"></span>
                                 <p class="context" th:text="${notice.context}"></p>
                             </div>
                         </div>
@@ -69,6 +70,7 @@
                                     학급 공지사항
                                 </div>
                                 <p class="writer" th:text="${question.writerName}">김땡땡</p>
+                                <span class="text-sm text-gray-700" th:text="${#temporals.format(question.qWriteTime,'YYYY-MM-dd HH:mm')}"></span>
                                 <p class="context" th:text="${question.qContext}">이거 어떻게 푸는 거에요????</p>
                             </div>
                         </div>
@@ -99,6 +101,7 @@
                                     학급 공지사항
                                 </div>
                                 <p class="writer" th:text="${assignment.writerName}">김아무개</p>
+                                <span class="text-sm text-gray-700" th:text="${#temporals.format(assignment.writeTime,'YYYY-MM-dd HH:mm')}"></span>
                                 <p class="context" th:text="${assignment.context}">이거 어떻게 푸는 거에요????</p>
                             </div>
                         </div>

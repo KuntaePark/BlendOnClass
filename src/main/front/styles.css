@@ -155,7 +155,7 @@
 }
 
 .board-list-box .writer {
-    @apply text-sm text-black mb-4;
+    @apply text-sm text-black;
 }
 
 .board-list-box .context {
