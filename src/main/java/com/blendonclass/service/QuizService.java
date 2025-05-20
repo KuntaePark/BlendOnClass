@@ -133,9 +133,13 @@ public class QuizService {
                     return newScore;
                 });
 
-        // 기존 시도라면 attemptCount만 증가, completeRate는 유지
+        // 기존 시도라면 attemptCount만 증가, completeRate는 이전보다 크면 갱신
         if (score.getAttemptCount() > 0) {
             score.setAttemptCount(score.getAttemptCount() + 1);
+            if(score.getCompleteRate() < progressRate) {
+                //갱신
+                score.setCompleteRate(progressRate);
+            }
         } else {
             score.setAttemptCount(1);
         }

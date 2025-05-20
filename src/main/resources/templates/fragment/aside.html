@@ -19,6 +19,12 @@
         <br />
         <th:block sec:authorize="!hasRole('ROLE_ADMIN')">
             <ul class="mt-2 space-y-2 text-white text-[18px] font-md w-full max-w-[200px] mx-auto px-6">
+                <th:block sec:authorize="hasRole('ROLE_TEACHER')" th:if="${classroomDto != null}">
+                    <div class="flex flex-col justify-center">
+                        <p class="text-white mb-2" th:text="${classroomDto.grade+'학년 '+classroomDto.classroomNum+'반'}"></p>
+                        <div class="w-full h-[1px] bg-white"></div>
+                    </div>
+                </th:block>
                 <li sec:authorize="hasRole('ROLE_STUDENT')" class="flex items-center gap-3 cursor-pointer min-h-[40px]">
                     <img src="/images/Listening.png" alt="강의 아이콘" class="w-10 h-10" />
                     <a href="/student/lesson/main" class="leading-none hover:text-[20px] transition-all duration-100">강의듣기</a>
@@ -30,7 +36,11 @@
                 </li>
                 <li class="flex items-center gap-3 cursor-pointer min-h-[40px]">
                     <img src="/images/OurClass.png" alt="우리반 아이콘" class="w-9 h-9" />
-                    <a href="/board?id=1" class="leading-none hover:text-[20px] transition-all duration-100">우리 반</a>
+                    <a th:href="@{'/board?id='+${classroomId}}" class="leading-none hover:text-[20px] transition-all duration-100">우리 반</a>
+                </li>
+                <li sec:authorize="hasRole('ROLE_TEACHER')" class="flex items-center gap-3 cursor-pointer min-h-[40px]">
+                    <img src="/images/Progress.png" alt="진도 아이콘" class="w-9 h-9 invert" />
+                    <a th:href="@{'/teacher/progress?id='+${classroomId}}" class="leading-none hover:text-[20px] transition-all duration-100">진도 설정</a>
                 </li>
             </ul>
         </th:block>

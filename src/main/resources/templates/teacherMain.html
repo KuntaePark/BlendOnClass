@@ -9,7 +9,7 @@
     <script src="/javascript/getSysAnn.js"></script>
     <script th:inline="javascript">
         const classroomList = [[${classroomListDtos}]]
-        let classroomId = [[${classroomId}]];
+        let classroomId = [[${classroomDto.id}]];
         const classrooms = [];
         let $progressContainer = null;
         let totalItems = 0;
@@ -102,7 +102,7 @@
 </th:block>
 
 
-<th:block layout:fragment="main">
+<th:block layout:fragment="main" th:with="classroomId=${classroomDto.id}">
     <div class="main-container">
         <div class="title-box">
             <p><b class="text-(--primary-color)">BlendOnClass</b>에 오신 것을 환영합니다!</p>
