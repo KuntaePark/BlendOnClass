@@ -177,6 +177,12 @@
                     </div>
                     <div class="flex-1 overflow-hidden">
                         <div id="progress-container" class="transition-transform duration-500 ease-in-out h-full">
+                            <th:block th:if="${progressListDtos.size() == 0}">
+                                <div class="flex-1 w-full h-full flex flex-col gap-2 px-4 py-2 items-center justify-center
+                                 rounded-xl text-gray-700 bg-gray-100 text-xl">
+                                    <p>현재 존재하는 진도가 없습니다.</p>
+                                </div>
+                            </th:block>
                             <div class="flex-1 w-full h-full flex flex-col gap-2 px-4 py-2  rounded-border-box" th:each="progress : ${progressListDtos}" th:object="${progress}">
                                 <div>
                                     <p class="text-xl font-bold text-gray-800" th:text="*{subject.getSubject()}"></p>

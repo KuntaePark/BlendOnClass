@@ -27,7 +27,7 @@
                 <div class="bg-gray-200 h-[1px] w-full"></div>
                 <div th:text="*{context}" class="flex-1"></div>
                 <a th:href="*{fileUrl}" class="rectangle-button bg-(--primary-color)" download>첨부파일 다운로드</a>
-                <div class="button-box">
+                <div class="button-box items-center">
                     <th:block th:if="*{isWriter}">
                         <a th:href="@{'/board/assignment/write?id='+*{abId}+'&classroomId='+${classroomId}}" class="rectangle-button bg-(--primary-color)">수정</a>
                         <form method="post" th:action="@{'/board/assignment/delete?id='+*{abId}+'&classroomId='+${classroomId}}">
@@ -35,8 +35,13 @@
                         </form>
                     </th:block>
                     <th:block sec:authorize="hasRole('ROLE_STUDENT')">
+                        <p th:if="${isSubmit != null}" class="text-bold text-green-400 font-bold">제출 완료!</p>
+                        <p th:if="${isSubmit == null}" class="text-bold text-red-400 font-bold">미제출</p>
                         <a th:href="@{'/board/assignment/submit/write?id='+${assignmentShowDto.abId}+'&classroomId='+${classroomId}}"
-                        class="rectangle-button bg-(--primary-color) button-hover">제출하기</a>
+                        class="rectangle-button bg-(--primary-color) button-hover">
+                            <p th:if="${isSubmit==null}">제출하기</p>
+                            <p th:if="${isSubmit!=null}">수정하기</p>
+                        </a>
                     </th:block>
                 </div>
             </div>

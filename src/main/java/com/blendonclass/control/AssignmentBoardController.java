@@ -1,10 +1,13 @@
 package com.blendonclass.control;
 
+import com.blendonclass.constant.ROLE;
 import com.blendonclass.dto.*;
 import com.blendonclass.service.AccountService;
 import com.blendonclass.service.AuthorityService;
+import com.blendonclass.service.CustomUserDetails;
 import com.blendonclass.service.board.AssignmentBoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -57,8 +60,10 @@ public class AssignmentBoardController {
     //과제 상세 페이지 요청
     @GetMapping("/assignment/detail")
     public String getAssignmentDetail(@RequestParam("abId") Long abId,
-                                      @RequestParam("classroomId") Long classroomId, Principal principal, Model model) {
-        Long accountId = Long.parseLong(principal.getName());
+                                      @RequestParam("classroomId") Long classroomId,
+                                      @AuthenticationPrincipal CustomUserDetails userDetails,
+                                      Model model) {
+        Long accountId = Long.parseLong(userDetails.getUsername());
         AssignmentShowDto assignmentShowDto = assignmentBoardService.getAssignmentDetail(abId, accountId);
         model.addAttribute("assignmentShowDto", assignmentShowDto);
 
@@ -66,7 +71,17 @@ public class AssignmentBoardController {
         List<SubmitStudentListDto> submitStudentListDtos = assignmentBoardService.getSubmitStudentList(abId, classroomId);
         model.addAttribute("submitStudentListDtos", submitStudentListDtos);
         model.addAttribute("classroomId", classroomId);
-        //반 학생 목록
+
+        //학생일 경우, 제출물 있을 시 제출 완료 확인
+        ROLE role = userDetails.getRole();
+        if(role == ROLE.STUDENT) {
+            for(SubmitStudentListDto submitStudentListDto : submitStudentListDtos) {
+                if(accountId.equals(submitStudentListDto.getAccountId()) && submitStudentListDto.getIsSubmit()) {
+                    model.addAttribute("isSubmit",true);
+                    break;
+                }
+            }
+        }
         return "board/assignmentDetail";
     }
 

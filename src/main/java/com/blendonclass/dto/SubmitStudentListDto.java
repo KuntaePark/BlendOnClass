@@ -11,5 +11,5 @@ public class SubmitStudentListDto {
     private Long sbId;
     private String name;
     private String email;
-    private boolean isSubmit;
+    private Boolean isSubmit;
 }

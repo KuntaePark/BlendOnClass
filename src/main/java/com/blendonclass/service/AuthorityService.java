@@ -60,7 +60,9 @@ public class AuthorityService {
     }
 
     //해당 권한 삭제
-    public void deleteAuthority(Long authId) {}
+    public void deleteAuthority(Long authId) {
+        authorityRepository.deleteById(authId);
+    }
 
     //권한 요청 수락
     public void acceptAuthorityRequest(Long arId, boolean accept) {}

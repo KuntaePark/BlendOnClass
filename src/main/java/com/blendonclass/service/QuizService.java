@@ -21,11 +21,9 @@ import java.util.stream.Collectors;
 public class QuizService {
     private final QuizRepository quizRepository;
     private final LessonRepository lessonRepository;
-    private final LessonDetailRepository lessonDetailRepository;
     private final QuizOngoingRepository quizOngoingRepository;
     private final AccountRepository accountRepository;
     private final ScoreRepository scoreRepository;
-    private final ChapterRepository chapterRepository;
 
 
     // 퀴즈 5문제

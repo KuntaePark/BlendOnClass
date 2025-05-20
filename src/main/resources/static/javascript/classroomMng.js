@@ -120,7 +120,28 @@ async function requestClassroomAdd() {
     });
 }
 
-function deleteAuth() {
-    alert("delete auth"+toDelete);
+async function deleteAuth() {
+    const token = $("meta[name='_csrf']").attr("content");
+    const header = $("meta[name='_csrf_header']").attr("content");
+    await new Promise((resolve, reject) => {
+        $.ajax({
+            type: "POST",
+            url: '/admin/classroom/deleteAuth',
+            data : {
+                id : toDelete
+            },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function(result, status) {
+                console.log(status);
+                alert("계정 삭제에 성공했습니다.");
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.log(status);
+            }
+        })
+    })
     toDelete = null;
 }
