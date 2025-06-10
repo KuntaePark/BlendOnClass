@@ -1,12 +1,17 @@
 package com.blendonclass.dto;
 
+import com.blendonclass.constant.LTYPE;
+import com.blendonclass.constant.SUBJECT;
 import com.blendonclass.entity.Lesson;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
 
 @Getter @Setter
+@NoArgsConstructor
 public class LessonDto {
     private Long lessonId;
     private String lessonTitle;
@@ -16,6 +21,17 @@ public class LessonDto {
     private Long chapterId;
     private Integer grade;
     private String subject;
+
+    public LessonDto(Long lessonId, String lessonTitle, String lessonBrief, LTYPE lessonType, Integer completeRate, Long chapterId, Integer grade, SUBJECT subject) {
+        this.lessonId = lessonId;
+        this.lessonTitle = lessonTitle;
+        this.lessonBrief = lessonBrief;
+        this.lessonType = lessonType.toString();
+        this.completeRate = completeRate == null ? 0 : completeRate;
+        this.chapterId = chapterId;
+        this.grade = grade;
+        this.subject = subject.toString();
+    }
 
     private static ModelMapper modelMapper = new ModelMapper();
 

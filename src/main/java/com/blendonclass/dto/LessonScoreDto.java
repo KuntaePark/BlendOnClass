@@ -18,4 +18,5 @@ public class LessonScoreDto {
     private LTYPE lessonType;
     private Integer completeRate;
     private Integer attemptCount;
+
 }

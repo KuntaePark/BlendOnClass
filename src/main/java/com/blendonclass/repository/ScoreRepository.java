@@ -1,6 +1,7 @@
 package com.blendonclass.repository;
 
 import com.blendonclass.constant.SUBJECT;
+import com.blendonclass.dto.LessonDto;
 import com.blendonclass.dto.LessonScoreDto;
 import com.blendonclass.entity.Account;
 import com.blendonclass.entity.Score;
@@ -29,6 +30,18 @@ public interface ScoreRepository extends JpaRepository<Score, Long> {
                          order by l.id asc
     """)
     List<LessonScoreDto> findScoresByGradeAndSubjectAndAccountId(int grade, SUBJECT subject, Long accountId);
+
+    @Query("""
+    select new com.blendonclass.dto.LessonDto(
+        l.id, l.lessonTitle, l.lessonBrief, l.lessonType, s.completeRate, c.id, c.grade, c.subject
+        )
+            from Chapter c
+                         join Lesson l on l.chapter = c
+                         left join Score s on s.lesson = l and s.account.id = :accountId
+                         where c.id = :chapterId
+                         order by l.id asc
+    """)
+    List<LessonDto> findScoresOfLessonInChapter(Long chapterId, Long accountId);
 
     @Query("""
     select s

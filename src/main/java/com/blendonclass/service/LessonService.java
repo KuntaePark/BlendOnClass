@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class LessonService {
     private final LessonRepository lessonRepository;
     private final ScoreRepository scoreRepository;
-    private final ClassroomScoreRepository classroomScoreRepository;
     private final LessonDetailRepository lessonDetailRepository;
     private final LessonRecordRepository lessonRecordRepository;
     private final ChapterRepository chapterRepository;
@@ -27,7 +26,7 @@ public class LessonService {
         return chapterRepository.findByGradeAndSubject(grade, subject)
                 .stream()
                 .map(chapter -> {
-                    List<LessonDto> lessonDtos = getAllLessonsOfChapter(chapter.getId(), loggedId);
+                    List<LessonDto> lessonDtos = scoreRepository.findScoresOfLessonInChapter(chapter.getId(), loggedId);
                     return ChapterDto.from(chapter, lessonDtos);
                 })
                 .collect(Collectors.toList());
@@ -49,26 +48,6 @@ public class LessonService {
 
 
         return LessonDto.from(lastLesson, completeRate);
-    }
-
-    public List<LessonDto> getAllLessonsOfChapter(Long chapId, Long accountId){
-        // 해당 대단원의 모든 소단원 조회
-        List<Lesson> lessons = lessonRepository.findByChapter_Id(chapId);
-
-        // 각 소단원에 대한 진도율을 조회하여 LessonDto로 변환
-        List<LessonDto> lessonDtos = new ArrayList<>();
-        for(Lesson lesson : lessons){
-            // 각 강의에 대해 ScoreRepository에서 진도율 조회
-            Optional<Score> optionalScore = scoreRepository.findByAccountIdAndLessonId(accountId, lesson.getId());
-            Score score = optionalScore.orElse(null);
-            int completeRate = (score != null) ? score.getCompleteRate() : 0;
-            System.out.println(completeRate);
-            // LessonDto로 변환하여 리스트에 추가
-            LessonDto dto = LessonDto.from(lesson, completeRate);
-            lessonDtos.add(dto);
-
-        }
-        return lessonDtos;
     }
 
     public LessonDetailDto getLessonDetail(Long lessonId){
@@ -114,7 +93,6 @@ public class LessonService {
         return LessonDetailDto.from(lesson,detail);
 
     }
-
 
     public List<ChapterDto> getChapterWithLessons(int grade, SUBJECT subject) {
         // 1. 대단원 목록 조회
